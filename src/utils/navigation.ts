@@ -3,7 +3,6 @@ const navBarLinks = [
   { name: 'Product', url: '/products' },
   { name: 'Services', url: '/services' },
   { name: 'Blog', url: '/blog' },
-  { name: 'Systems', url: '#features' },
   { name: 'Contact', url: '/contact' },
 ];
 

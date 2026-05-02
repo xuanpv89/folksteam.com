@@ -5,8 +5,8 @@ author: 'Folks Team'
 authorImage: '@/images/blog/jacob.avif'
 authorImageAlt: 'Folks Team author avatar'
 pubDate: 2025-07-12
-cardImage: '@/images/blog/post-1.avif'
-cardImageAlt: 'Creative team shaping a growth culture'
+cardImage: '@/images/folks-brand-logo.png'
+cardImageAlt: 'Folks Team brand mark for growth culture'
 readTime: 4
 tags: ['culture', 'creativity', 'growth']
 contents:

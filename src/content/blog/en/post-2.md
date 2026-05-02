@@ -5,8 +5,8 @@ author: 'Folks Team'
 authorImage: '@/images/blog/brad.avif'
 authorImageAlt: 'Folks Team author avatar'
 pubDate: 2025-07-14
-cardImage: '@/images/blog/post-2.avif'
-cardImageAlt: 'Team building a structured growth system'
+cardImage: '@/images/growth-workshop.jpg'
+cardImageAlt: 'Workshop for building a structured growth system'
 readTime: 5
 tags: ['strategy', 'systems', 'execution']
 contents:

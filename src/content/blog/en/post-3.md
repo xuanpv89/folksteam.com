@@ -5,8 +5,8 @@ author: 'Folks Team'
 authorImage: '@/images/blog/anna.avif'
 authorImageAlt: 'Folks Team author avatar'
 pubDate: 2025-07-13
-cardImage: '@/images/blog/post-3.avif'
-cardImageAlt: 'Modern growth tools and workflows'
+cardImage: '@/images/growth-analytics.jpg'
+cardImageAlt: 'Analytics dashboard for modern growth workflows'
 readTime: 4
 tags: ['tools', 'workflows', 'growth']
 contents:

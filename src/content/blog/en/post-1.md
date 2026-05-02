@@ -5,8 +5,8 @@ author: 'Folks Team'
 authorImage: '@/images/blog/jacob.avif'
 authorImageAlt: 'Folks Team author avatar'
 pubDate: 2025-07-15
-cardImage: '@/images/blog/post-1.avif'
-cardImageAlt: 'Growth framework planning workspace'
+cardImage: '@/images/growth-brainstorm.jpg'
+cardImageAlt: 'Team planning a structured growth strategy'
 readTime: 4
 tags: ['growth', 'marketing', 'community']
 contents:

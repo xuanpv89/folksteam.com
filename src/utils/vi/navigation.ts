@@ -3,7 +3,6 @@ const navBarLinks = [
   { name: 'Sản phẩm', url: '/vi/products' },
   { name: 'Dịch vụ', url: '/vi/services' },
   { name: 'Blog', url: '/vi/blog' },
-  { name: 'Hệ thống', url: '/vi#features' },
   { name: 'Liên hệ', url: '/vi/contact' },
 ];
 
