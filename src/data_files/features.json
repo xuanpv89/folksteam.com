@@ -1,22 +1,32 @@
 [
   {
-    "heading": "Dedicated Teams",
-    "content": "Benefit from our committed teams who ensure your success is personal. Count on expert guidance and exceptional results throughout your project journey.",
+    "heading": "C.H.E.S.S Framework Integration",
+    "content": "A unified system combining Content, Hub, Ecosystem, System, and Scale into one cohesive growth engine.",
     "svg": "groups"
   },
   {
-    "heading": "Simplicity and Affordability",
-    "content": "Find easy-to-use, affordable solutions with ScrewFast's line of tools and equipment. Our products make procurement simple and keep projects within budget.",
+    "heading": "Execution-Ready Systems",
+    "content": "Plug-and-play frameworks ready to deploy across marketing, content, and operations.",
     "svg": "verified"
   },
   {
-    "heading": "Comprehensive Documentation",
-    "content": "Integrate with ease using ScrewFast's exhaustive guides and libraries. Achieve seamless product adoption with our full suite of documentation designed for your success.",
+    "heading": "Proven Growth Principles",
+    "content": "Built on real-world execution, focusing on clarity, efficiency, and measurable outcomes.",
     "svg": "books"
   },
   {
-    "heading": "User-Centric Design",
-    "content": "Experience the difference with ScrewFast's user-focused design — where functionality meets practicality for an enhanced work experience.",
+    "heading": "Speed & Efficiency",
+    "content": "Reduce wasted effort, move faster, and execute with confidence using structured workflows.",
     "svg": "frame"
+  },
+  {
+    "heading": "Organic Growth Engine (SEO + Content)",
+    "content": "Turn content into a long-term growth asset that attracts, nurtures, and converts audiences.",
+    "svg": "dashboard"
+  },
+  {
+    "heading": "Open System Thinking",
+    "content": "Designed to evolve - adaptable, collaborative, and continuously improving with your business.",
+    "svg": "tools"
   }
 ]

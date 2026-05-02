@@ -1,147 +1,324 @@
 ---
-// Import the necessary components
 import MainLayout from '@/layouts/MainLayout.astro';
 import HeroSection from '@components/sections/landing/HeroSection.astro';
 import HeroSectionAlt from '@components/sections/landing/HeroSectionAlt.astro';
-import ClientsSection from '@components/sections/landing/ClientsSection.astro';
 import FeaturesGeneral from '@components/sections/features/FeaturesGeneral.astro';
 import FeaturesNavs from '@components/sections/features/FeaturesNavs.astro';
 import TestimonialsSection from '@components/sections/testimonials/TestimonialsSection.astro';
-import PricingSection from '@components/sections/pricing/PricingSection.astro';
 import FAQ from '@components/sections/misc/FAQ.astro';
 import AnnouncementBanner from '@components/ui/banners/AnnouncementBanner.astro';
 import heroImage from '@images/hero-image.avif';
 import faqs from '@data/faqs.json';
 import features from '@data/features.json';
-import pricing from '@data/pricing.json';
 import featureImage from '@images/features-image.avif';
 import construction from '@images/construction-image.avif';
 import tools from '@images/automated-tools.avif';
 import dashboard from '@images/dashboard-image.avif';
-import { partnersData } from '@/data_files/constants';
 
 const avatarSrcs: Array<string> = [
-  'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
-  'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
-  'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&&auto=format&fit=facearea&facepad=3&w=300&h=300&q=80',
-  'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+  'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+  'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+  'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?auto=format&fit=facearea&facepad=3&w=300&h=300&q=80',
+  'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+];
+
+const steps = [
+  {
+    title: 'Step 1: Start with Strategy',
+    description: 'Define your positioning, audience, and core growth direction. Build your foundation with clarity.',
+  },
+  {
+    title: 'Step 2: Build Your System',
+    description: 'Create your Content, Hub, and Ecosystem layers. Turn ideas into structured execution.',
+  },
+  {
+    title: 'Step 3: Scale with Confidence',
+    description: 'Optimize, expand, and scale your system sustainably using data and feedback.',
+  },
+];
+
+const coreComponents = [
+  {
+    title: 'Strategy Layer',
+    description: 'Without direction, execution is noise. Strategy gives your system clarity and purpose.',
+  },
+  {
+    title: 'Content Engine',
+    description: 'Content is your growth fuel - attracting, educating, and building trust over time.',
+  },
+  {
+    title: 'Growth Systems',
+    description: 'Where structure meets execution. Systems turn effort into predictable outcomes.',
+  },
+  {
+    title: 'Execution Layer',
+    description: 'This is where ideas become reality - consistent, focused, and measurable.',
+  },
+  {
+    title: 'Call-to-Action Layer',
+    description: 'Every system needs movement. Clear actions turn attention into results.',
+  },
+  {
+    title: 'Monetization Models',
+    description: 'Turn value into revenue through structured offers and aligned positioning.',
+  },
+  {
+    title: 'Proof & Trust',
+    description: 'Real results, real feedback - credibility compounds over time.',
+  },
+  {
+    title: 'Connection Layer',
+    description: 'Community, relationships, and interaction - the core of sustainable growth.',
+  },
+  {
+    title: 'Foundation Layer',
+    description: 'Everything rests on strong fundamentals - positioning, clarity, and systems.',
+  },
+];
+
+const blogPosts = [
+  {
+    title: 'The C.H.E.S.S Model: A Complete Growth Framework',
+    description:
+      "In today's world, growth is not about hacks - it's about systems. C.H.E.S.S helps you attract, engage, and scale sustainably.",
+  },
+  {
+    title: 'How to Build a Growth System from Scratch',
+    description: 'Learn how to turn strategy into execution using structured frameworks.',
+  },
+  {
+    title: 'Tools & Systems for Modern Growth',
+    description: 'Discover essential tools and workflows to build scalable systems.',
+  },
+  {
+    title: 'Culture, Creativity & Growth',
+    description: "Growth is not just systems - it's also identity, creativity, and long-term vision.",
+  },
 ];
 ---
 
 <MainLayout>
   <AnnouncementBanner
+    title="NEW"
     btnId="dismiss-button"
-    btnTitle="Explore ScrewFast on GitHub"
-    url="https://github.com/mearashadowfax/ScrewFast"
+    btnTitle="Folks Team Is Live"
+    url="https://github.com/xuanpv89/folks-template-screwfast"
   />
 
   <HeroSection
-    title=`Equip Your Projects with <span
-        class="text-yellow-500 dark:text-yellow-400">ScrewFast</span>`
-    subTitle="Top-quality hardware tools and expert construction services for every project need."
-    primaryBtn="Start Exploring"
-    primaryBtnURL="/products"
-    secondaryBtn="Contact Sales Team"
-    secondaryBtnURL="/contact"
+    title=`A Modern Growth System Built on <span class="text-yellow-500 dark:text-yellow-400">C.H.E.S.S</span>`
+    subTitle="A strategic framework for building marketing, community, and scalable growth systems. Folks Team is a complete, customizable, and execution-ready system designed for startups, operators, and modern businesses looking to grow with clarity and structure."
+    primaryBtn="Get Started"
+    primaryBtnURL="#features"
+    secondaryBtn="Learn more"
+    secondaryBtnURL="#blueprint"
     withReview={true}
     avatars={avatarSrcs}
-    rating=`<span class="font-bold">4.8</span> / 5`
-    starCount={4}
-    reviews=`From Over <span class="font-bold">12.8k</span> Reviews`
+    rating=`<span class="font-bold">132K</span>`
+    starCount={5}
+    reviews="builders applying structured growth"
     src={heroImage}
-    alt="Stack of ScrewFast product boxes containing assorted hardware tools"
+    alt="Folks Team growth system dashboard"
   />
 
-  <ClientsSection
-    title="Trusted by Industry Leaders"
-    subTitle="Experience the reliability chosen by industry giants."
-    partners={partnersData}
-  />
+  <section class="bg-neutral-100 px-4 py-6 text-center dark:bg-neutral-900">
+    <p class="mx-auto max-w-4xl text-lg font-medium text-neutral-700 dark:text-neutral-300">
+      <span class="font-bold text-neutral-900 dark:text-neutral-100">Philosophy:</span>
+      Clarity, Systems, and Sustainable Growth
+    </p>
+  </section>
 
   <FeaturesGeneral
-    title="Meeting Industry Demands"
-    subTitle="At ScrewFast, we tackle the unique challenges encountered in the hardware and construction sectors. From cutting-edge tools to expert services, we're dedicated to helping you overcome obstacles and achieve your goals."
+    title="What you get with Folks Team"
+    subTitle="One of the most structured and practical growth systems designed for modern marketing and community building."
     src={featureImage}
-    alt="ScrewFast products in floating boxes"
+    alt="Folks Team system blueprint"
     features={features}
   />
 
   <FeaturesNavs
-    title=`Customize <span class="text-yellow-500 dark:text-yellow-400">ScrewFast</span>'s offerings to perfectly suit your hardware and construction needs.`
+    title=`<span id="blueprint">Folks Team Blueprint:</span> Strategy Meets Execution`
     tabs={[
       {
-        heading: 'Cutting-Edge Tools',
-        content:
-          "Empower your projects with ScrewFast's cutting-edge tools. Experience enhanced efficiency in construction management with our sophisticated automated solutions.",
+        heading: 'Built on C.H.E.S.S Foundations',
+        content: 'Leverage a system designed to align strategy, execution, and growth into one unified model.',
         svg: 'tools',
         src: tools,
-        alt: 'Yellow and black heavy equipment on brown grass field',
+        alt: 'Strategic growth system workspace',
         first: true,
       },
       {
-        heading: 'Intuitive Dashboards',
-        content:
-          "Navigate with ease using ScrewFast's intuitive dashboards. Set up and oversee your projects seamlessly, with user-friendly interfaces designed for quick and effective workflow management.",
+        heading: 'System-Driven Execution',
+        content: 'Move beyond random tactics with structured workflows that scale.',
         svg: 'dashboard',
         src: dashboard,
-        alt: 'A screenshot or graphic representation of the intuitive dashboard',
+        alt: 'Structured growth dashboard',
         second: true,
       },
       {
-        heading: 'Robust Features',
-        content:
-          "Minimize complexity, maximize productivity. ScrewFast's robust features are engineered to streamline your construction process, delivering results that stand out for their excellence.",
+        heading: 'Cross-Channel Integration',
+        content: 'Ensure your content, community, and operations work together seamlessly.',
         svg: 'house',
         src: construction,
-        alt: 'Gray metal building frame near tower crane during daytime',
+        alt: 'Connected growth operations',
       },
     ]}
   />
 
+  <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
+    <div class="mx-auto max-w-3xl text-center">
+      <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl dark:text-neutral-200">
+        Make Your Growth System Truly Yours
+      </h2>
+      <p class="mt-3 text-neutral-600 dark:text-neutral-400">
+        Adapt the system to your business model, audience, and growth stage.
+      </p>
+    </div>
+    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {
+        [
+          ['High Level of Customization', 'Adapt the system to your business model, audience, and growth stage.'],
+          ['Flexible Growth Paths', 'Choose different execution paths depending on your goals and resources.'],
+          ['Fully Scalable Design', 'From early-stage to scale - the system evolves with you.'],
+          ['Multi-format Content Integration', 'Combine content, media, and community into a unified growth loop.'],
+        ].map(([title, description]) => (
+          <article class="rounded-xl border border-neutral-200 p-6 dark:border-neutral-700">
+            <h3 class="font-bold text-neutral-800 dark:text-neutral-200">{title}</h3>
+            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="bg-neutral-100 px-4 py-12 dark:bg-neutral-900">
+    <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8">
+      <div class="grid gap-8 lg:grid-cols-3">
+        <div>
+          <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl dark:text-neutral-200">
+            Designed for Long-Term Growth
+          </h2>
+          <p class="mt-3 text-neutral-600 dark:text-neutral-400">
+            Build real relationships, improve continuously, and focus effort on what drives growth.
+          </p>
+        </div>
+        <div class="grid gap-5 md:grid-cols-2 lg:col-span-2">
+          {
+            [
+              ['Deeper Audience Engagement', 'Build real relationships through content, community, and consistent value delivery.'],
+              ['Continuous Optimization', 'Iterate, improve, and refine your system based on data and feedback.'],
+              ['Time & Resource Efficiency', 'Stop wasting effort on disconnected tactics - focus on what actually drives growth.'],
+              ['Community-Driven Support', 'Learn, adapt, and grow within a network of builders and operators.'],
+            ].map(([title, description]) => (
+              <article class="rounded-xl bg-white p-6 dark:bg-neutral-800">
+                <h3 class="font-bold text-neutral-800 dark:text-neutral-200">{title}</h3>
+                <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl dark:text-neutral-200">
+        Launch Your Growth System in 3 Steps
+      </h2>
+    </div>
+    <div class="mt-10 grid gap-6 md:grid-cols-3">
+      {
+        steps.map(step => (
+          <article class="rounded-xl border border-neutral-200 p-6 dark:border-neutral-700">
+            <h3 class="font-bold text-neutral-800 dark:text-neutral-200">{step.title}</h3>
+            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{step.description}</p>
+          </article>
+        ))
+      }
+    </div>
+    <p class="mt-8 text-center text-lg font-bold text-yellow-600 dark:text-yellow-400">Ready!</p>
+  </section>
+
+  <section class="bg-neutral-100 px-4 py-12 dark:bg-neutral-900">
+    <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl dark:text-neutral-200">
+          Core System Components
+        </h2>
+      </div>
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          coreComponents.map(component => (
+            <article class="rounded-xl bg-white p-6 dark:bg-neutral-800">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">{component.title}</h3>
+              <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{component.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
+    <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div>
+        <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl dark:text-neutral-200">
+          Explore More in Our Blog
+        </h2>
+        <a class="mt-3 inline-block font-semibold text-yellow-600 dark:text-yellow-400" href="/blog">View all posts</a>
+      </div>
+    </div>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {
+        blogPosts.map(post => (
+          <article class="rounded-xl border border-neutral-200 p-6 dark:border-neutral-700">
+            <h3 class="font-bold text-neutral-800 dark:text-neutral-200">{post.title}</h3>
+            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{post.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <FAQ title="FAQs" faqs={faqs} />
+
   <TestimonialsSection
-    title="Fast-Track Your Projects"
-    subTitle="At ScrewFast, we ensure a swift start with instant account setup. Experience the speed of construction redefined."
-    ;
+    title="Impact Metrics"
+    subTitle="Proof that structured growth compounds across builders, operators, and communities."
     testimonials={[
       {
         content:
-          'ScrewFast dramatically boosted our project efficiency. Setup was instant, and their rapid response times are phenomenal. Truly a game-changer in hardware and construction support!',
-        author: 'Samantha Ruiz',
-        role: 'Chief Operating Officer | ConstructIt Inc.',
+          'Folks Team brings clarity, structure, and repeatable execution to modern growth work.',
+        author: 'Folks Team',
+        role: 'Built on C.H.E.S.S',
         avatarSrc:
-          'https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?q=80&w=1453&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80',
+          'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=facearea&facepad=2&w=320&h=320&q=80',
       },
     ]}
     statistics={[
       {
-        count: '70k+',
-        description:
-          'customers equipped — from DIY to major construction firms',
+        count: '132K',
+        description: 'builders applying structured growth',
       },
       {
-        count: '35%',
-        description:
-          'uptick in project efficiency with ScrewFast tools and services',
+        count: '24.8K',
+        description: 'systems created',
       },
       {
-        count: '15.3%',
-        description:
-          'reduction in maintenance costs reported by long-term clients',
+        count: '10.3K',
+        description: 'active operators',
       },
       {
-        count: '2x',
-        description: 'quicker assembly using innovative fastening solutions',
+        count: '48.4K',
+        description: 'community members',
       },
     ]}
   />
 
-  <PricingSection pricing={pricing} />
-
-  <FAQ title="Frequently<br />asked questions" faqs={faqs} />
-
   <HeroSectionAlt
-    title="Let's Build Together"
-    subTitle="ScrewFast is an open-source template, meticulously crafted with Astro, Tailwind CSS, and Preline UI frameworks."
-    url="https://github.com/mearashadowfax/ScrewFast"
+    title="Stop guessing. Start building systems."
+    subTitle="Built on C.H.E.S.S. Be surprised by what structured growth can do."
+    url="https://github.com/xuanpv89/folks-template-screwfast"
   />
 </MainLayout>

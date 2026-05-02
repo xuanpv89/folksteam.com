@@ -1,36 +1,60 @@
-// An array of links for navigation bar
 const navBarLinks = [
-  { name: 'Home', url: '/' },
-  { name: 'Products', url: '/products' },
-  { name: 'Services', url: '/services' },
+  { name: 'Homes', url: '/' },
+  { name: 'Pages', url: '/services' },
+  { name: 'Landing', url: '/' },
   { name: 'Blog', url: '/blog' },
-  { name: 'Contact', url: '/contact' },
+  { name: 'Systems', url: '#features' },
 ];
-// An array of links for footer
+
 const footerLinks = [
   {
-    section: 'Ecosystem',
+    section: 'Product',
     links: [
-      { name: 'Documentation', url: '/welcome-to-docs/' },
-      { name: 'Tools & Equipment', url: '/products' },
-      { name: 'Construction Services', url: '/services' },
+      { name: 'Framework', url: '#' },
+      { name: 'Systems', url: '#features' },
+      { name: 'Security', url: '#' },
+      { name: 'Team', url: '#' },
+      { name: 'Enterprise', url: '#' },
+      { name: 'Case Studies', url: '#' },
+      { name: 'Pricing', url: '#' },
+    ],
+  },
+  {
+    section: 'Resources',
+    links: [
+      { name: 'Platform', url: '#' },
+      { name: 'Developer API', url: '#' },
+      { name: 'Partners', url: '#' },
+      { name: 'Guides', url: '/welcome-to-docs/' },
+      { name: 'Community', url: '#' },
+    ],
+  },
+  {
+    section: 'Support',
+    links: [
+      { name: 'Docs', url: '/welcome-to-docs/' },
+      { name: 'Forum', url: '#' },
+      { name: 'Professional Services', url: '/services' },
+      { name: 'Workflows', url: '#' },
+      { name: 'Status', url: '#' },
     ],
   },
   {
     section: 'Company',
     links: [
-      { name: 'About us', url: '#' },
+      { name: 'About', url: '#' },
       { name: 'Blog', url: '/blog' },
       { name: 'Careers', url: '#' },
-      { name: 'Customers', url: '#' },
+      { name: 'Press', url: '#' },
+      { name: 'Impact', url: '#' },
     ],
   },
 ];
-// An object of links for social icons
+
 const socialLinks = {
   facebook: 'https://www.facebook.com/',
   x: 'https://twitter.com/',
-  github: 'https://github.com/mearashadowfax/ScrewFast',
+  github: 'https://github.com/xuanpv89/folks-template-screwfast',
   google: 'https://www.google.com/',
   slack: 'https://slack.com/',
 };
