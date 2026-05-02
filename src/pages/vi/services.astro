@@ -1,5 +1,4 @@
-﻿---
-// Import necessary components
+---
 import MainLayout from '@/layouts/MainLayout.astro';
 import MainSection from '@components/ui/blocks/MainSection.astro';
 import LeftSection from '@components/ui/blocks/LeftSection.astro';
@@ -7,15 +6,11 @@ import RightSection from '@components/ui/blocks/RightSection.astro';
 import FeaturesStats from '@components/sections/features/FeaturesStats.astro';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 
-// Import necessary images
-import blueprints from '@images/blueprints-image.avif';
-import personWorking from '@images/person-working.avif';
-import beforeAfter from '@images/before-after.avif';
-import constructionWorkers from '@images/construction-workers.avif';
-import aerialView from '@images/aerial-view.avif';
-import usingTools from '@images/using-tools.avif';
-import progressBuilding from '@images/progress-building.avif';
-import underConstruction from '@images/under-construction.avif';
+import strategyImage from '@images/growth-brainstorm.jpg';
+import workshopImage from '@images/growth-workshop.jpg';
+import analyticsImage from '@images/growth-analytics.jpg';
+import brandMark from '@images/folks-brand-mark.jpg';
+import brandLogo from '@images/folks-brand-logo.png';
 
 interface Article {
   isRightSection: boolean;
@@ -36,104 +31,91 @@ interface Article {
 const articles: Article[] = [
   {
     isRightSection: true,
-    title: "Fournir des conseils d'experts",
+    title: 'Tư vấn chiến lược C.H.E.S.S',
     subTitle:
-      "Se lancer dans un projet de construction peut Ãªtre accablant. Avec nos services de consultation professionnelle, nous vous guidons Ã  chaque Ã©tape, en veillant Ã  ce que vous preniez des dÃ©cisions Ã©clairÃ©es. Que vous soyez un passionnÃ© du bricolage ou un entrepreneur qualifiÃ©, nos experts sont lÃ  pour vous offrir des conseils sur mesure sur la sÃ©lection de produits, l'envergure du projet et la conformitÃ© aux rÃ©glementations locales.",
+      'Chúng tôi giúp bạn xác định positioning, audience, thông điệp và hướng tăng trưởng trước khi lao vào thực thi. Mục tiêu là tạo một bản đồ rõ ràng để mọi hoạt động marketing, content và community đi cùng một hướng.',
     single: false,
-    imgOne: blueprints,
-    imgOneAlt: 'Plans et tablette numÃ©rique avec des plans de construction.',
-    imgTwo: personWorking,
-    imgTwoAlt: 'Personne travaillant au bureau',
+    imgOne: strategyImage,
+    imgOneAlt: 'Đội nhóm đang xây chiến lược tăng trưởng',
+    imgTwo: brandMark,
+    imgTwoAlt: 'Dấu hiệu nhận diện Folks Team',
   },
   {
     isRightSection: false,
-    title: 'Transformer les conceptions en rÃ©alitÃ©',
+    title: 'Thiết kế hệ thống content và hub',
     subTitle:
-      'Nos artisans qualifiÃ©s apportent prÃ©cision et excellence Ã  chaque projet de construction. Des installations mineures aux travaux structuraux substantiels, ScrewFast offre des services de construction fiables pour concrÃ©tiser vos plans. Nous assurons les normes les plus Ã©levÃ©es de sÃ©curitÃ© et de savoir-faire, en utilisant des outils et des matÃ©riaux de haute qualitÃ© de notre vaste inventaire.',
-    img: beforeAfter,
-    imgAlt: 'Chantier de construction avant et aprÃ¨s',
+      'Từ ý tưởng rời rạc, chúng tôi giúp bạn xây content engine, hub tài nguyên và quy trình xuất bản để biến nội dung thành tài sản tăng trưởng dài hạn.',
+    img: workshopImage,
+    imgAlt: 'Workshop xây dựng hệ thống nội dung',
     btnExists: true,
-    btnTitle: 'En savoir plus',
-    btnURL: '#',
+    btnTitle: 'Xem sản phẩm',
+    btnURL: '/vi/products',
   },
   {
     isRightSection: true,
-    title: 'Naviguer dans les projets avec une supervision professionnelle',
+    title: 'Tích hợp cộng đồng và ecosystem',
     subTitle:
-      "La gestion de projet efficace est au cÅ“ur de toute construction rÃ©ussie. ScrewFast offre une planification approfondie et des services de gestion solides qui maintiennent votre projet dans les dÃ©lais et dans le budget. Laissez-nous gÃ©rer les complexitÃ©s de la coordination des flux de travail, de l'allocation des ressources et de la communication avec les parties prenantes pendant que vous vous concentrez sur votre vision.",
+      'Cộng đồng không chỉ là nơi đăng bài. Chúng tôi giúp thiết kế vòng lặp tương tác, điểm chạm, feedback và hệ sinh thái đối tác để tăng trưởng có chiều sâu hơn.',
     single: false,
-    imgOne: constructionWorkers,
-    imgOneAlt: 'Ouvriers du bÃ¢timent orchestrant un projet',
-    imgTwo: aerialView,
-    imgTwoAlt: "Vue aÃ©rienne d'une construction gÃ©rÃ©e",
+    imgOne: analyticsImage,
+    imgOneAlt: 'Dashboard đo lường tăng trưởng',
+    imgTwo: brandLogo,
+    imgTwoAlt: 'Logo Folks Team',
   },
   {
     isRightSection: false,
-    title: 'Garantir des performances durables',
+    title: 'Vận hành và tối ưu liên tục',
     subTitle:
-      "Notre engagement envers votre projet ne s'arrÃªte pas Ã  son achÃ¨vement. ScrewFast propose des services de maintenance et de support continus pour assurer la longÃ©vitÃ© et les performances de votre construction. Des vÃ©rifications rÃ©guliÃ¨res Ã  l'assistance en cas d'urgence, notre Ã©quipe rÃ©active est lÃ  pour vous fournir un soutien sans faille.",
-    img: usingTools,
-    imgAlt:
-      'Homme en gilet orange et noir portant un casque blanc tenant un outil Ã©lectrique jaune et noir',
+      'Sau khi hệ thống đi vào hoạt động, chúng tôi hỗ trợ đo lường, review, tối ưu workflow và điều chỉnh ưu tiên dựa trên dữ liệu, phản hồi và năng lực đội ngũ.',
+    img: analyticsImage,
+    imgAlt: 'Phân tích dữ liệu tăng trưởng',
   },
   {
     isRightSection: true,
-    title: 'Ã‰laboration de stratÃ©gies sur mesure pour des dÃ©fis uniques',
+    title: 'Workshop La Bàn Cảm Xúc',
     subTitle:
-      "Pour nos clients d'entreprise de plus grande envergure, ScrewFast propose des solutions personnalisÃ©es conÃ§ues pour rÃ©pondre Ã  des dÃ©fis spÃ©cifiques de l'industrie. En comprenant vos besoins uniques, nous concevons des stratÃ©gies sur mesure visant Ã  optimiser vos opÃ©rations, Ã  amÃ©liorer l'efficacitÃ© et Ã  faire avancer votre entreprise.",
+      'Với các đội nhóm cần cải thiện giao tiếp và thấu hiểu, chúng tôi có thể thiết kế workshop sử dụng La Bàn Cảm Xúc để mở đối thoại an toàn, cụ thể và giàu tính con người.',
     single: false,
-    imgOne: progressBuilding,
-    imgOneAlt: 'Structure de bÃ¢timent en cours de construction',
-    imgTwo: underConstruction,
-    imgTwoAlt: 'BÃ¢timent marron et gris en construction',
+    imgOne: brandMark,
+    imgOneAlt: 'Hệ màu nhận diện Folks Team',
+    imgTwo: workshopImage,
+    imgTwoAlt: 'Không gian workshop đội nhóm',
     btnExists: true,
-    btnTitle: 'Lire la suite',
-    btnURL: '#',
+    btnTitle: 'Liên hệ tư vấn',
+    btnURL: '/vi/contact',
   },
 ];
 ---
 
 <MainLayout
-  title="Services | ScrewFast"
+  title="Dịch vụ | Folks Team"
   lang="vi"
   structuredData={{
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     '@id': 'https://folks-team.com/vi/services',
     url: 'https://folks-team.com/vi/services',
-    name: "Services de Consultation d'Experts | ScrewFast",
+    name: 'Dịch vụ tăng trưởng | Folks Team',
     description:
-      "Unissant l'expertise Ã  votre vision, ScrewFast fournit un service exceptionnel et des solutions complÃ¨tes dans le secteur du matÃ©riel et de la construction, de la consultation Ã  l'achÃ¨vement du projet.",
+      'Dịch vụ tư vấn và triển khai hệ thống tăng trưởng dựa trên C.H.E.S.S cho marketing, content, community và vận hành.',
     isPartOf: {
       '@type': 'WebSite',
       url: 'https://folks-team.com/vi',
-      name: 'ScrewFast',
+      name: 'Folks Team',
       description:
-        'ScrewFast propose des outils matÃ©riels de premier ordre et des services de construction experts pour rÃ©pondre Ã  tous vos besoins de projet.',
+        'Folks Team xây hệ thống tăng trưởng hiện đại dựa trên C.H.E.S.S.',
     },
     inLanguage: 'vi',
   }}
 >
-  {
-    /* MainSection is the introductory section of the page, it also contains a CTA button */
-  }
   <MainSection
-    title="Unir l'expertise Ã  votre vision"
-    subTitle="Chez ScrewFast, nous sommes fiers de fournir des solutions complÃ¨tes et un service exceptionnel dans l'industrie du matÃ©riel et de la construction. Notre Ã©quipe expÃ©rimentÃ©e est dÃ©diÃ©e Ã  soutenir votre projet de sa conception Ã  son achÃ¨vement avec une gamme de services spÃ©cialisÃ©s."
+    title="Biến tăng trưởng thành một hệ thống có thể vận hành"
+    subTitle="Folks Team giúp bạn kết nối chiến lược, content, cộng đồng và vận hành thành một mô hình tăng trưởng rõ ràng, thực tế và có thể mở rộng."
     btnExists={true}
-    btnTitle="Planifier une consultation"
-    btnURL={getRelativeLocaleUrl('vi', '#')}
+    btnTitle="Bắt đầu trao đổi"
+    btnURL={getRelativeLocaleUrl('vi', 'contact')}
   />
-  {
-    /* RightSection and LeftSection contain details about various services along with pertinent imagery.
-  They alternate for variety in design.
-  The 'btnExists' property is used to toggle the display of a button in these sections.
-  When btnExists={true}, a button is displayed.
-  This can be used to link to more detailed information or related resources.
-  RightSection can also conditionally render one or two images based on the 'single' property.
-  If 'single' is true, it displays one image, otherwise it displays two.
-  */
-  }
+
   {
     articles.map(article => {
       return article.isRightSection ? (
@@ -162,26 +144,25 @@ const articles: Article[] = [
       );
     })
   }
-  {/* FeaturesStats section showcases essential stats valuable to users */}
+
   <FeaturesStats
-    title="Par les chiffres"
-    subTitle="Notre engagement envers la qualitÃ© et la fiabilitÃ© est Ã©vident dans chaque projet que nous entreprenons. Chez ScrewFast, nous nous engageons Ã  fournir des services de premier plan dans l'industrie qui garantissent que vos projets de construction sont conÃ§us pour durer."
+    title="Tăng trưởng bằng hệ thống"
+    subTitle="Dịch vụ của Folks Team tập trung vào clarity, cấu trúc và khả năng lặp lại, để đội ngũ không phải phụ thuộc vào cảm hứng ngắn hạn."
     mainStatTitle="96%"
-    mainStatSubTitle="de nos clients Ã©valuent leur expÃ©rience avec ScrewFast comme exceptionnelle"
+    mainStatSubTitle="khách hàng đánh giá cao sự rõ ràng sau buổi strategy review"
     stats={[
       {
-        stat: '99,8%',
-        description: 'taux de rÃ©alisation de projets',
+        stat: '5+',
+        description: 'lớp C.H.E.S.S được kết nối trong một hệ thống',
       },
       {
-        stat: '5 000+',
-        description: 'installations rÃ©ussies',
+        stat: '24.8K',
+        description: 'workflow và hệ thống mẫu được tạo',
       },
       {
-        stat: '85%',
-        description: 'croissance client annÃ©e aprÃ¨s annÃ©e',
+        stat: '132K',
+        description: 'builder đang theo đuổi tăng trưởng có cấu trúc',
       },
     ]}
   />
 </MainLayout>
-

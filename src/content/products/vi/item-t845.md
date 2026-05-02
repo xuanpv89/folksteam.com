@@ -1,55 +1,53 @@
 ---
-title: 'SF-TB T845'
-description: 'Vis à machine'
+title: 'La Bàn Cảm Xúc'
+description: 'Bộ thẻ nhận diện cảm xúc'
 main:
   id: 1
   content: |
-    Découvrez le SF-TB T845 – votre solution de prédilection pour la fixation de précision dans les machines et équipements. Cet ensemble complet de vis à machine est méticuleusement conçu pour répondre aux exigences strictes des applications industrielles, garantissant une fixation sécurisée et fiable.
-  imgCard: '@/images/product-image-1.avif'
-  imgMain: '@/images/product-image-main-1.avif'
-  imgAlt: 'Maquettes de boîtes de vis à machine'
+    La Bàn Cảm Xúc là bộ thẻ giúp người dùng gọi tên cảm xúc, quan sát tín hiệu bên trong và mở ra những cuộc trò chuyện an toàn hơn trong đội nhóm, lớp học, coaching hoặc tự phản tư.
+  imgCard: '@/images/emotion-compass.jpg'
+  imgMain: '@/images/emotion-compass.jpg'
+  imgAlt: 'Bộ thẻ La Bàn Cảm Xúc trên bàn gỗ'
 tabs:
   - id: 'tabs-with-card-item-1'
     dataTab: '#tabs-with-card-1'
-    title: 'Description'
+    title: 'Mô tả'
   - id: 'tabs-with-card-item-2'
     dataTab: '#tabs-with-card-2'
-    title: 'Spécifications'
+    title: 'Ứng dụng'
   - id: 'tabs-with-card-item-3'
     dataTab: '#tabs-with-card-3'
-    title: 'Plans'
+    title: 'Gợi ý dùng'
 longDescription:
-  title: 'Solutions de fixation de précision'
+  title: 'Một công cụ nhỏ để hiểu cảm xúc rõ hơn'
   subTitle: |
-    Les vis à machine SF-TB T845 offrent une précision et une fiabilité inégalées pour les applications industrielles, garantissant un fonctionnement fluide et une longue durée de vie pour vos machines et équipements.
-  btnTitle: 'Contactez le service commercial pour en savoir plus'
-  btnURL: '#'
+    Thay vì hỏi “bạn đang thấy thế nào?” và nhận lại sự im lặng, La Bàn Cảm Xúc đưa ra hình ảnh, từ khóa và gợi ý để người dùng dễ chọn, dễ nói và dễ lắng nghe hơn.
+  btnTitle: 'Liên hệ để tìm hiểu thêm'
+  btnURL: '/vi/contact'
 descriptionList:
-  - title: 'Durabilité'
-    subTitle: 'Fabriquées à partir de matériaux de haute qualité, ces vis à machine sont conçues pour résister aux rigueurs des environnements industriels.'
-  - title: 'Ingénierie de précision'
-    subTitle: 'Conçues avec des filets coupés avec précision et des spécifications exactes, garantissant un ajustement serré et sécurisé pour chaque application.'
-  - title: 'Polyvalence'
-    subTitle: "Adaptées à une large gamme de machines et d'équipements, offrant des solutions de fixation polyvalentes pour divers besoins industriels."
+  - title: 'Dễ bắt đầu'
+    subTitle: 'Người dùng chỉ cần chọn thẻ gần với trạng thái hiện tại, sau đó đọc gợi ý để mở lời.'
+  - title: 'An toàn cho nhóm'
+    subTitle: 'Bộ thẻ giúp cuộc trò chuyện bớt phán xét và tập trung hơn vào quan sát.'
+  - title: 'Linh hoạt'
+    subTitle: 'Phù hợp cho workshop, lớp học, coaching, journaling hoặc check-in đội nhóm.'
 specificationsLeft:
-  - title: 'Composition du matériau'
-    subTitle: 'Construites en acier ou alliage de qualité supérieure pour une résistance et une durabilité exceptionnelles.'
-  - title: 'Finition de surface'
-    subTitle: 'Fini avec un revêtement protecteur pour améliorer la résistance à la corrosion et prolonger la durée de vie.'
-  - title: 'Quantité par ensemble'
-    subTitle: 'Chaque ensemble contient un assortiment complet de vis à machine pour répondre aux divers besoins industriels.'
-  - title: 'Gamme de tailles'
-    subTitle: "Disponible en différentes tailles et longueurs pour s'adapter aux spécifications des machines et équipements."
+  - title: 'Định dạng'
+    subTitle: 'Bộ thẻ in kèm hướng dẫn sử dụng.'
+  - title: 'Mục tiêu'
+    subTitle: 'Gọi tên cảm xúc, hiểu tín hiệu và chọn phản ứng phù hợp hơn.'
+  - title: 'Đối tượng'
+    subTitle: 'Facilitator, coach, giáo viên, đội nhóm và cá nhân muốn tự quan sát.'
+  - title: 'Ngữ cảnh'
+    subTitle: 'Check-in, debrief, reflection, coaching và hoạt động cộng đồng.'
 specificationsRight:
-  - title: 'Spécifications du filetage'
-    subTitle: 'Des filets conçus avec précision assurent une adhérence optimale et une fiabilité, même dans les environnements à haute vibration.'
-  - title: 'Capacité de charge'
-    subTitle: 'Conçues pour répondre ou dépasser les normes industrielles en matière de capacité de charge, garantissant une opération sûre et fiable.'
-  - title: 'Certifications'
-    subTitle: 'Conformes aux normes et certifications industrielles pertinentes, garantissant qualité et fiabilité.'
-  - title: 'Applications'
-    subTitle: 'Idéal pour une utilisation dans une large gamme de machines industrielles, équipements et assemblages nécessitant une fixation précise et sécurisée.'
+  - title: 'Phong cách'
+    subTitle: 'Trực quan, nhẹ nhàng và giàu tính gợi mở.'
+  - title: 'Kết hợp'
+    subTitle: 'Có thể dùng cùng journaling, vòng tròn chia sẻ hoặc hoạt động nhóm.'
+  - title: 'Tư duy'
+    subTitle: 'Không tìm câu trả lời đúng, mà giúp người dùng quan sát rõ hơn.'
 blueprints:
-  first: '@/images/blueprint-1.avif'
-  second: '@/images/blueprint-2.avif'
+  first: '@/images/emotion-compass.jpg'
+  second: '@/images/folks-brand-mark.jpg'
 ---

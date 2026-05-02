@@ -1,7 +1,7 @@
 const navBarLinks = [
   { name: 'Trang chủ', url: '/vi' },
   { name: 'Sản phẩm', url: '/vi/products' },
-  { name: 'Landing', url: '/vi' },
+  { name: 'Dịch vụ', url: '/vi/services' },
   { name: 'Blog', url: '/vi/blog' },
   { name: 'Hệ thống', url: '/vi#features' },
   { name: 'Liên hệ', url: '/vi/contact' },

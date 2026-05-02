@@ -1,20 +1,19 @@
 ---
-title: "Optimisation de l'efficacité avec les outils de pointe de ScrewFast"
-description: "Innovation de l'efficacité de la construction avec des outils de précision et un soutien."
-author: 'Jacob'
+title: 'Mô hình C.H.E.S.S: framework tăng trưởng hoàn chỉnh'
+description: 'Cách kết nối Content, Hub, Ecosystem, System và Scale thành một hệ thống tăng trưởng bền vững.'
+author: 'Folks Team'
 authorImage: '@/images/blog/jacob.avif'
-authorImageAlt: 'Avatar Description'
+authorImageAlt: 'Avatar tác giả'
 pubDate: 2024-02-06
-cardImage: '@/images/blog/post-1.avif'
-cardImageAlt: 'Top view mechanical tools arrangement'
+cardImage: '@/images/growth-brainstorm.jpg'
+cardImageAlt: 'Đội nhóm xây chiến lược tăng trưởng'
 readTime: 4
-tags: ['outils', 'construction', 'flux de travail']
+tags: ['C.H.E.S.S', 'growth', 'system']
 contents:
   [
-    "Dans l'industrie de la construction d'aujourd'hui, où tout va vite, l'efficacité est la clé du succès. Chez ScrewFast, nous comprenons l'importance d'optimiser le flux de votre projet pour respecter les délais et rester dans les limites du budget. C'est pourquoi nous sommes ravis de vous présenter nos outils de pointe conçus pour donner à vos projets une puissance inégalée.",
-    "Notre gamme d'outils matériels associe ingénierie de précision et design centré sur l'utilisateur, garantissant une productivité maximale sur chaque chantier. Des perceuses électriques aux solutions de fixation avancées, les outils de ScrewFast sont conçus pour résister aux rigueurs de la construction tout en rationalisant votre flux de travail.",
-    "L'un de nos atouts majeurs est nos tableaux de bord intuitifs, qui fournissent des informations en temps réel sur l'avancement du projet, l'allocation des ressources, et plus encore. Avec des interfaces conviviales, naviguer et superviser vos projets n'a jamais été aussi simple.",
-    "Mais l'efficacité ne dépend pas seulement des outils que vous utilisez, elle dépend également du soutien que vous recevez. C'est pourquoi ScrewFast propose une documentation complète et un accompagnement d'experts à chaque étape. Nos équipes dévouées sont engagées dans votre succès, fournissant une assistance personnalisée pour vous assurer de tirer le meilleur parti de nos produits.",
-    "Rejoignez les nombreux leaders de l'industrie qui ont déjà constaté la différence que peuvent faire les outils ScrewFast. Avec nos solutions de pointe, vous pouvez accélérer vos projets vers le succès et rester en tête de la concurrence.",
+    'Tăng trưởng hiện đại không còn là cuộc đua của những mẹo ngắn hạn. Điều tạo khác biệt là khả năng xây một hệ thống có thể lặp lại, đo lường và cải thiện liên tục.',
+    'C.H.E.S.S kết nối năm lớp quan trọng: Content để thu hút, Hub để tập trung giá trị, Ecosystem để mở rộng quan hệ, System để vận hành và Scale để nhân rộng điều đã hoạt động.',
+    'Khi năm lớp này đi cùng nhau, đội ngũ không còn phải đoán mò. Mỗi nội dung, mỗi chiến dịch và mỗi điểm chạm đều có vai trò trong một hệ thống chung.',
+    'Bắt đầu nhỏ là cách tốt nhất: chọn một audience rõ ràng, xây một hub đơn giản, rồi tạo workflow để xuất bản, đo lường và tối ưu đều đặn.',
   ]
 ---

@@ -1,20 +1,20 @@
 ---
-title: "Simplifiez l'Approvisionnement et Restez dans les Limites du Budget avec ScrewFast"
-description: 'Outils abordables et durables pour des projets de construction efficaces'
-author: 'Olga Zabegina'
-role: 'Directrice Marketing Stratégique'
+title: 'Công cụ và workflow cho tăng trưởng hiện đại'
+description: 'Những hệ thống nhỏ giúp đội ngũ làm việc rõ hơn, nhanh hơn và ít lãng phí hơn.'
+author: 'Folks Team'
+role: 'Growth Systems'
 authorImage: '@/images/blog/anna.avif'
-authorImageAlt: 'Avatar Description'
+authorImageAlt: 'Avatar tác giả'
 pubDate: 2024-02-18
-cardImage: '@/images/blog/post-3.avif'
-cardImageAlt: 'Side view worker wearing gloves'
+cardImage: '@/images/growth-analytics.jpg'
+cardImageAlt: 'Dashboard đo lường tăng trưởng'
 readTime: 3
-tags: ['approvisionnement', 'abordable', 'efficacité']
+tags: ['tools', 'operations', 'systems']
 contents:
   [
-    "Gérer un projet de construction peut être écrasant, surtout en ce qui concerne l'approvisionnement. C'est pourquoi ScrewFast s'engage à simplifier le processus et à maintenir vos projets dans les limites du budget.",
-    "Avec notre gamme d'outils et d'équipements abordables, vous pouvez trouver tout ce dont vous avez besoin sans vous ruiner. Notre design centré sur l'utilisateur garantit que nos produits sont faciles à utiliser, vous faisant gagner du temps et de la frustration sur le chantier.",
-    "Mais abordable ne signifie pas sacrifier la qualité. Les produits ScrewFast sont conçus pour durer, offrant des performances fiables et une durabilité lorsque vous en avez le plus besoin. Et avec notre documentation complète et nos tutoriels, vous pouvez intégrer nos produits de manière transparente dans votre flux de travail, maximisant ainsi l'efficacité et la productivité.",
-    'Que vous soyez un passionné du bricolage ou un entrepreneur expérimenté, ScrewFast a les solutions dont vous avez besoin pour réussir. Découvrez la différence par vous-même et voyez pourquoi ScrewFast est le choix de confiance pour les besoins en matériel et en construction.',
+    'Công cụ tốt không thay thế tư duy hệ thống, nhưng nó giúp hệ thống vận hành nhẹ hơn.',
+    'Một đội ngũ tăng trưởng nên có ít nhất bốn workflow: lập kế hoạch content, xuất bản, đo lường và review. Mỗi workflow cần đầu vào, đầu ra và người chịu trách nhiệm rõ ràng.',
+    'Dashboard không cần phức tạp. Điều quan trọng là nó trả lời được câu hỏi: điều gì đang hoạt động, điều gì cần dừng lại và bước tiếp theo là gì.',
+    'Khi workflow đủ rõ, tốc độ không còn đến từ việc làm nhiều hơn, mà từ việc giảm nhiễu và tập trung vào đúng điểm đòn bẩy.',
   ]
 ---

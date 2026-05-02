@@ -1,5 +1,4 @@
-﻿---
-// Import necessary components, modules and types
+---
 import MainLayout from '@/layouts/MainLayout.astro';
 import CardBlog from '@components/ui/cards/CardBlog.astro';
 import CardBlogRecent from '@components/ui/cards/CardBlogRecent.astro';
@@ -8,39 +7,34 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { SITE } from '@data/constants';
 
-// Get all blogs post in French and sort them based on publish date
-
-const frenchBlogEntries = await getCollection('blog', ({ id }) => {
+const vietnameseBlogEntries = await getCollection('blog', ({ id }) => {
   return id.startsWith('vi/');
 });
 
-const frenchInsightsEntries = await getCollection('insights', ({ id }) => {
+const vietnameseInsightsEntries = await getCollection('insights', ({ id }) => {
   return id.startsWith('vi/');
 });
 
-const blogPosts: CollectionEntry<'blog'>[] = frenchBlogEntries.sort(
+const blogPosts: CollectionEntry<'blog'>[] = vietnameseBlogEntries.sort(
   (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
     b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-// Get all insights posts
-const insightPosts: CollectionEntry<'insights'>[] = frenchInsightsEntries;
 
-// Separate the most recent post from others
+const insightPosts: CollectionEntry<'insights'>[] = vietnameseInsightsEntries;
 const mostRecentPost: CollectionEntry<'blog'> = blogPosts[0];
 const otherPosts: CollectionEntry<'blog'>[] = blogPosts.slice(1);
 
-// Define variables for page content
-const title: string = "Votre Passerelle vers l'Excellence en Construction";
+const title: string = 'Góc nhìn về tăng trưởng có cấu trúc';
 const subTitle: string =
-  'Explorez les derniÃ¨res actualitÃ©s, astuces et analyses de ScrewFast pour amÃ©liorer vos projets de construction. Des mises en avant de produits aux stratÃ©gies de gestion de projet, notre blog est votre ressource incontournable pour tout ce qui concerne les outils et la construction.';
-const secondTitle: string = 'Perspectives';
+  'Khám phá bài viết về C.H.E.S.S, content engine, cộng đồng và cách biến chiến lược thành hệ thống thực thi bền vững.';
+const secondTitle: string = 'Insights';
 const secondSubTitle: string =
-  "Restez Ã  jour avec les derniÃ¨res tendances et Ã©volutions de l'industrie de la construction grÃ¢ce aux analyses de l'Ã©quipe d'experts de ScrewFast.";
+  'Các góc nhìn ngắn giúp builder và operator ra quyết định rõ hơn trong hành trình tăng trưởng.';
 
 const pageTitle: string = `Blog | ${SITE.title}`;
 const metaDescription =
-  "Restez informÃ© des derniÃ¨res tendances et Ã©volutions dans le secteur de la construction avec les analyses de l'Ã©quipe d'experts de ScrewFast.";
-const ogTitle = "Blog de l'Industrie de la Construction | ScrewFast";
+  'Bài viết và insights của Folks Team về C.H.E.S.S, hệ thống tăng trưởng, content và cộng đồng.';
+const ogTitle = 'Blog tăng trưởng | Folks Team';
 ---
 
 <MainLayout
@@ -53,15 +47,14 @@ const ogTitle = "Blog de l'Industrie de la Construction | ScrewFast";
     '@type': 'WebPage',
     '@id': 'https://folks-team.com/vi/blog',
     url: 'https://folks-team.com/vi/blog',
-    name: 'Blog | ScrewFast',
-    description:
-      "Restez informÃ© des derniÃ¨res tendances et Ã©volutions dans le secteur de la construction avec les analyses de l'Ã©quipe d'experts de ScrewFast.",
+    name: 'Blog | Folks Team',
+    description: metaDescription,
     isPartOf: {
       '@type': 'WebSite',
       url: 'https://folks-team.com/vi',
-      name: 'ScrewFast',
+      name: 'Folks Team',
       description:
-        'ScrewFast propose des outils matÃ©riels de premier ordre et des services de construction experts pour rÃ©pondre Ã  tous vos besoins de projet.',
+        'Folks Team xây hệ thống tăng trưởng hiện đại dựa trên C.H.E.S.S.',
     },
     inLanguage: 'vi',
   }}
@@ -69,7 +62,6 @@ const ogTitle = "Blog de l'Industrie de la Construction | ScrewFast";
   <section
     class="mx-auto max-w-[85rem] space-y-8 px-4 pt-16 sm:px-6 lg:px-8 2xl:max-w-full"
   >
-    {/* Page header */}
     <div class="mx-auto max-w-3xl text-left sm:text-center">
       <h1
         class="block text-4xl font-bold tracking-tight text-balance text-neutral-800 md:text-5xl lg:text-6xl dark:text-neutral-200"
@@ -88,7 +80,6 @@ const ogTitle = "Blog de l'Industrie de la Construction | ScrewFast";
   <section
     class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
   >
-    {/* Blog posts grid */}
     <div class="grid gap-6 lg:grid-cols-2">
       {
         otherPosts.map(blogEntry => (
@@ -97,13 +88,13 @@ const ogTitle = "Blog de l'Industrie de la Construction | ScrewFast";
       }
     </div>
   </section>
-  {/* Most recent blog post */}
+
   <section
     class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
   >
     <CardBlogRecent blogEntry={mostRecentPost} recentBlogLocale="vi" />
   </section>
-  {/* Insights section */}
+
   <section
     class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
   >
@@ -126,4 +117,3 @@ const ogTitle = "Blog de l'Industrie de la Construction | ScrewFast";
     </div>
   </section>
 </MainLayout>
-

@@ -22,7 +22,7 @@ export async function getStaticPaths() {
   return productEntries.map(product => {
     const idWithoutLang = product.id.replace(/^vi\//, ''); // Remove the "vi/" prefix
     return {
-      params: { lang: 'fr', id: idWithoutLang },
+      params: { lang: 'vi', id: idWithoutLang },
       props: { product },
     };
   });

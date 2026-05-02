@@ -1,13 +1,12 @@
-﻿---
-// Import the necessary components
+---
 import MainLayout from '@/layouts/MainLayout.astro';
 import ContactSection from '@components/sections/vi/ContactSection_vi.astro';
 import { SITE } from '@data/constants';
 
-const pageTitle: string = `Nous Contacter | ${SITE.title}`;
+const pageTitle: string = `Liên hệ | ${SITE.title}`;
 const metaDescription =
-  "Vous avez des questions ou souhaitez discuter d'un projet ? Contactez-nous et Ã©laborons ensemble la solution parfaite avec nos outils et services.";
-const ogTitle = 'Nous Contacter | ScrewFast';
+  'Trao đổi với Folks Team về C.H.E.S.S, hệ thống tăng trưởng hoặc La Bàn Cảm Xúc.';
+const ogTitle = 'Liên hệ | Folks Team';
 ---
 
 <MainLayout
@@ -20,19 +19,17 @@ const ogTitle = 'Nous Contacter | ScrewFast';
     '@type': 'WebPage',
     '@id': 'https://folks-team.com/vi/contact',
     url: 'https://folks-team.com/vi/contact',
-    name: 'Nous Contacter | ScrewFast',
-    description:
-      "Vous avez des questions ou souhaitez discuter d'un projet ? Contactez-nous et Ã©laborons ensemble la solution parfaite avec nos outils et services.",
+    name: 'Liên hệ | Folks Team',
+    description: metaDescription,
     isPartOf: {
       '@type': 'WebSite',
       url: 'https://folks-team.com/vi/',
-      name: 'ScrewFast',
+      name: 'Folks Team',
       description:
-        'ScrewFast propose des outils matÃ©riels de premier ordre et des services de construction experts pour rÃ©pondre Ã  tous vos besoins de projet.',
+        'Folks Team xây hệ thống tăng trưởng hiện đại dựa trên C.H.E.S.S.',
     },
     inLanguage: 'vi',
   }}
 >
   <ContactSection />
 </MainLayout>
-

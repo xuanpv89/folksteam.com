@@ -1,55 +1,44 @@
 ---
-title: 'SF-BN B203'
-description: 'Ensemble de boulons à vis et écrous'
+title: 'C.H.E.S.S Growth Blueprint'
+description: 'Khung chiến lược tăng trưởng có cấu trúc'
 main:
   id: 3
   content: |
-    Découvrez le SF-BN B203 – votre compagnon fiable pour des fixations de qualité professionnelle. Cet ensemble complet comprend une sélection polyvalente de boulons à vis et d'écrous, méticuleusement conçus pour offrir la tenue la plus solide pour vos projets de construction et d'assemblage.
-  imgCard: '@/images/product-image-3.avif'
-  imgMain: '@/images/product-image-main-3.avif'
-  imgAlt: "Maquettes de boîtes d'un ensemble de boulons à vis et écrous"
+    C.H.E.S.S Growth Blueprint giúp đội ngũ kết nối Content, Hub, Ecosystem, System và Scale thành một mô hình tăng trưởng rõ ràng.
+  imgCard: '@/images/growth-brainstorm.jpg'
+  imgMain: '@/images/growth-brainstorm.jpg'
+  imgAlt: 'Đội nhóm xây blueprint tăng trưởng'
 tabs:
   - id: 'tabs-with-card-item-1'
     dataTab: '#tabs-with-card-1'
-    title: 'Description'
+    title: 'Mô tả'
   - id: 'tabs-with-card-item-2'
     dataTab: '#tabs-with-card-2'
-    title: 'Spécifications'
+    title: 'Ứng dụng'
   - id: 'tabs-with-card-item-3'
     dataTab: '#tabs-with-card-3'
-    title: 'Plans'
+    title: 'Gợi ý dùng'
 longDescription:
-  title: 'La force rencontre la précision'
+  title: 'Chiến lược gặp thực thi'
   subTitle: |
-    L'ensemble de boulons à vis et écrous SF-BN B203 offre une durabilité robuste et une précision pour les professionnels de la construction, garantissant des performances fiables dans chaque application, de l'encadrement de maisons à l'assemblage de machines.
-  btnTitle: 'Contactez le service commercial pour en savoir plus'
-  btnURL: '#'
+    Blueprint giúp bạn nhìn rõ hệ thống tăng trưởng hiện tại, xác định điểm nghẽn và chọn hướng ưu tiên để thực thi có trật tự hơn.
+  btnTitle: 'Xem dịch vụ'
+  btnURL: '/vi/services'
 descriptionList:
-  - title: 'Résistance à la corrosion'
-    subTitle: 'Le revêtement en zinc offre non seulement un aspect poli, mais protège également contre la corrosion, garantissant une longue durée de vie.'
-  - title: 'Sécurité améliorée'
-    subTitle: 'Un ajustement sécurisé se traduit par des structures plus sûres avec un risque réduit de défaillance des composants.'
-  - title: 'Praticité'
-    subTitle: 'Cet ensemble tout-en-un signifie que vous avez la bonne taille sous la main, réduisant les retards de projet et les allers-retours supplémentaires au magasin de bricolage.'
+  - title: 'Rõ chiến lược'
+    subTitle: 'Kết nối positioning, audience và thông điệp với hệ thống thực thi.'
+  - title: 'Rõ workflow'
+    subTitle: 'Biến ý tưởng thành quy trình có thể lặp lại.'
+  - title: 'Rõ ưu tiên'
+    subTitle: 'Giúp đội ngũ biết nên làm gì trước và đo gì sau.'
 specificationsLeft:
-  - title: 'Composition du matériau'
-    subTitle: "Fabriqué à partir d'acier de haute qualité, offrant résistance et fiabilité pour des applications exigeantes."
-  - title: 'Finition de surface'
-    subTitle: 'Protégé par un revêtement de zinc pour offrir une résistance accrue à la corrosion et une longévité.'
-  - title: 'Quantité par ensemble'
-    subTitle: "L'ensemble comprend une sélection équilibrée de 25 boulons à vis et 25 écrous assortis."
-  - title: 'Assortiment de tailles'
-    subTitle: 'Comprend une gamme complète de tailles pour répondre à diverses exigences de projet, garantissant compatibilité et polyvalence.'
-specificationsRight:
-  - title: 'Détails du filetage'
-    subTitle: 'Conçu avec des filets coupés avec précision pour un ajustement sécurisé et une installation facile.'
-  - title: 'Propriétés mécaniques'
-    subTitle: 'Chaque boulon et écrou est conçu pour répondre à des indices de charge spécifiques ou à des normes de résistance, adaptés aux applications structurelles.'
-  - title: 'Normes et certifications'
-    subTitle: 'Conforme aux normes et certifications industrielles pertinentes, garantissant une qualité et une sécurité constantes.'
-  - title: 'Applications adaptées'
-    subTitle: "Idéal pour un large éventail d'utilisations, des environnements de construction aux assemblages mécaniques qui nécessitent des joints solides et sécurisés."
+  - title: 'Lớp hệ thống'
+    subTitle: 'Content, Hub, Ecosystem, System và Scale.'
+  - title: 'Đầu ra'
+    subTitle: 'Bản đồ tăng trưởng, ưu tiên thực thi và workflow cốt lõi.'
+  - title: 'Phù hợp'
+    subTitle: 'Startup, operator, cộng đồng và đội marketing.'
 blueprints:
-  first: '@/images/blueprint-1.avif'
-  second: '@/images/blueprint-2.avif'
+  first: '@/images/growth-brainstorm.jpg'
+  second: '@/images/growth-analytics.jpg'
 ---

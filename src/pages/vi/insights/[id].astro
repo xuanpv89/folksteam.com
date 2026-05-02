@@ -13,7 +13,7 @@ export async function getStaticPaths() {
   return insightPosts.map(post => {
     const idWithoutLang = post.id.replace(/^vi\//, ''); // Remove the "vi/" prefix
     return {
-      params: { lang: 'fr', id: idWithoutLang },
+      params: { lang: 'vi', id: idWithoutLang },
       props: { post },
     };
   });

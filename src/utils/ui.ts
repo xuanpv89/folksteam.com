@@ -1,5 +1,4 @@
-﻿export const languages = {
+export const languages = {
   en: 'English',
-  fr: 'FranÃ§ais',
+  vi: 'Tiếng Việt',
 };
-

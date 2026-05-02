@@ -1,17 +1,13 @@
-﻿---
-// Importing necessary components
+---
 import MainLayout from '@/layouts/MainLayout.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import CardSmall from '@components/ui/cards/CardSmall.astro';
 import CardWide from '@components/ui/cards/CardWide.astro';
 import FeaturesStatsAlt from '@components/sections/features/FeaturesStatsAlt.astro';
 import TestimonialsSectionAlt from '@components/sections/testimonials/TestimonialsSectionAlt.astro';
-
-// Importing necessary functions from Astro
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
-// Fetching all the product related content and sorting it by main.id
 const product: CollectionEntry<'products'>[] = (
   await getCollection('products', ({ id }) => {
     return id.startsWith('vi/');
@@ -21,48 +17,44 @@ const product: CollectionEntry<'products'>[] = (
     a.data.main.id - b.data.main.id
 );
 
-// Define variables for page content
-const title: string = 'Produits';
+const title: string = 'Sản phẩm';
 const subTitle: string =
-  'Explorez la durabilitÃ© et la prÃ©cision des outils ScrewFast, conÃ§us aussi bien pour les professionnels que pour les amateurs. Chacun de nos produits est fabriquÃ© avec prÃ©cision et conÃ§u pour durer, garantissant que vous disposez du bon outil pour chaque tÃ¢che.';
+  'Khám phá La Bàn Cảm Xúc: bộ thẻ và công cụ giúp gọi tên cảm xúc, quan sát tín hiệu bên trong và mở ra những cuộc trò chuyện sâu hơn.';
 
-// Testimonial data that will be rendered in the component
 const testimonials = [
   {
     content:
-      "Depuis que nous avons adoptÃ© les outils matÃ©riels de ScrewFast, l'efficacitÃ© sur nos chantiers de construction a explosÃ©. La durabilitÃ© des boulons hexagonaux et la prÃ©cision des vis machine sont tout simplement inÃ©galÃ©es. C'est rafraÃ®chissant de travailler avec une entreprise qui comprend vraiment les exigences quotidiennes de l'industrie.",
-    author: 'Jason Clark',
-    role: 'ContremaÃ®tre de chantier | TopBuild',
+      'La Bàn Cảm Xúc giúp buổi workshop trở nên dễ mở lời hơn. Người tham gia không cần diễn giải quá nhiều vẫn có thể chọn thẻ để bắt đầu chia sẻ.',
+    author: 'Mai Anh',
+    role: 'Facilitator | Community Lab',
     avatarSrc:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80',
-    avatarAlt: "Description de l'image",
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1376&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80',
+    avatarAlt: 'Người dùng La Bàn Cảm Xúc',
   },
-
   {
     content:
-      "En tant que designer d'intÃ©rieur, je suis toujours Ã  la recherche de matÃ©riaux et d'outils de haute qualitÃ© qui m'aident Ã  donner vie Ã  mes visions. L'assortiment de vis mixtes de ScrewFast a rÃ©volutionnÃ© mes projets, offrant le mÃ©lange parfait de qualitÃ© et de variÃ©tÃ©. Le support client exceptionnel Ã©tait la cerise sur le gÃ¢teau !",
-    author: 'Maria Gonzalez',
-    role: "Designer d'intÃ©rieur | Creative Spaces",
+      'Bộ thẻ làm cho việc nhận diện cảm xúc trở nên cụ thể. Nó rất hữu ích khi làm việc với đội nhóm, lớp học hoặc những buổi coaching một một.',
+    author: 'Quang Minh',
+    role: 'Coach | Growth Practice',
     avatarSrc:
-      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1376&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80',
-    avatarAlt: "Description de l'image",
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1374&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80',
+    avatarAlt: 'Coach sử dụng La Bàn Cảm Xúc',
   },
-
   {
     content:
-      "Je suis menuisier professionnel depuis plus de 15 ans, et je peux sincÃ¨rement dire que les boulons et Ã©crous Ã  tarauder de ScrewFast sont parmi les meilleurs que j'ai utilisÃ©s. Ils adhÃ¨rent comme aucun autre, et j'ai une confiance totale dans chaque joint et Ã©lÃ©ment. De plus, le service est impeccable - ils se soucient vraiment du succÃ¨s de mon projet.",
-    author: 'Richard Kim',
-    role: 'Menuisier-MaÃ®tre | WoodWright',
+      'Điểm hay nhất là sản phẩm không ép người dùng phải có câu trả lời đúng. Nó tạo một không gian an toàn để quan sát và gọi tên điều đang diễn ra.',
+    author: 'Linh Đan',
+    role: 'Learning Designer | Folks Team',
     avatarSrc:
-      'https://images.unsplash.com/photo-1474176857210-7287d38d27c6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80',
-    avatarAlt: "Description de l'image",
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1374&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80',
+    avatarAlt: 'Learning designer',
   },
 ];
 
-const pageTitle = 'Produits | ScrewFast';
+const pageTitle = 'Sản phẩm | Folks Team';
 const metaDescription =
-  'Explorez la durabilitÃ© et la prÃ©cision des outils ScrewFast, conÃ§us aussi bien pour les professionnels que pour les passionnÃ©s.';
-const ogTitle = 'Outils MatÃ©riels | ScrewFast';
+  'La Bàn Cảm Xúc là bộ công cụ giúp nhận diện, gọi tên và trò chuyện về cảm xúc một cách rõ ràng hơn.';
+const ogTitle = 'La Bàn Cảm Xúc | Folks Team';
 ---
 
 <MainLayout
@@ -75,15 +67,14 @@ const ogTitle = 'Outils MatÃ©riels | ScrewFast';
     '@type': 'WebPage',
     '@id': 'https://folks-team.com/vi/products',
     url: 'https://folks-team.com/vi/products',
-    name: 'Outils MatÃ©riels | ScrewFast',
-    description:
-      'Explorez la durabilitÃ© et la prÃ©cision des outils ScrewFast, conÃ§us aussi bien pour les professionnels que pour les passionnÃ©s.',
+    name: 'La Bàn Cảm Xúc | Folks Team',
+    description: metaDescription,
     isPartOf: {
       '@type': 'WebSite',
       url: 'https://folks-team.com/vi',
-      name: 'ScrewFast',
+      name: 'Folks Team',
       description:
-        'ScrewFast propose des outils matÃ©riels de premier ordre et des services de construction experts pour rÃ©pondre Ã  tous vos besoins de projet.',
+        'Folks Team xây hệ thống tăng trưởng hiện đại dựa trên C.H.E.S.S.',
     },
     inLanguage: 'vi',
   }}
@@ -106,18 +97,9 @@ const ogTitle = 'Outils MatÃ©riels | ScrewFast';
           )
         }
       </div>
-      <PrimaryCTA
-        title="Histoires de clients"
-        url="#testimonials"
-        noArrow={true}
-      />
+      <PrimaryCTA title="Câu chuyện người dùng" url="#testimonials" noArrow={true} />
     </div>
-    {
-      /* Displaying products in alternating styles. Alternative product gets different card styling. */
-    }
-    {
-      /* Maps through all product entries and displays them with either CardSmall or CardWide based on their position. */
-    }
+
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">
       {
         product.map((product, index) => {
@@ -131,20 +113,19 @@ const ogTitle = 'Outils MatÃ©riels | ScrewFast';
       }
     </section>
   </div>
-  {/* Features statistics section */}
+
   <FeaturesStatsAlt
-    title="Pourquoi choisir ScrewFast ?"
-    subTitle="Transformez vos idÃ©es en rÃ©sultats tangibles avec les outils ScrewFast. Que vous commenciez par un croquis sur un coin de table ou plongiez dans un projet de construction complet, nos outils sont conÃ§us pour vous aider Ã  construire en toute confiance."
+    title="Vì sao chọn La Bàn Cảm Xúc?"
+    subTitle="Một công cụ trực quan để biến cảm xúc từ điều mơ hồ thành ngôn ngữ có thể chia sẻ, quan sát và thực hành."
     benefits={[
-      'Outils robustes et fiables pour des performances durables.',
-      'Solutions innovantes adaptÃ©es aux besoins de construction modernes.',
-      'Support client dÃ©diÃ© au succÃ¨s de votre projet.',
+      'Giúp người dùng gọi tên cảm xúc nhanh hơn và chính xác hơn.',
+      'Phù hợp cho workshop, coaching, giáo dục, đội nhóm và tự quan sát.',
+      'Thiết kế mở, dễ kết hợp với journaling, check-in, debrief và hoạt động nhóm.',
     ]}
   />
-  {/* Testimonials section */}
+
   <TestimonialsSectionAlt
-    title="Ce que disent nos clients"
+    title="Người dùng nói gì"
     testimonials={testimonials}
   />
 </MainLayout>
-
