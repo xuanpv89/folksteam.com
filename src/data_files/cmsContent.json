@@ -1,0 +1,85 @@
+{
+  "updatedAt": "2026-05-03",
+  "pages": [
+    {
+      "id": "home",
+      "title": "Home",
+      "path": "/",
+      "sections": [
+        {
+          "id": "hero",
+          "title": "Hero",
+          "fields": [
+            { "key": "headline", "label": "Headline", "type": "text", "value": "A Modern Growth System Built on C.H.E.S.S" },
+            { "key": "subtitle", "label": "Subtitle", "type": "textarea", "value": "A strategic framework for building marketing, community, and scalable growth systems." },
+            { "key": "primaryCta", "label": "Primary CTA", "type": "text", "value": "Get Started" },
+            { "key": "secondaryCta", "label": "Secondary CTA", "type": "text", "value": "Learn more" }
+          ]
+        },
+        {
+          "id": "video-gallery",
+          "title": "Video Gallery",
+          "fields": [
+            { "key": "title", "label": "Title", "type": "text", "value": "See how content can carry community energy" },
+            { "key": "description", "label": "Description", "type": "textarea", "value": "Video is one of the clearest ways to show learning, emotion, and trust." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About Us",
+      "path": "/about",
+      "sections": [
+        {
+          "id": "story",
+          "title": "Company Story",
+          "fields": [
+            { "key": "headline", "label": "Headline", "type": "text", "value": "We build growth systems for people-centered brands." },
+            { "key": "body", "label": "Body", "type": "textarea", "value": "Folks Team connects strategy, content, community, and reflective tools into practical systems." }
+          ]
+        },
+        {
+          "id": "team",
+          "title": "Team",
+          "fields": [
+            { "key": "headline", "label": "Headline", "type": "text", "value": "Meet the Folks Team" },
+            { "key": "summary", "label": "Summary", "type": "textarea", "value": "A compact team of strategists, facilitators, content makers, and product builders." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "path": "/contact",
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Intro",
+          "fields": [
+            { "key": "title", "label": "Title", "type": "text", "value": "Contact us" },
+            { "key": "subtitle", "label": "Subtitle", "type": "textarea", "value": "Have questions or want to discuss a project? Reach out." },
+            { "key": "email", "label": "Email", "type": "text", "value": "contact@folksteam.com" },
+            { "key": "address", "label": "Address", "type": "text", "value": "50 Quach Giai, Cat Lai, HCMC" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "member",
+      "title": "Member",
+      "path": "/member",
+      "sections": [
+        {
+          "id": "hero",
+          "title": "Hero",
+          "fields": [
+            { "key": "headline", "label": "Headline", "type": "text", "value": "Build your growth system with structure, support, and practice." },
+            { "key": "subtitle", "label": "Subtitle", "type": "textarea", "value": "The Folks member area is designed as a practical workspace for people applying C.H.E.S.S." }
+          ]
+        }
+      ]
+    }
+  ]
+}

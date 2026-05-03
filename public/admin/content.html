@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Folks Team Content CMS</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+
+      :root {
+        --ink: #262626;
+        --muted: #525252;
+        --line: #e5e5e5;
+        --paper: #e5e5e5;
+        --brand: #4fb16f;
+        --brand-dark: #3f965c;
+        --brand-soft: #f0faf3;
+        font-family: 'Be Vietnam Pro', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--paper); color: var(--ink); }
+      a { color: inherit; text-decoration: none; }
+
+      .shell { max-width: 1320px; margin: 0 auto; padding: 24px 18px 56px; }
+      .topbar {
+        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+        margin-bottom: 22px; border: 1px solid rgb(220 244 228 / 72%); border-radius: 36px;
+        background: rgb(240 250 243 / 72%); padding: 16px; box-shadow: 0 18px 55px rgb(38 38 38 / 7%);
+      }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .mark { display: grid; width: 50px; height: 50px; place-items: center; border-radius: 8px; background: var(--brand); color: #fff; font-weight: 900; }
+      .eyebrow { margin: 0; color: var(--brand-dark); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 { margin-bottom: 0; font-size: clamp(34px, 5vw, 58px); line-height: 1; letter-spacing: -.02em; }
+      h2 { margin-bottom: 8px; }
+
+      .nav, .actions, .button-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+      button, .nav a {
+        min-height: 40px; border: 0; border-radius: 999px; background: var(--brand); color: #fff;
+        cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+        padding: 9px 15px; font: inherit; font-size: 13px; font-weight: 800;
+      }
+      .nav a { background: var(--ink); }
+      button.secondary, .nav a.secondary { border: 1px solid #d4d4d4; background: #fff; color: var(--ink); }
+      button.danger { border: 1px solid #fecaca; background: #fff; color: #991b1b; }
+
+      .hero-panel, .card {
+        border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 22px;
+        box-shadow: 0 18px 45px rgb(38 38 38 / 8%);
+      }
+      .hero-panel { margin-bottom: 18px; background: #f5f5f5; }
+      .hero-panel p { color: var(--muted); max-width: 760px; }
+
+      .layout { display: grid; gap: 18px; }
+      @media (min-width: 1060px) {
+        .layout { grid-template-columns: 270px minmax(0, .95fr) minmax(0, 1fr); align-items: start; }
+      }
+
+      .sidebar, .preview-card { position: sticky; top: 18px; }
+      .list { display: grid; gap: 8px; }
+      .item {
+        width: 100%; justify-content: flex-start; border: 1px solid var(--line); border-radius: 8px;
+        background: #fff; color: var(--ink); text-align: left;
+      }
+      .item.active { border-color: #bde8cb; background: var(--brand-soft); color: #244f34; }
+      .item small { display: block; color: var(--muted); font-weight: 600; }
+
+      label { display: grid; gap: 6px; color: #403d37; font-size: 13px; font-weight: 800; }
+      input, select, textarea {
+        width: 100%; border: 1px solid #d4d4d4; border-radius: 8px; background: #fafafa; color: var(--ink);
+        font: inherit; font-size: 14px; padding: 12px 13px; outline: none;
+      }
+      textarea { min-height: 118px; resize: vertical; }
+      input:focus, select:focus, textarea:focus { border-color: var(--brand); background: #fff; box-shadow: 0 0 0 3px rgb(79 177 111 / 18%); }
+      .row { display: grid; gap: 12px; }
+      @media (min-width: 680px) { .row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      .field-list { display: grid; gap: 12px; margin-top: 14px; }
+      .field-card { border: 1px solid var(--line); border-radius: 8px; background: #fafafa; padding: 14px; }
+      .section-title { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+      .hint { color: var(--muted); font-size: 13px; }
+      .path {
+        border: 1px solid #d4d4d4; border-radius: 8px; background: #f5f5f5; padding: 8px 10px;
+        color: #404040; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; overflow-wrap: anywhere;
+      }
+      pre {
+        min-height: 560px; max-height: 72vh; overflow: auto; border: 1px solid #2b2b2b; border-radius: 8px;
+        background: #171717; color: #f9f4df; font-size: 13px; line-height: 1.55; padding: 16px; white-space: pre-wrap;
+      }
+      .publish-box { display: grid; gap: 12px; border: 1px solid #bde8cb; border-radius: 8px; background: var(--brand-soft); padding: 14px; margin-top: 14px; }
+      .toast { display: none; margin-top: 10px; border-radius: 8px; background: #ecfdf5; color: #065f46; padding: 10px 12px; font-size: 13px; font-weight: 700; }
+      .toast.error { background: #fef2f2; color: #991b1b; }
+      .toast.show { display: block; }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="mark">FT</div>
+          <div>
+            <p class="eyebrow">Folks Team CMS</p>
+            <h1>Content Manager</h1>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Admin links">
+          <a href="/admin/">Blog CMS</a>
+          <a href="/blog">Blog EN</a>
+          <a href="/vi/blog">Blog VI</a>
+          <a class="secondary" href="/">Home</a>
+        </nav>
+      </header>
+
+      <section class="hero-panel">
+        <p class="eyebrow">Page content workspace</p>
+        <h2>Quản lý nội dung theo từng trang, section và đoạn copy.</h2>
+        <p>
+          CMS này tạo một file JSON trung tâm cho nội dung site. Bạn có thể lưu
+          draft trên trình duyệt, export JSON, hoặc publish lên GitHub vào
+          <code>src/data_files/cmsContent.json</code>.
+        </p>
+      </section>
+
+      <section class="layout">
+        <aside class="card sidebar">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Pages</p>
+              <h2>Trang</h2>
+            </div>
+          </div>
+          <div class="list" id="page-list"></div>
+          <div class="actions" style="margin-top:14px">
+            <button type="button" id="add-page">Add page</button>
+          </div>
+        </aside>
+
+        <section class="card">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Editor</p>
+              <h2 id="editor-title">Page editor</h2>
+            </div>
+          </div>
+
+          <div class="row">
+            <label>
+              Page title
+              <input id="page-title" />
+            </label>
+            <label>
+              Page path
+              <input id="page-path" />
+            </label>
+          </div>
+
+          <div class="section-title" style="margin-top:18px">
+            <div>
+              <p class="eyebrow">Sections</p>
+              <h3>Section trong trang</h3>
+            </div>
+            <button type="button" id="add-section">Add section</button>
+          </div>
+          <div class="list" id="section-list"></div>
+
+          <div class="publish-box">
+            <h3>Selected section</h3>
+            <div class="row">
+              <label>
+                Section ID
+                <input id="section-id" />
+              </label>
+              <label>
+                Section title
+                <input id="section-title-input" />
+              </label>
+            </div>
+            <div class="section-title" style="margin-top:8px">
+              <div>
+                <p class="eyebrow">Fields</p>
+                <h3>Từng đoạn nội dung</h3>
+              </div>
+              <button type="button" id="add-field">Add field</button>
+            </div>
+            <div class="field-list" id="field-list"></div>
+          </div>
+
+          <div class="publish-box">
+            <h3>Publish JSON to GitHub</h3>
+            <p class="hint">
+              Token cần quyền <strong>Contents: Read and write</strong>. Khi
+              publish, CMS sẽ commit file JSON vào repo.
+            </p>
+            <div class="row">
+              <label>
+                Repository
+                <input id="githubRepo" value="xuanpv89/folks-template-screwfast" />
+              </label>
+              <label>
+                Branch
+                <input id="githubBranch" value="main" />
+              </label>
+            </div>
+            <label>
+              GitHub token
+              <input id="githubToken" type="password" autocomplete="off" placeholder="github_pat_..." />
+            </label>
+          </div>
+
+          <div class="button-row" style="margin-top:14px">
+            <button type="button" id="save-local">Save draft</button>
+            <button type="button" class="secondary" id="export-json">Download JSON</button>
+            <button type="button" class="secondary" id="copy-json">Copy JSON</button>
+            <button type="button" id="publish-github">Publish to GitHub</button>
+          </div>
+          <div class="toast" id="toast">Done.</div>
+        </section>
+
+        <section class="card preview-card">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Preview</p>
+              <h2>JSON preview</h2>
+            </div>
+          </div>
+          <div class="path">src/data_files/cmsContent.json</div>
+          <pre id="preview"></pre>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const defaultContent = {
+        updatedAt: new Date().toISOString(),
+        pages: [
+          {
+            id: 'home',
+            title: 'Home',
+            path: '/',
+            sections: [
+              {
+                id: 'hero',
+                title: 'Hero',
+                fields: [
+                  { key: 'headline', label: 'Headline', type: 'text', value: 'A Modern Growth System Built on C.H.E.S.S' },
+                  { key: 'subtitle', label: 'Subtitle', type: 'textarea', value: 'A strategic framework for building marketing, community, and scalable growth systems.' },
+                  { key: 'primaryCta', label: 'Primary CTA', type: 'text', value: 'Get Started' }
+                ]
+              }
+            ]
+          },
+          {
+            id: 'about',
+            title: 'About Us',
+            path: '/about',
+            sections: [
+              {
+                id: 'team',
+                title: 'Team',
+                fields: [
+                  { key: 'headline', label: 'Headline', type: 'text', value: 'Meet the Folks Team' },
+                  { key: 'summary', label: 'Summary', type: 'textarea', value: 'A compact team of strategists, facilitators, content makers, and product builders.' }
+                ]
+              }
+            ]
+          }
+        ]
+      };
+
+      let state = JSON.parse(localStorage.getItem('folksContentCms') || 'null') || defaultContent;
+      let pageIndex = 0;
+      let sectionIndex = 0;
+
+      const pageList = document.getElementById('page-list');
+      const sectionList = document.getElementById('section-list');
+      const fieldList = document.getElementById('field-list');
+      const preview = document.getElementById('preview');
+      const toast = document.getElementById('toast');
+      const pageTitle = document.getElementById('page-title');
+      const pagePath = document.getElementById('page-path');
+      const sectionId = document.getElementById('section-id');
+      const sectionTitle = document.getElementById('section-title-input');
+      const githubRepo = document.getElementById('githubRepo');
+      const githubBranch = document.getElementById('githubBranch');
+      const githubToken = document.getElementById('githubToken');
+
+      function slugify(value) {
+        return String(value || 'item').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      }
+
+      function showToast(message, type = 'success') {
+        toast.textContent = message;
+        toast.classList.toggle('error', type === 'error');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), type === 'error' ? 5200 : 2400);
+      }
+
+      function currentPage() {
+        return state.pages[pageIndex];
+      }
+
+      function currentSection() {
+        return currentPage().sections[sectionIndex];
+      }
+
+      function renderPages() {
+        pageList.innerHTML = '';
+        state.pages.forEach((page, index) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `item ${index === pageIndex ? 'active' : ''}`;
+          button.innerHTML = `<span>${page.title}</span><small>${page.path}</small>`;
+          button.addEventListener('click', () => {
+            pageIndex = index;
+            sectionIndex = 0;
+            render();
+          });
+          pageList.appendChild(button);
+        });
+      }
+
+      function renderSections() {
+        sectionList.innerHTML = '';
+        currentPage().sections.forEach((section, index) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `item ${index === sectionIndex ? 'active' : ''}`;
+          button.innerHTML = `<span>${section.title}</span><small>${section.id}</small>`;
+          button.addEventListener('click', () => {
+            sectionIndex = index;
+            render();
+          });
+          sectionList.appendChild(button);
+        });
+      }
+
+      function renderFields() {
+        fieldList.innerHTML = '';
+        currentSection().fields.forEach((field, index) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'field-card';
+          const input = field.type === 'textarea'
+            ? `<textarea data-field-value="${index}">${field.value || ''}</textarea>`
+            : `<input data-field-value="${index}" value="${String(field.value || '').replaceAll('"', '&quot;')}" />`;
+          wrapper.innerHTML = `
+            <div class="row">
+              <label>Field key<input data-field-key="${index}" value="${field.key}" /></label>
+              <label>Label<input data-field-label="${index}" value="${field.label}" /></label>
+            </div>
+            <div class="row" style="margin-top:12px">
+              <label>Type
+                <select data-field-type="${index}">
+                  <option value="text" ${field.type === 'text' ? 'selected' : ''}>Text</option>
+                  <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Textarea</option>
+                </select>
+              </label>
+              <label>Value${input}</label>
+            </div>
+            <div class="actions">
+              <button type="button" class="danger" data-remove-field="${index}">Remove field</button>
+            </div>
+          `;
+          fieldList.appendChild(wrapper);
+        });
+      }
+
+      function syncInputs() {
+        const page = currentPage();
+        const section = currentSection();
+        pageTitle.value = page.title;
+        pagePath.value = page.path;
+        sectionId.value = section.id;
+        sectionTitle.value = section.title;
+        document.getElementById('editor-title').textContent = `${page.title} content`;
+      }
+
+      function updatePreview() {
+        state.updatedAt = new Date().toISOString();
+        preview.textContent = JSON.stringify(state, null, 2);
+      }
+
+      function render() {
+        renderPages();
+        renderSections();
+        syncInputs();
+        renderFields();
+        updatePreview();
+      }
+
+      function saveCurrentFromInputs() {
+        const page = currentPage();
+        const section = currentSection();
+        page.title = pageTitle.value.trim() || page.title;
+        page.path = pagePath.value.trim() || page.path;
+        page.id = slugify(page.title);
+        section.id = slugify(sectionId.value || section.title);
+        section.title = sectionTitle.value.trim() || section.title;
+        section.fields.forEach((field, index) => {
+          field.key = document.querySelector(`[data-field-key="${index}"]`).value.trim() || field.key;
+          field.label = document.querySelector(`[data-field-label="${index}"]`).value.trim() || field.label;
+          field.type = document.querySelector(`[data-field-type="${index}"]`).value;
+          field.value = document.querySelector(`[data-field-value="${index}"]`).value;
+        });
+        updatePreview();
+      }
+
+      function downloadJson() {
+        saveCurrentFromInputs();
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'cmsContent.json';
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }
+
+      function toBase64Utf8(value) {
+        const bytes = new TextEncoder().encode(value);
+        let binary = '';
+        bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+        return btoa(binary);
+      }
+
+      async function githubRequest(url, token, options = {}) {
+        const response = await fetch(url, {
+          ...options,
+          headers: {
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${token}`,
+            'X-GitHub-Api-Version': '2022-11-28',
+            ...(options.headers || {}),
+          },
+        });
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : null;
+        if (!response.ok) {
+          const error = new Error(data?.message || `GitHub API error ${response.status}`);
+          error.status = response.status;
+          throw error;
+        }
+        return data;
+      }
+
+      async function publishToGithub() {
+        saveCurrentFromInputs();
+        const repo = githubRepo.value.trim();
+        const branch = githubBranch.value.trim() || 'main';
+        const token = githubToken.value.trim();
+        if (!repo.includes('/') || !token) {
+          showToast('Nhập repo và GitHub token trước khi publish.', 'error');
+          return;
+        }
+        const target = 'src/data_files/cmsContent.json';
+        const apiPath = encodeURIComponent(target).replace(/%2F/g, '/');
+        const url = `https://api.github.com/repos/${repo}/contents/${apiPath}?ref=${encodeURIComponent(branch)}`;
+        let sha;
+        try {
+          const existing = await githubRequest(url, token);
+          sha = existing.sha;
+        } catch (error) {
+          if (error.status !== 404) throw error;
+        }
+        await githubRequest(`https://api.github.com/repos/${repo}/contents/${apiPath}`, token, {
+          method: 'PUT',
+          body: JSON.stringify({
+            message: 'Update CMS page content',
+            content: toBase64Utf8(JSON.stringify(state, null, 2)),
+            branch,
+            ...(sha ? { sha } : {}),
+          }),
+        });
+        showToast('Đã publish cmsContent.json lên GitHub.');
+      }
+
+      document.addEventListener('input', event => {
+        if (event.target.closest('.card')) saveCurrentFromInputs();
+      });
+      document.getElementById('add-page').addEventListener('click', () => {
+        state.pages.push({ id: 'new-page', title: 'New Page', path: '/new-page', sections: [{ id: 'intro', title: 'Intro', fields: [] }] });
+        pageIndex = state.pages.length - 1;
+        sectionIndex = 0;
+        render();
+      });
+      document.getElementById('add-section').addEventListener('click', () => {
+        currentPage().sections.push({ id: 'new-section', title: 'New Section', fields: [] });
+        sectionIndex = currentPage().sections.length - 1;
+        render();
+      });
+      document.getElementById('add-field').addEventListener('click', () => {
+        currentSection().fields.push({ key: 'newField', label: 'New field', type: 'text', value: '' });
+        render();
+      });
+      fieldList.addEventListener('click', event => {
+        const index = event.target.dataset.removeField;
+        if (index === undefined) return;
+        currentSection().fields.splice(Number(index), 1);
+        render();
+      });
+      document.getElementById('save-local').addEventListener('click', () => {
+        saveCurrentFromInputs();
+        localStorage.setItem('folksContentCms', JSON.stringify(state));
+        showToast('Đã lưu draft content trên trình duyệt.');
+      });
+      document.getElementById('export-json').addEventListener('click', downloadJson);
+      document.getElementById('copy-json').addEventListener('click', async () => {
+        saveCurrentFromInputs();
+        await navigator.clipboard.writeText(JSON.stringify(state, null, 2));
+        showToast('Đã copy JSON.');
+      });
+      document.getElementById('publish-github').addEventListener('click', () => {
+        publishToGithub().catch(error => showToast(`Publish lỗi: ${error.message}`, 'error'));
+      });
+      githubRepo.value = localStorage.getItem('folksGithubRepo') || githubRepo.value;
+      githubBranch.value = localStorage.getItem('folksGithubBranch') || githubBranch.value;
+      githubToken.value = localStorage.getItem('folksGithubToken') || '';
+      render();
+    </script>
+  </body>
+</html>
