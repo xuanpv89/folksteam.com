@@ -15,7 +15,7 @@ const locale = Astro.currentLocale === 'vi' ? 'vi' : 'en';
   <div
     class="mx-auto w-full max-w-[85rem] px-4 py-10 sm:px-6 lg:px-16 lg:pt-20 2xl:max-w-(--breakpoint-2xl)"
   >
-    <div class="grid grid-cols-2 gap-6 md:grid-cols-4 lg:grid-cols-5">
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-4 lg:grid-cols-[1.25fr_repeat(3,minmax(0,.8fr))_1.45fr] lg:gap-8">
       <div class="col-span-full lg:col-span-1">
         <BrandLogo class="h-auto w-32" />
         <div class="mt-4 space-y-1 text-sm text-neutral-600 dark:text-neutral-400">
@@ -52,14 +52,19 @@ const locale = Astro.currentLocale === 'vi' ? 'vi' : 'en';
           </div>
         ))
       }
-    </div>
 
-    <div class="mt-8 max-w-xl">
-      <NewsletterSignup locale={locale} compact={true} id={`newsletter-footer-${locale}`} />
+      <div class="col-span-full md:col-span-2 lg:col-span-1">
+        <NewsletterSignup
+          locale={locale}
+          compact={true}
+          variant="footer"
+          id={`newsletter-footer-${locale}`}
+        />
+      </div>
     </div>
 
     <div
-      class="mt-9 grid gap-y-2 sm:mt-12 sm:flex sm:items-center sm:justify-between sm:gap-y-0"
+      class="mt-9 grid gap-y-2 border-t border-neutral-400/40 pt-6 sm:mt-12 sm:flex sm:items-center sm:justify-between sm:gap-y-0 dark:border-neutral-700"
     >
       <div class="flex items-center justify-between">
         <p class="text-sm text-neutral-600 dark:text-neutral-400">
