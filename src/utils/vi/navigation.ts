@@ -42,13 +42,6 @@ const footerLinks = [
       { name: 'Liên hệ', url: '/vi/contact' },
     ],
   },
-  {
-    section: 'Liên hệ',
-    links: [
-      { name: 'contact@folksteam.com', url: 'mailto:contact@folksteam.com' },
-      { name: '50 Quách Giai, Cát Lái, TPHCM', url: '/vi/contact' },
-    ],
-  },
 ];
 
 const socialLinks = {

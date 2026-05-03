@@ -1,10 +1,17 @@
 ---
-const { label = Astro.currentLocale === 'vi' ? 'Email' : 'Email', id } =
+const {
+  label = Astro.currentLocale === 'vi' ? 'Email' : 'Email',
+  id,
+  name = 'email',
+  required = false,
+} =
   Astro.props;
 
 interface Props {
   label?: string;
   id: string;
+  name?: string;
+  required?: boolean;
 }
 ---
 
@@ -17,9 +24,10 @@ interface Props {
   {/* Email input field */}
   <input
     type="email"
-    name="hs-email-contacts"
+    name={name}
     id={id}
     autocomplete="email"
+    required={required}
     class="block w-full rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-700 placeholder:text-neutral-500 focus:border-neutral-200 focus:ring-3 focus:ring-neutral-400 focus:outline-hidden disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-700/30 dark:text-neutral-300 dark:placeholder:text-neutral-400 dark:focus:ring-1"
     placeholder="Email"
   />

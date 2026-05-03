@@ -42,13 +42,6 @@ const footerLinks = [
       { name: 'Contact', url: '/contact' },
     ],
   },
-  {
-    section: 'Contact',
-    links: [
-      { name: 'contact@folksteam.com', url: 'mailto:contact@folksteam.com' },
-      { name: '50 Quach Giai, Cat Lai, HCMC', url: '/contact' },
-    ],
-  },
 ];
 
 const socialLinks = {

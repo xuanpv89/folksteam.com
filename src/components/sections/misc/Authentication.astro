@@ -1,16 +1,10 @@
 ---
-// Import the necessary components from their respective component files
-import LoginModal from '@components/ui/forms/LoginModal.astro';
-import RegisterModal from '@components/ui/forms/RegisterModal.astro';
-import RecoverModal from '@components/ui/forms/RecoverModal.astro';
 import LoginBtn from '@components/ui/buttons/LoginBtn.astro';
+
+const isVi = Astro.currentLocale === 'vi';
+const title = isVi ? 'Thành viên' : 'Login';
+const url = isVi ? '/vi/member' : '/member';
 ---
 
 {/* Login Button */}
-<LoginBtn title="Login" />
-{/* Login Modal */}
-<LoginModal />
-{/* Register Modal */}
-<RegisterModal />
-{/* Password Recovery Modal */}
-<RecoverModal />
+<LoginBtn title={title} url={url} />

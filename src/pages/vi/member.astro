@@ -1,0 +1,85 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+
+const benefits = [
+  ['Lộ trình học', 'Theo dõi các track C.H.E.S.S cho content, community, event, offer và session.'],
+  ['Thư viện template', 'Sử dụng checklist, canvas và công cụ vận hành để xây hệ thống tăng trưởng lặp lại được.'],
+  ['Không gian cộng đồng', 'Thảo luận cùng thành viên, nhận phản hồi và học từ các builder khác.'],
+  ['Thực hành Compassio', 'Dùng prompt phản tư để đội nhóm có thêm ngôn ngữ cho cảm xúc, lắng nghe và niềm tin.'],
+];
+
+const memberRoles = [
+  ['Builder', 'Dành cho founder, creator và operator đang xây hệ thống tăng trưởng có cấu trúc đầu tiên.'],
+  ['Facilitator', 'Dành cho coach, giáo viên và community lead tổ chức workshop hoặc vòng học tập.'],
+  ['Team', 'Dành cho tổ chức muốn liên kết content, event, offer và trải nghiệm thành viên quanh một mô hình chung.'],
+];
+---
+
+<MainLayout title="Thành viên | Folks Team" lang="vi">
+  <section class="mx-auto grid max-w-[85rem] gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_.9fr] lg:px-8 lg:py-24">
+    <div class="flex flex-col justify-center">
+      <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">Member Portal</p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight text-neutral-900 md:text-6xl dark:text-neutral-100">
+        Xây hệ thống tăng trưởng với cấu trúc, hỗ trợ và thực hành.
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg text-neutral-600 dark:text-neutral-400">
+        Khu vực thành viên Folks là workspace thực tế cho người đang áp dụng C.H.E.S.S: lộ trình học, công cụ tái sử dụng, phản hồi cộng đồng và thực hành phản tư cùng Compassio.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/vi/contact" class="inline-flex rounded-lg bg-yellow-500 px-6 py-3 text-sm font-bold text-white transition hover:bg-yellow-600">
+          Yêu cầu truy cập
+        </a>
+        <a href="/vi/guides/getting-started/" class="inline-flex rounded-lg border border-neutral-300 px-6 py-3 text-sm font-bold text-neutral-800 transition hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800">
+          Xem hướng dẫn
+        </a>
+      </div>
+    </div>
+    <div class="overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-900">
+      <img
+        src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=85"
+        alt="Không gian thành viên Folks Team"
+        class="h-full min-h-[420px] w-full object-cover"
+      />
+    </div>
+  </section>
+
+  <section class="bg-neutral-100 px-4 py-14 dark:bg-neutral-900">
+    <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h2 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">Thành viên có thể dùng gì</h2>
+        <p class="mt-3 text-neutral-600 dark:text-neutral-400">
+          Portal giúp công việc tăng trưởng có tổ chức hơn, từ ý tưởng đến hành động lặp lại được.
+        </p>
+      </div>
+      <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {
+          benefits.map(([title, description]) => (
+            <article class="rounded-xl bg-white p-6 dark:bg-neutral-800">
+              <h3 class="font-bold text-neutral-900 dark:text-neutral-100">{title}</h3>
+              <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-start">
+      <div>
+        <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">Dành cho</p>
+        <h2 class="mt-3 text-3xl font-bold text-neutral-900 dark:text-neutral-100">Nhiều kiểu thành viên, một mô hình chung</h2>
+      </div>
+      <div class="grid gap-4">
+        {
+          memberRoles.map(([title, description]) => (
+            <article class="rounded-xl border border-neutral-200 p-6 dark:border-neutral-700">
+              <h3 class="font-bold text-neutral-900 dark:text-neutral-100">{title}</h3>
+              <p class="mt-2 text-neutral-600 dark:text-neutral-400">{description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</MainLayout>

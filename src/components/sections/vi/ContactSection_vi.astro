@@ -34,26 +34,31 @@ const formSubTitle: string = 'Chúng tôi sẽ phản hồi trong 1-2 ngày làm
         >
           {formTitle}
         </h2>
-        <form>
+        <form action="https://formsubmit.co/contact@folksteam.com" method="POST">
+          <input type="hidden" name="_subject" value="Liên hệ mới từ website Folks Team" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
           <div class="grid gap-4">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <TextInput
                 id="hs-firstname-contacts"
                 label="Tên"
-                name="hs-firstname-contacts"
+                name="first_name"
+                required={true}
               />
               <TextInput
                 id="hs-lastname-contacts"
                 label="Họ"
-                name="hs-lastname-contacts"
+                name="last_name"
               />
             </div>
-            <EmailContactInput id="hs-email-contacts" />
+            <EmailContactInput id="hs-email-contacts" required={true} />
             <PhoneInput id="hs-phone-number" />
             <TextAreaInput
               id="hs-about-contacts"
               label="Nội dung cần trao đổi"
-              name="hs-about-contacts"
+              name="message"
+              required={true}
             />
           </div>
 
