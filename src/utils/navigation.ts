@@ -4,7 +4,7 @@ const navBarLinks = [
     name: 'C.H.E.S.S',
     url: '/chess',
     children: [
-      { name: 'Compassio', url: '/compassio' },
+      { name: 'Project: Compassio', url: '/projects/compassio' },
       { name: 'Dancenter Case Study', url: '/case-studies/dancenter-chess' },
       {
         name: 'The School of Life Case Study',
@@ -24,7 +24,7 @@ const footerLinks = [
     section: 'Explore',
     links: [
       { name: 'C.H.E.S.S Model', url: '/chess' },
-      { name: 'Compassio', url: '/compassio' },
+      { name: 'Project: Compassio', url: '/projects/compassio' },
       { name: 'Products', url: '/products' },
       { name: 'Services', url: '/services' },
       { name: 'Dancenter Case Study', url: '/case-studies/dancenter-chess' },

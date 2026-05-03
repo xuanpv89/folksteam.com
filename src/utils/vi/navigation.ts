@@ -4,7 +4,7 @@ const navBarLinks = [
     name: 'C.H.E.S.S',
     url: '/vi/chess',
     children: [
-      { name: 'Compassio', url: '/vi/compassio' },
+      { name: 'Project: Compassio', url: '/vi/projects/compassio' },
       { name: 'Case Study Dancenter', url: '/case-studies/dancenter-chess' },
       {
         name: 'Case Study The School of Life',
@@ -24,7 +24,7 @@ const footerLinks = [
     section: 'Khám phá',
     links: [
       { name: 'Mô hình C.H.E.S.S', url: '/vi/chess' },
-      { name: 'Compassio', url: '/vi/compassio' },
+      { name: 'Project: Compassio', url: '/vi/projects/compassio' },
       { name: 'Sản phẩm', url: '/vi/products' },
       { name: 'Dịch vụ', url: '/vi/services' },
       { name: 'Case Study Dancenter', url: '/case-studies/dancenter-chess' },

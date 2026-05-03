@@ -9,6 +9,7 @@ export function getStaticPaths() {
     'services',
     'chess',
     'compassio',
+    'projects/compassio',
     'contact',
     'member',
     'blog',
@@ -248,7 +249,10 @@ const pages = {
 } as const;
 
 type PageKey = keyof typeof pages;
-const slug = (Astro.params.slug ?? 'about').split('/')[0] as PageKey;
+const rawSlug = Astro.params.slug ?? 'about';
+const slug = (rawSlug === 'projects/compassio'
+  ? 'compassio'
+  : rawSlug.split('/')[0]) as PageKey;
 const page = pages[slug];
 const pageTitle = `${page.title} | ${SITE.title}`;
 ---
