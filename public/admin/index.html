@@ -128,6 +128,33 @@
         color: #713f12;
       }
 
+      .steps {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .steps li {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        gap: 10px;
+        align-items: start;
+      }
+
+      .steps span {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        place-items: center;
+        border-radius: 999px;
+        background: #262626;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
       .grid {
         display: grid;
         gap: 18px;
@@ -263,6 +290,10 @@
         padding: 6px 10px;
         font-size: 12px;
       }
+
+      .hidden {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -287,6 +318,32 @@
           <strong>CMS offline-ready:</strong> trang này không dùng CDN nên sẽ
           mở được ngay. Nó tạo file Markdown đúng schema blog hiện tại. Sau khi
           tải file, đặt vào thư mục tương ứng rồi commit/deploy.
+        </div>
+        <div class="card">
+          <h2>Sau khi điền form thì làm gì?</h2>
+          <ol class="steps">
+            <li>
+              <span>1</span>
+              <div>
+                Bấm <strong>Download .md</strong> để tải file bài viết, hoặc
+                <strong>Copy Markdown</strong> nếu muốn dán thủ công.
+              </div>
+            </li>
+            <li>
+              <span>2</span>
+              <div>
+                Đặt file vào đúng đường dẫn đang hiển thị bên dưới form, ví dụ
+                <code>src/content/blog/en/test-1.md</code>.
+              </div>
+            </li>
+            <li>
+              <span>3</span>
+              <div>
+                Commit/deploy lại website. Khi build xong, bài sẽ tự hiện trên
+                trang Blog và filter theo category.
+              </div>
+            </li>
+          </ol>
         </div>
       </section>
 
@@ -390,6 +447,8 @@
             <div class="path" id="target-path">src/content/blog/en/my-new-post.md</div>
           </div>
 
+          <a id="download-link" class="hidden" download="new-blog-post.md"></a>
+
           <div class="actions">
             <button type="button" id="generate">Generate preview</button>
             <button type="button" id="download">Download .md</button>
@@ -421,6 +480,8 @@
       const preview = document.getElementById('preview');
       const targetPath = document.getElementById('target-path');
       const toast = document.getElementById('toast');
+      const draftsEl = document.getElementById('drafts');
+      const downloadLink = document.getElementById('download-link');
 
       const fields = [
         'locale',
@@ -511,25 +572,119 @@ ${contents.join('\n\n')}
       function updatePreview() {
         const result = buildMarkdown();
         preview.textContent = result.markdown;
+        return result;
       }
 
       function downloadFile() {
-        const result = buildMarkdown();
+        const result = updatePreview();
         const blob = new Blob([result.markdown], {
           type: 'text/markdown;charset=utf-8',
         });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `${result.slug}.md`;
-        link.click();
-        URL.revokeObjectURL(link.href);
+        if (downloadLink.href) URL.revokeObjectURL(downloadLink.href);
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${result.slug}.md`;
+        downloadLink.click();
+        showToast('Đã tạo file .md để tải xuống.');
       }
 
       async function copyMarkdown() {
-        const result = buildMarkdown();
-        await navigator.clipboard.writeText(result.markdown);
+        const result = updatePreview();
+        try {
+          await navigator.clipboard.writeText(result.markdown);
+          showToast('Đã copy Markdown.');
+        } catch {
+          preview.focus();
+          const selection = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(preview);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          showToast('Browser chặn copy tự động. Markdown đã được chọn để copy thủ công.');
+        }
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 1600);
+        setTimeout(() => toast.classList.remove('show'), 2200);
+      }
+
+      function currentDraft() {
+        return Object.fromEntries(fields.map(id => [id, getValue(id)]));
+      }
+
+      function readDrafts() {
+        try {
+          return JSON.parse(localStorage.getItem('folksBlogDrafts') || '[]');
+        } catch {
+          return [];
+        }
+      }
+
+      function writeDrafts(drafts) {
+        localStorage.setItem('folksBlogDrafts', JSON.stringify(drafts));
+      }
+
+      function renderDrafts() {
+        const drafts = readDrafts();
+        draftsEl.innerHTML = '';
+        if (!drafts.length) {
+          draftsEl.innerHTML = '<p class="hint">Chưa có draft nào.</p>';
+          return;
+        }
+
+        drafts.forEach((draft, index) => {
+          const item = document.createElement('div');
+          item.className = 'draft-item';
+          item.innerHTML = `
+            <div>
+              <strong>${draft.title || draft.slug || 'Untitled'}</strong>
+              <div class="hint">${draft.locale || 'en'} / ${draft.slug || 'new-blog-post'}</div>
+            </div>
+            <div class="actions">
+              <button type="button" data-load="${index}">Load</button>
+              <button type="button" class="secondary" data-delete="${index}">Delete</button>
+            </div>
+          `;
+          draftsEl.appendChild(item);
+        });
+      }
+
+      function saveDraft() {
+        const draft = currentDraft();
+        const drafts = readDrafts();
+        const slug = slugify(draft.slug || draft.title || 'new-blog-post');
+        const existingIndex = drafts.findIndex(
+          item => item.locale === draft.locale && slugify(item.slug) === slug
+        );
+        const nextDraft = { ...draft, slug, savedAt: new Date().toISOString() };
+        if (existingIndex >= 0) {
+          drafts[existingIndex] = nextDraft;
+        } else {
+          drafts.unshift(nextDraft);
+        }
+        writeDrafts(drafts.slice(0, 12));
+        renderDrafts();
+        showToast('Đã lưu draft trên trình duyệt.');
+      }
+
+      function loadDraft(index) {
+        const draft = readDrafts()[index];
+        if (!draft) return;
+        fields.forEach(id => {
+          const element = document.getElementById(id);
+          if (element && draft[id] !== undefined) element.value = draft[id];
+        });
+        updatePreview();
+        showToast('Đã load draft.');
+      }
+
+      function deleteDraft(index) {
+        const drafts = readDrafts();
+        drafts.splice(index, 1);
+        writeDrafts(drafts);
+        renderDrafts();
+        showToast('Đã xóa draft.');
       }
 
       document.getElementById('pubDate').value = today();
@@ -546,9 +701,22 @@ ${contents.join('\n\n')}
       });
 
       form.addEventListener('input', updatePreview);
-      form.addEventListener('reset', () => setTimeout(updatePreview));
+      form.addEventListener('reset', () => setTimeout(() => {
+        document.getElementById('pubDate').value = today();
+        document.getElementById('slug').value = 'new-blog-post';
+        updatePreview();
+      }));
+      draftsEl.addEventListener('click', event => {
+        const loadIndex = event.target.dataset.load;
+        const deleteIndex = event.target.dataset.delete;
+        if (loadIndex !== undefined) loadDraft(Number(loadIndex));
+        if (deleteIndex !== undefined) deleteDraft(Number(deleteIndex));
+      });
+      document.getElementById('generate').addEventListener('click', updatePreview);
       document.getElementById('download').addEventListener('click', downloadFile);
       document.getElementById('copy').addEventListener('click', copyMarkdown);
+      document.getElementById('save-draft').addEventListener('click', saveDraft);
+      renderDrafts();
       updatePreview();
     </script>
   </body>
