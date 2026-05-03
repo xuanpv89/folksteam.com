@@ -98,7 +98,7 @@ export default defineConfig({
       ],
       disable404Route: true,
       customCss: ['./src/assets/styles/starlight.css'],
-      favicon: '/favicon.ico',
+      favicon: '/docs-favicon.ico',
       components: {
         SiteTitle: './src/components/ui/starlight/SiteTitle.astro',
         Head: './src/components/ui/starlight/Head.astro',
