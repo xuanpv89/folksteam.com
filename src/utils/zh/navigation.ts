@@ -24,14 +24,10 @@ const footerLinks = [
     section: '探索',
     links: [
       { name: 'C.H.E.S.S 模型', url: '/zh/chess' },
-      { name: 'Project: Compassio', url: '/zh/projects/compassio' },
+      { name: 'Projects', url: '/projects' },
       { name: '产品', url: '/zh/products' },
       { name: '服务', url: '/zh/services' },
-      { name: 'Dancenter 案例研究', url: '/case-studies/dancenter-chess' },
-      {
-        name: 'The School of Life 案例研究',
-        url: '/case-studies/the-school-of-life-chess',
-      },
+      { name: 'Case Studies', url: '/case-studies' },
     ],
   },
   {

@@ -24,14 +24,10 @@ const footerLinks = [
     section: 'Explore',
     links: [
       { name: 'C.H.E.S.S Model', url: '/chess' },
-      { name: 'Project: Compassio', url: '/projects/compassio' },
+      { name: 'Projects', url: '/projects' },
       { name: 'Products', url: '/products' },
       { name: 'Services', url: '/services' },
-      { name: 'Dancenter Case Study', url: '/case-studies/dancenter-chess' },
-      {
-        name: 'The School of Life Case Study',
-        url: '/case-studies/the-school-of-life-chess',
-      },
+      { name: 'Case Studies', url: '/case-studies' },
     ],
   },
   {

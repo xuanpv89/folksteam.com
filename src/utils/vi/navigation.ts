@@ -24,14 +24,10 @@ const footerLinks = [
     section: 'Khám phá',
     links: [
       { name: 'Mô hình C.H.E.S.S', url: '/vi/chess' },
-      { name: 'Project: Compassio', url: '/vi/projects/compassio' },
+      { name: 'Projects', url: '/projects' },
       { name: 'Sản phẩm', url: '/vi/products' },
       { name: 'Dịch vụ', url: '/vi/services' },
-      { name: 'Case Study Dancenter', url: '/case-studies/dancenter-chess' },
-      {
-        name: 'Case Study The School of Life',
-        url: '/case-studies/the-school-of-life-chess',
-      },
+      { name: 'Case Studies', url: '/case-studies' },
     ],
   },
   {
