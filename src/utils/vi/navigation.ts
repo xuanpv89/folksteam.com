@@ -51,7 +51,7 @@ const footerLinks = [
 const socialLinks = {
   facebook: '',
   x: '',
-  github: 'https://github.com/xuanpv89/folks-template-screwfast',
+  github: '',
   google: '',
   slack: '',
 };

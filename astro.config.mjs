@@ -95,13 +95,7 @@ export default defineConfig({
           autogenerate: { directory: 'advanced' },
         },
       ],
-      social: [
-        {
-          icon: 'github',
-          label: 'GitHub',
-          href: 'https://github.com/xuanpv89/folks-template-screwfast',
-        },
-      ],
+      social: [],
       disable404Route: true,
       customCss: ['./src/assets/styles/starlight.css'],
       favicon: '/docs-favicon.ico',
