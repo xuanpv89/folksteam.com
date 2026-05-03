@@ -45,40 +45,30 @@ export default defineConfig({
           label: 'English',
           lang: 'en',
         },
-        de: { label: 'Deutsch', lang: 'de' },
-        es: { label: 'EspaÃ±ol', lang: 'es' },
-        fa: { label: 'Persian', lang: 'fa', dir: 'rtl' },
         vi: { label: 'Tiếng Việt', lang: 'vi' },
-        ja: { label: 'æ—¥æœ¬èªž', lang: 'ja' },
-        'zh-cn': { label: 'ç®€ä½“ä¸­æ–‡', lang: 'zh-CN' },
       },
       // https://starlight.astro.build/guides/sidebar/
       sidebar: [
         {
-          label: 'Quick Start Guides',
+          label: 'Compassio Quick Start',
           translations: {
-            de: 'Schnellstartanleitungen',
-            es: 'GuÃ­as de Inicio RÃ¡pido',
-            fa: 'Ø±Ø§Ù‡Ù†Ù…Ø§ÛŒ Ø´Ø±ÙˆØ¹ Ø³Ø±ÛŒØ¹',
             vi: 'Hướng dẫn bắt đầu nhanh',
-            ja: 'ã‚¯ã‚¤ãƒƒã‚¯ã‚¹ã‚¿ãƒ¼ãƒˆã‚¬ã‚¤ãƒ‰',
-            'zh-cn': 'å¿«é€Ÿå…¥é—¨æŒ‡å—',
           },
           autogenerate: { directory: 'guides' },
         },
         {
-          label: 'Tools & Equipment',
+          label: 'Practice Tools',
           items: [
-            { label: 'Tool Guides', link: 'tools/tool-guides/' },
-            { label: 'Equipment Care', link: 'tools/equipment-care/' },
+            { label: 'Compassio Guides', link: 'tools/tool-guides/' },
+            { label: 'Reflection Tool Care', link: 'tools/equipment-care/' },
           ],
         },
         {
-          label: 'Construction Services',
+          label: 'Compassio Programs',
           autogenerate: { directory: 'construction' },
         },
         {
-          label: 'Advanced Topics',
+          label: 'Advanced Facilitation',
           autogenerate: { directory: 'advanced' },
         },
       ],

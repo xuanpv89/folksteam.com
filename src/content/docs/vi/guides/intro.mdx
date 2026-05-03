@@ -1,38 +1,77 @@
 ---
-title: Introduction aux Services ScrewFast
-description: Explorez la documentation complète de ScrewFast pour un examen approfondi de nos outils haut de gamme et services de construction.
+title: Compassio Guide
+description: Hướng dẫn thực hành để dùng Compassio, La Bàn Cảm Xúc, podcast, sự kiện và booking chuyên gia trong một hệ C.H.E.S.S.
 sidebar:
-  label: Introduction to Services
+  label: Compassio Guide
   order: 2
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import {
+  Aside,
+  Card,
+  CardGrid,
+  LinkCard,
+  Steps,
+  Tabs,
+  TabItem,
+} from '@astrojs/starlight/components';
 
-Dans le cadre de notre engagement à fournir une solution de bout en bout pour tous vos besoins en construction et matériel, nous, chez ScrewFast, sommes fiers de proposer une suite complète de services professionnels. Des consultations initiales aux inspections finales, nos services polyvalents englobent l'intégralité de votre projet, garantissant des résultats de qualité et la satisfaction du client. Cette section de la documentation vous guidera à travers tout ce que vous devez savoir pour exploiter pleinement notre expertise.
+Compassio là dự án wellbeing và emotional literacy gắn với mô hình C.H.E.S.S của Folks. Dự án kết nối nội dung tâm lý học, podcast/video, event, booking chuyên gia, ấn phẩm và bộ thẻ La Bàn Cảm Xúc.
 
-## Aperçu des Services
+## Compassio nhìn theo C.H.E.S.S
+
+<CardGrid>
+  <Card title="Content" icon="document">
+    Podcast, video, bài viết và bài thực hành ngắn giúp người dùng hiểu công việc, quan hệ, lắng nghe, ở một mình, hạnh phúc và cảm xúc.
+  </Card>
+  <Card title="Hub" icon="seti:yaml">
+    Ngôn ngữ chung về cảm xúc giúp cộng đồng, lớp học, workshop và nhóm reflection nói chuyện rõ hơn.
+  </Card>
+  <Card title="Event" icon="seti:notebook">
+    Talk, workshop và Facebook events tạo khoảnh khắc live để mọi người thực hành cùng nhau.
+  </Card>
+  <Card title="Store" icon="seti:folder">
+    La Bàn Cảm Xúc và ấn phẩm biến tri thức Compassio thành công cụ có thể dùng lặp lại.
+  </Card>
+  <Card title="Session" icon="seti:config">
+    Booking chuyên gia tạo đường sâu hơn khi nội dung và tự thực hành chưa đủ.
+  </Card>
+</CardGrid>
+
+## Bản đồ chủ đề
 
 <Tabs>
-  <TabItem label="Solutions sur Mesure">
-    Chaque projet de construction comporte ses propres défis et exigences. Chez
-    ScrewFast, nous personnalisons nos services pour correspondre à vos besoins
-    spécifiques, garantissant que, quelle que soit l'échelle ou la complexité de
-    votre projet, notre équipe est équipée pour le gérer avec précision et
-    professionnalisme.
+  <TabItem label="Chăm sóc tinh thần">
+    Dùng khi cần chậm lại, nhận diện tín hiệu bên trong và xây thói quen tự hỗ trợ.
   </TabItem>
-  <TabItem label="Équipe d'Experts">
-    Tire parti des compétences de notre personnel qualifié, des architectes et
-    ingénieurs aux ouvriers qualifiés, chacun contribuant à apporter leur
-    expertise pour donner vie à votre vision.
+  <TabItem label="Nghề nghiệp">
+    Dùng cho động lực, lựa chọn nghề, ý nghĩa công việc và cảm xúc trong đời sống chuyên môn.
   </TabItem>
-  <TabItem label="Engagement envers la Qualité">
-    La qualité est au cœur de tout ce que nous faisons. Nous mettons en œuvre
-    des mesures rigoureuses de contrôle de qualité pour garantir que le travail
-    que nous livrons répond et dépasse les normes de l'industrie.
+  <TabItem label="Tình yêu">
+    Dùng để phân biệt tình yêu với gắn bó, phụ thuộc, thân mật, đam mê và cam kết.
   </TabItem>
-  <TabItem label="Support Continu">
-    Notre relation avec nos clients ne se termine pas une fois le projet
-    terminé. Nous fournissons un support continu pour résoudre tout problème et
-    garantir une satisfaction durable avec votre investissement.
+  <TabItem label="Cảm xúc">
+    Dùng với La Bàn Cảm Xúc: chọn thẻ, gọi tên trạng thái, hiểu thông điệp và chọn phản ứng phù hợp hơn.
   </TabItem>
 </Tabs>
+
+## Nội dung Compassio nên dùng làm prompt
+
+- **Góc Vuông:** tình yêu, kỷ luật, lãnh đạo và chăm sóc trong môi trường làm việc.
+- **Cái Nghề Cái Nghiệp:** động lực, lựa chọn nghề và mặt cảm xúc của công việc.
+- **Relation Ship:** tình yêu và những thứ dễ bị nhầm là tình yêu.
+- **Học Nhanh, Sống Chậm:** bài thực hành lắng nghe chủ động.
+- **Đọc Cùng Compassio:** ở một mình, cô đơn và hạnh phúc khi có thời gian cho chính mình.
+- **Workshop Thi & Ca:** biến phản tư thành sáng tạo.
+
+## Link nguồn
+
+<CardGrid>
+  <LinkCard title="Podcast & Video" href="https://folksasia.wixsite.com/compassio/podcast" />
+  <LinkCard title="Booking chuyên gia" href="https://folksasia.wixsite.com/compassio/booking" />
+  <LinkCard title="Sự kiện Compassio" href="https://www.facebook.com/compassio.info/events" />
+</CardGrid>
+
+<Aside type="caution" title="Ranh giới quan trọng">
+  Compassio hỗ trợ nhận diện, trò chuyện và học tập. Đây không phải thay thế cho trị liệu hoặc chăm sóc lâm sàng khi người tham gia cần hỗ trợ chuyên môn.
+</Aside>
