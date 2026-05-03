@@ -21,7 +21,7 @@ const footerLinks = [
       { name: 'Security', url: '#' },
       { name: 'Team', url: '#' },
       { name: 'Enterprise', url: '#' },
-      { name: 'Case Studies', url: '#' },
+      { name: 'Case Studies', url: '/case-studies/dancenter-chess' },
       { name: 'Pricing', url: '#' },
     ],
   },

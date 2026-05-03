@@ -1,0 +1,292 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Icon from '@components/ui/icons/Icon.astro';
+import { SITE } from '@data/constants';
+
+const heroImage =
+  'https://static.wixstatic.com/media/36e653_c193019b734441cfaa289534954e41f2~mv2.jpeg/v1/fill/w_1920,h_1080,fp_0.65_0.23,q_90,enc_avif,quality_auto/36e653_c193019b734441cfaa289534954e41f2~mv2.jpeg';
+const studioImage =
+  'https://static.wixstatic.com/media/36e653_343500bd0b6a49f8b411420bda62db0c~mv2.jpg/v1/fill/w_1141,h_956,al_c/36e653_343500bd0b6a49f8b411420bda62db0c~mv2.jpg';
+const kpopImage =
+  'https://static.wixstatic.com/media/ae3d18_196abb43d9084d898cc14cf41f13fa60~mv2.jpg/v1/fill/w_720,h_480,al_c,q_90,enc_avif,quality_auto/Copy%20of%20Copy%20of%20DC_KPOPTEEN_14.jpg';
+const stageImage =
+  'https://static.wixstatic.com/media/1c996e_2099b67b29e849428e68b47023084312~mv2.jpg/v1/fill/w_900,h_636,al_c/1c996e_2099b67b29e849428e68b47023084312~mv2.jpg';
+
+const chessLayers = [
+  {
+    letter: 'C',
+    title: 'Content',
+    subtitle: 'Teach the language of movement',
+    body: 'Dancenter already has a rich content base: class pages, show stories, K-Pop updates, student testimonials, and social channels. The C.H.E.S.S opportunity is to turn that material into structured journeys for parents, teens, adult learners, and aspiring performers.',
+    moves: ['Student pathway explainers', 'Short teacher-led reels', 'Show rehearsal stories'],
+  },
+  {
+    letter: 'H',
+    title: 'Hub',
+    subtitle: 'Make the studio feel like home online',
+    body: 'Their public positioning centers on a dance home and community. A Hub layer can organize ongoing parent updates, student milestones, show preparation, alumni stories, and support for new students choosing a level or style.',
+    moves: ['Parent orientation hub', 'Student progress spaces', 'Alumni and performance archive'],
+  },
+  {
+    letter: 'E',
+    title: 'Event',
+    subtitle: 'Convert energy into participation',
+    body: 'Classes, showcases, summer camps, international competitions, and community performances are natural event engines. CHESS treats each event as a conversion moment, a content source, and a relationship ritual.',
+    moves: ['Open studio weeks', 'Showcase countdowns', 'Post-event reflection loops'],
+  },
+  {
+    letter: 'S',
+    title: 'Store',
+    subtitle: 'Connect trust to clear offers',
+    body: 'The Store layer can clarify the path from trial class to drop-in, class card, level program, summer camp, private class, dancewear, and studio rental without making the education experience feel transactional.',
+    moves: ['Offer matrix by age and goal', 'Trial-to-program flows', 'Dancewear and camp bundles'],
+  },
+  {
+    letter: 'S',
+    title: 'Session',
+    subtitle: 'Personalize the learning path',
+    body: 'Private classes, auditions, teacher guidance, injury-sensitive pacing, and performance coaching are premium Session experiences. This layer makes student growth feel personal and measurable.',
+    moves: ['Level placement consults', 'Private technique sessions', 'Performance readiness check-ins'],
+  },
+];
+
+const sources = [
+  {
+    label: 'Dancenter Vietnam website',
+    href: 'https://www.dancentervn.com/',
+    note: 'Programs, positioning, contact, expression/community/pedagogy themes.',
+  },
+  {
+    label: 'Dancenter About Us',
+    href: 'https://www.dancentervn.com/about-us',
+    note: 'History, founder note, online learning, charity events, shows, ATOD milestone.',
+  },
+  {
+    label: 'Dancenter K-Pop Dance',
+    href: 'https://www.dancentervn.com/kpop',
+    note: 'K-Pop program structure, teacher-led class promise, timetable and fee examples.',
+  },
+  {
+    label: 'YouTube',
+    href: 'https://www.youtube.com/@DanCentervn',
+    note: 'Public video channel for performance and class storytelling.',
+  },
+  {
+    label: 'Facebook',
+    href: 'https://www.facebook.com/DancenterVietnam',
+    note: 'Community updates and social proof touchpoints.',
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/dancentervn/',
+    note: 'Visual identity, student moments, event highlights.',
+  },
+];
+
+const pageTitle = `Dancenter Vietnam CHESS Case Study | ${SITE.title}`;
+const metaDescription =
+  'A C.H.E.S.S case study concept showing how Dancenter Vietnam can connect content, community, events, offers, and personalized sessions into one growth system.';
+---
+
+<MainLayout
+  title={pageTitle}
+  customDescription={metaDescription}
+  customOgTitle="Dancenter Vietnam x C.H.E.S.S Case Study"
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': 'https://folks-team.com/case-studies/dancenter-chess',
+    url: 'https://folks-team.com/case-studies/dancenter-chess',
+    name: 'Dancenter Vietnam x C.H.E.S.S Case Study',
+    description: metaDescription,
+    about: {
+      '@type': 'Organization',
+      name: 'Dancenter Vietnam',
+      url: 'https://www.dancentervn.com/',
+    },
+    inLanguage: 'en-US',
+  }}
+>
+  <section class="mx-auto grid max-w-[85rem] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[.95fr_1.05fr] lg:px-8 lg:py-20 2xl:max-w-full">
+    <div class="flex flex-col justify-center">
+      <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+        Case Study Concept
+      </p>
+      <h1 class="mt-4 text-4xl font-black tracking-tight text-neutral-900 md:text-6xl dark:text-neutral-100">
+        Dancenter Vietnam as a C.H.E.S.S Growth System
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-8 text-neutral-600 dark:text-neutral-400">
+        Dancenter Vietnam is already more than a class schedule. Its public story combines dance education, self-expression, community, pedagogy, live performance, digital classes, and social channels. This case study maps those assets into the C.H.E.S.S model: Content, Hub, Event, Store, and Session.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#model" class="inline-flex rounded-lg bg-yellow-500 px-5 py-3 text-sm font-bold text-white transition hover:bg-yellow-600">
+          Explore the model
+        </a>
+        <a href="https://www.dancentervn.com/" class="inline-flex rounded-lg border border-neutral-300 px-5 py-3 text-sm font-bold text-neutral-800 transition hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800">
+          Visit Dancenter
+        </a>
+      </div>
+    </div>
+    <div class="relative min-h-[430px] overflow-hidden rounded-2xl bg-neutral-900 shadow-xl">
+      <img src={heroImage} alt="Dancenter Vietnam stage and dance community" class="h-full min-h-[430px] w-full object-cover opacity-90" loading="eager" />
+      <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-neutral-950 via-neutral-950/70 to-transparent p-6">
+        <p class="max-w-lg text-2xl font-black text-white">
+          From dance education to an owned ecosystem of learning, belonging, and performance.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-neutral-100 px-4 py-14 dark:bg-neutral-900">
+    <div class="mx-auto grid max-w-[85rem] gap-6 sm:px-6 lg:grid-cols-4 lg:px-8 2xl:max-w-full">
+      <article class="rounded-xl bg-white p-6 dark:bg-neutral-950">
+        <p class="text-sm font-bold text-yellow-600 dark:text-yellow-400">Founded</p>
+        <p class="mt-2 text-3xl font-black text-neutral-900 dark:text-neutral-100">2007</p>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">Public history notes Dancenter was born in July 2007 as a home for dance in HCMC.</p>
+      </article>
+      <article class="rounded-xl bg-white p-6 dark:bg-neutral-950">
+        <p class="text-sm font-bold text-yellow-600 dark:text-yellow-400">Core Audience</p>
+        <p class="mt-2 text-3xl font-black text-neutral-900 dark:text-neutral-100">4+</p>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">Mini Kids, kids, teens, adults, committed dancers, artists, schools, and partners.</p>
+      </article>
+      <article class="rounded-xl bg-white p-6 dark:bg-neutral-950">
+        <p class="text-sm font-bold text-yellow-600 dark:text-yellow-400">Learning Modes</p>
+        <p class="mt-2 text-3xl font-black text-neutral-900 dark:text-neutral-100">Hybrid</p>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">Studio classes, private classes, camps, shows, social content, and past online learning programs.</p>
+      </article>
+      <article class="rounded-xl bg-white p-6 dark:bg-neutral-950">
+        <p class="text-sm font-bold text-yellow-600 dark:text-yellow-400">CHESS Fit</p>
+        <p class="mt-2 text-3xl font-black text-neutral-900 dark:text-neutral-100">High</p>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">Dance naturally creates content, community, events, offers, and personalized sessions.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-[85rem] gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[.85fr_1.15fr] lg:px-8 2xl:max-w-full">
+    <div>
+      <h2 class="text-3xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+        Why C.H.E.S.S fits a dance education brand
+      </h2>
+      <p class="mt-5 text-lg leading-8 text-neutral-600 dark:text-neutral-400">
+        Dancenter's public language already points to the emotional heart of C.H.E.S.S: expression, connection, pride, humility, practice, and community. The model gives those strengths an operating structure so each class, show, social post, and parent conversation can support the same student journey.
+      </p>
+      <div class="mt-8 grid gap-4">
+        {['Discovery through movement stories', 'Belonging through an online/offline hub', 'Participation through shows and camps', 'Revenue through clear program paths', 'Depth through private and guided sessions'].map(item => (
+          <div class="flex gap-3 rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+            <span class="text-yellow-600 dark:text-yellow-400"><Icon name="checkCircle" /></span>
+            <p class="font-bold text-neutral-800 dark:text-neutral-200">{item}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="grid gap-5">
+      <img src={studioImage} alt="Dancenter Vietnam dance education visual" class="h-72 w-full rounded-2xl object-cover" loading="lazy" />
+      <div class="grid gap-5 sm:grid-cols-2">
+        <img src={kpopImage} alt="Dancenter K-Pop dance class" class="h-56 w-full rounded-2xl object-cover" loading="lazy" />
+        <img src={stageImage} alt="Dancenter stage and performance" class="h-56 w-full rounded-2xl object-cover" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section id="model" class="bg-neutral-100 px-4 py-14 dark:bg-neutral-900">
+    <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8 2xl:max-w-full">
+      <div class="max-w-3xl">
+        <h2 class="text-3xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+          The C.H.E.S.S map for Dancenter
+        </h2>
+        <p class="mt-4 text-lg text-neutral-600 dark:text-neutral-400">
+          This model connects public-facing brand assets with practical user journeys. It is written as a strategic application, based on public information, not as a claim of an internal implementation.
+        </p>
+      </div>
+      <div class="mt-10 grid gap-5 lg:grid-cols-5">
+        {chessLayers.map(layer => (
+          <article class="flex min-h-full flex-col rounded-xl bg-white p-6 dark:bg-neutral-950">
+            <span class="flex size-12 items-center justify-center rounded-lg bg-yellow-100 text-2xl font-black text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300">
+              {layer.letter}
+            </span>
+            <h3 class="mt-5 text-xl font-black text-neutral-900 dark:text-neutral-100">{layer.title}</h3>
+            <p class="mt-1 text-sm font-bold text-yellow-600 dark:text-yellow-400">{layer.subtitle}</p>
+            <p class="mt-4 text-sm leading-6 text-neutral-600 dark:text-neutral-400">{layer.body}</p>
+            <ul class="mt-5 space-y-2">
+              {layer.moves.map(move => (
+                <li class="text-sm font-medium text-neutral-800 dark:text-neutral-200">{move}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 2xl:max-w-full">
+    <div class="grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
+      <div class="sticky top-28">
+        <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+          Proposed Experience
+        </p>
+        <h2 class="mt-3 text-3xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+          A student journey from first curiosity to stage confidence
+        </h2>
+      </div>
+      <div class="grid gap-4">
+        {[
+          ['1. Discover', 'A parent or student finds short videos explaining age groups, class styles, teacher energy, and what first class nerves usually feel like.'],
+          ['2. Choose', 'A simple pathway quiz recommends Mini Kids, Open Class, Level Program, K-Pop, Dance Fit, Private Class, or Summer Camp.'],
+          ['3. Join', 'The first trial or drop-in leads to a welcome flow with expectations, clothes, schedule, and student support notes.'],
+          ['4. Belong', 'The Hub keeps students and parents connected through class milestones, rehearsal notes, show preparation, and community highlights.'],
+          ['5. Grow', 'Sessions and level reviews help committed dancers move from hobby practice to technique, artistry, competition, or performance readiness.'],
+        ].map(([title, text]) => (
+          <article class="rounded-xl border border-neutral-200 p-6 dark:border-neutral-800">
+            <h3 class="text-xl font-black text-neutral-900 dark:text-neutral-100">{title}</h3>
+            <p class="mt-3 text-neutral-600 dark:text-neutral-400">{text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-neutral-950 px-4 py-14 text-white">
+    <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8 2xl:max-w-full">
+      <div class="grid gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+        <div>
+          <h2 class="text-3xl font-black tracking-tight md:text-5xl">
+            The best-fit growth thesis
+          </h2>
+          <p class="mt-5 text-lg leading-8 text-neutral-300">
+            Dancenter should not behave like a generic course business. Its advantage is emotional: movement, family, discipline, confidence, stage memory, and belonging. C.H.E.S.S turns that advantage into a repeatable system where every touchpoint helps a learner feel, "I can see myself here."
+          </p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {[
+            ['Content metric', 'More qualified trial inquiries from class explainers and student stories.'],
+            ['Hub metric', 'Higher retention from parent/student communication and milestone rituals.'],
+            ['Event metric', 'More camp, showcase, and open-class participation from event content loops.'],
+            ['Session metric', 'More premium private class and placement conversations for committed dancers.'],
+          ].map(([title, body]) => (
+            <article class="rounded-xl bg-white/10 p-5">
+              <h3 class="font-black text-white">{title}</h3>
+              <p class="mt-2 text-sm text-neutral-300">{body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 2xl:max-w-full">
+    <h2 class="text-3xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+      Reference Sources
+    </h2>
+    <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {sources.map(source => (
+        <a href={source.href} class="rounded-xl border border-neutral-200 p-5 transition hover:bg-neutral-100 dark:border-neutral-800 dark:hover:bg-neutral-900">
+          <span class="inline-flex items-center text-sm font-black text-yellow-600 dark:text-yellow-400">
+            {source.label}
+            <Icon name="openInNew" />
+          </span>
+          <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">{source.note}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</MainLayout>

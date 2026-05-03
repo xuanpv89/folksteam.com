@@ -21,7 +21,7 @@ const footerLinks = [
       { name: 'Bảo mật', url: '#' },
       { name: 'Đội ngũ', url: '#' },
       { name: 'Doanh nghiệp', url: '#' },
-      { name: 'Case Studies', url: '#' },
+      { name: 'Case Studies', url: '/case-studies/dancenter-chess' },
       { name: 'Pricing', url: '#' },
     ],
   },
