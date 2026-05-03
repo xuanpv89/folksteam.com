@@ -1,0 +1,298 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Icon from '@components/ui/icons/Icon.astro';
+import { SITE } from '@data/constants';
+
+const heroImage =
+  'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1600&q=85';
+const studioImage =
+  'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1400&q=85';
+const productImage =
+  'https://images.unsplash.com/photo-1491841573634-28140fc7ced7?auto=format&fit=crop&w=1200&q=85';
+const beliefImage =
+  'https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=1200&q=85';
+
+const chessLayers = [
+  {
+    letter: 'C',
+    title: 'Content',
+    subtitle: 'Make emotional education searchable and daily',
+    body: 'The School of Life already operates a powerful content layer through articles, books, app, podcast, films, and a major YouTube channel. The C.H.E.S.S opportunity is to shape that library into clear learning journeys for self-knowledge, relationships, work, calm, and therapy readiness.',
+    moves: ['Topic pathways by life problem', 'YouTube-to-app learning flows', 'Article clusters with reflection prompts'],
+  },
+  {
+    letter: 'H',
+    title: 'Hub',
+    subtitle: 'Turn scattered wisdom into an owned member home',
+    body: 'Membership is positioned as the place where content, community, social connection, and live online events come together. A stronger Hub can help members know what to do first, what to revisit, and how to move from insight to practice.',
+    moves: ['Member onboarding map', 'Emotional skill dashboards', 'Article, film, podcast, and event collections'],
+  },
+  {
+    letter: 'E',
+    title: 'Event',
+    subtitle: 'Use live moments to deepen belonging',
+    body: 'Live online events, talks, corporate programmes, and community gatherings are natural event engines. In C.H.E.S.S, each event becomes a trust ritual, a content source, and a pathway into deeper membership, therapy, or workplace learning.',
+    moves: ['Monthly theme events', 'Post-event reflection packs', 'Corporate learning cohorts'],
+  },
+  {
+    letter: 'S',
+    title: 'Store',
+    subtitle: 'Connect insight to products people can keep',
+    body: 'Books, conversation cards, gift sets, app subscription, therapy, and workplace programmes give The School of Life a wide Store layer. The key is to make the next best offer feel like a continuation of learning rather than a hard sell.',
+    moves: ['Problem-led product bundles', 'Content-to-card set journeys', 'Membership plus therapy pathways'],
+  },
+  {
+    letter: 'S',
+    title: 'Session',
+    subtitle: 'Bring emotional education into guided support',
+    body: 'Online psychotherapy, career counselling, couples therapy, faculty-led learning, and workplace programmes are high-depth Session experiences. This layer converts broad self-understanding into personal support and behaviour change.',
+    moves: ['Therapy readiness guides', 'Couples reflection sessions', 'Workplace emotional skills diagnostics'],
+  },
+];
+
+const sources = [
+  {
+    label: 'The School of Life website',
+    href: 'https://www.theschooloflife.com/',
+    note: 'Membership, content, community, live events, app, articles, shop, therapy, and at-work offering.',
+  },
+  {
+    label: 'About Us',
+    href: 'https://www.theschooloflife.com/about-us/',
+    note: 'Mission, emotional education, psychology, psychotherapy, philosophy, art, culture, business offering, and 500+ films.',
+  },
+  {
+    label: 'YouTube Channel',
+    href: 'https://www.youtube.com/@theschooloflifetv',
+    note: 'Large public film library for self-understanding, calm, emotional maturity, relationships, and psychology.',
+  },
+  {
+    label: 'The School of Life YouTube subscription page',
+    href: 'https://www.theschooloflife.com/the-school-of-life-youtube/',
+    note: 'Bridge from free YouTube content to app, subscription, audio, video, articles, and cards.',
+  },
+  {
+    label: 'Shop: Self-Knowledge Collection',
+    href: 'https://www.theschooloflife.com/shop/know-yourself-gift-set/',
+    note: 'Example of physical tools that support reflection and self-knowledge.',
+  },
+  {
+    label: 'At Work',
+    href: 'https://www.theschooloflife.com/at-work/',
+    note: 'Corporate emotional skills and professional development programmes.',
+  },
+];
+
+const pageTitle = `The School of Life CHESS Case Study | ${SITE.title}`;
+const metaDescription =
+  'A C.H.E.S.S case study concept showing how The School of Life can connect films, articles, books, membership, community, therapy, and workplace learning into one growth system.';
+---
+
+<MainLayout
+  title={pageTitle}
+  customDescription={metaDescription}
+  customOgTitle="The School of Life x C.H.E.S.S Case Study"
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': 'https://folks-team.com/case-studies/the-school-of-life-chess',
+    url: 'https://folks-team.com/case-studies/the-school-of-life-chess',
+    name: 'The School of Life x C.H.E.S.S Case Study',
+    description: metaDescription,
+    about: {
+      '@type': 'Organization',
+      name: 'The School of Life',
+      url: 'https://www.theschooloflife.com/',
+    },
+    inLanguage: 'en-US',
+  }}
+>
+  <section class="mx-auto grid max-w-[85rem] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[.95fr_1.05fr] lg:px-8 lg:py-20 2xl:max-w-full">
+    <div class="flex flex-col justify-center">
+      <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+        Case Study Concept
+      </p>
+      <h1 class="mt-4 text-4xl font-black tracking-tight text-neutral-900 md:text-6xl dark:text-neutral-100">
+        The School of Life as a C.H.E.S.S Growth System
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-8 text-neutral-600 dark:text-neutral-400">
+        The School of Life is already more than a content publisher. Its public ecosystem combines psychological education, films, articles, books, an app, podcast, membership, community, therapy, workplace programmes, and physical reflection tools. This case study maps those assets into the C.H.E.S.S model: Content, Hub, Event, Store, and Session.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#model" class="inline-flex rounded-lg bg-yellow-500 px-5 py-3 text-sm font-bold text-white transition hover:bg-yellow-600">
+          Explore the model
+        </a>
+        <a href="https://www.theschooloflife.com/" class="inline-flex rounded-lg border border-neutral-300 px-5 py-3 text-sm font-bold text-neutral-800 transition hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800">
+          Visit The School of Life
+        </a>
+      </div>
+    </div>
+    <div class="relative min-h-[430px] overflow-hidden rounded-2xl bg-neutral-900 shadow-xl">
+      <img src={heroImage} alt="The School of Life emotional education visual" class="h-full min-h-[430px] w-full object-cover opacity-90" loading="eager" />
+      <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-neutral-950 via-neutral-950/70 to-transparent p-6">
+        <p class="max-w-lg text-2xl font-black text-white">
+          From emotional education content to an owned ecosystem of calm, self-understanding, and guided growth.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-neutral-100 px-4 py-14 dark:bg-neutral-900">
+    <div class="mx-auto grid max-w-[85rem] gap-6 sm:px-6 lg:grid-cols-4 lg:px-8 2xl:max-w-full">
+      <article class="rounded-xl bg-white p-6 dark:bg-neutral-950">
+        <p class="text-sm font-bold text-yellow-600 dark:text-yellow-400">Core Promise</p>
+        <p class="mt-2 text-3xl font-black text-neutral-900 dark:text-neutral-100">Learn, Heal, Grow</p>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">The public homepage frames the brand around calm, connection, and emotional intelligence.</p>
+      </article>
+      <article class="rounded-xl bg-white p-6 dark:bg-neutral-950">
+        <p class="text-sm font-bold text-yellow-600 dark:text-yellow-400">Content Library</p>
+        <p class="mt-2 text-3xl font-black text-neutral-900 dark:text-neutral-100">500+</p>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">The About page points to more than 500 films alongside a library of books and ideas.</p>
+      </article>
+      <article class="rounded-xl bg-white p-6 dark:bg-neutral-950">
+        <p class="text-sm font-bold text-yellow-600 dark:text-yellow-400">Learning Modes</p>
+        <p class="mt-2 text-3xl font-black text-neutral-900 dark:text-neutral-100">Hybrid</p>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">Articles, books, app, podcast, films, live events, therapy, community, and corporate work.</p>
+      </article>
+      <article class="rounded-xl bg-white p-6 dark:bg-neutral-950">
+        <p class="text-sm font-bold text-yellow-600 dark:text-yellow-400">CHESS Fit</p>
+        <p class="mt-2 text-3xl font-black text-neutral-900 dark:text-neutral-100">Very High</p>
+        <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">The ecosystem already contains content, hub, events, store products, and guided sessions.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-[85rem] gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[.85fr_1.15fr] lg:px-8 2xl:max-w-full">
+    <div>
+      <h2 class="text-3xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+        Why C.H.E.S.S fits an emotional education brand
+      </h2>
+      <p class="mt-5 text-lg leading-8 text-neutral-600 dark:text-neutral-400">
+        The School of Life already teaches the questions people rarely learn at ordinary school: how to understand themselves, relate better, work more effectively, find calm, and live with more meaning. C.H.E.S.S gives that intellectual and emotional strength an operating structure so a film, article, product, event, therapy page, and corporate programme can all support the same learner journey.
+      </p>
+      <div class="mt-8 grid gap-4">
+        {[
+          'Discovery through films, articles, podcasts, and public ideas',
+          'Belonging through membership and a global thoughtful community',
+          'Participation through live online events and corporate programmes',
+          'Revenue through books, cards, app subscription, shop, and therapy',
+          'Depth through guided services, faculty, therapists, and workplace learning',
+        ].map(item => (
+          <div class="flex gap-3 rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+            <span class="text-yellow-600 dark:text-yellow-400"><Icon name="checkCircle" /></span>
+            <p class="font-bold text-neutral-800 dark:text-neutral-200">{item}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="grid gap-5">
+      <img src={studioImage} alt="The School of Life psychological education visual" class="h-72 w-full rounded-2xl object-cover" loading="lazy" />
+      <div class="grid gap-5 sm:grid-cols-2">
+        <img src={productImage} alt="The School of Life self-knowledge tools" class="h-56 w-full rounded-2xl object-cover" loading="lazy" />
+        <img src={beliefImage} alt="The School of Life philosophy and beliefs visual" class="h-56 w-full rounded-2xl object-cover" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section id="model" class="bg-neutral-100 px-4 py-14 dark:bg-neutral-900">
+    <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8 2xl:max-w-full">
+      <div class="max-w-3xl">
+        <h2 class="text-3xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+          The C.H.E.S.S map for The School of Life
+        </h2>
+        <p class="mt-4 text-lg text-neutral-600 dark:text-neutral-400">
+          This model connects public-facing brand assets with practical user journeys. It is written as a strategic application, based on public information, not as a claim of an internal implementation.
+        </p>
+      </div>
+      <div class="mt-10 grid gap-5 lg:grid-cols-5">
+        {chessLayers.map(layer => (
+          <article class="flex min-h-full flex-col rounded-xl bg-white p-6 dark:bg-neutral-950">
+            <span class="flex size-12 items-center justify-center rounded-lg bg-yellow-100 text-2xl font-black text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300">
+              {layer.letter}
+            </span>
+            <h3 class="mt-5 text-xl font-black text-neutral-900 dark:text-neutral-100">{layer.title}</h3>
+            <p class="mt-1 text-sm font-bold text-yellow-600 dark:text-yellow-400">{layer.subtitle}</p>
+            <p class="mt-4 text-sm leading-6 text-neutral-600 dark:text-neutral-400">{layer.body}</p>
+            <ul class="mt-5 space-y-2">
+              {layer.moves.map(move => (
+                <li class="text-sm font-medium text-neutral-800 dark:text-neutral-200">{move}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 2xl:max-w-full">
+    <div class="grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
+      <div class="sticky top-28">
+        <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+          Proposed Experience
+        </p>
+        <h2 class="mt-3 text-3xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+          A learner journey from first insight to guided change
+        </h2>
+      </div>
+      <div class="grid gap-4">
+        {[
+          ['1. Discover', 'A person finds a YouTube film, article, or podcast episode that names a problem they have felt but could not yet explain.'],
+          ['2. Orient', 'A topic pathway connects the idea to a small set of articles, films, card prompts, and a beginner-friendly practice.'],
+          ['3. Join', 'Membership becomes the clear next step for deeper content, live online events, app access, and community connection.'],
+          ['4. Practice', 'The Hub gives recurring exercises, reminders, event notes, and reflection prompts that turn insight into daily emotional skill.'],
+          ['5. Deepen', 'Therapy, career counselling, couples therapy, or workplace programmes support moments where self-guided learning is no longer enough.'],
+        ].map(([title, text]) => (
+          <article class="rounded-xl border border-neutral-200 p-6 dark:border-neutral-800">
+            <h3 class="text-xl font-black text-neutral-900 dark:text-neutral-100">{title}</h3>
+            <p class="mt-3 text-neutral-600 dark:text-neutral-400">{text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-neutral-950 px-4 py-14 text-white">
+    <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8 2xl:max-w-full">
+      <div class="grid gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+        <div>
+          <h2 class="text-3xl font-black tracking-tight md:text-5xl">
+            The best-fit growth thesis
+          </h2>
+          <p class="mt-5 text-lg leading-8 text-neutral-300">
+            The School of Life should not behave like a generic media brand. Its advantage is emotional: it names inner life with unusual clarity and gives people intelligent, humane tools for becoming calmer, wiser, and more connected. C.H.E.S.S turns that advantage into a repeatable system where every touchpoint helps a learner feel, "This understands me, and it shows me what to do next."
+          </p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {[
+            ['Content metric', 'More qualified member trials from problem-led topic pathways and film-to-app journeys.'],
+            ['Hub metric', 'Higher retention from clear member onboarding, practice loops, and event follow-up.'],
+            ['Event metric', 'More live event participation from monthly themes and post-event reflection packs.'],
+            ['Session metric', 'More therapy and workplace enquiries from readiness guides and diagnostic content.'],
+          ].map(([title, body]) => (
+            <article class="rounded-xl bg-white/10 p-5">
+              <h3 class="font-black text-white">{title}</h3>
+              <p class="mt-2 text-sm text-neutral-300">{body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 2xl:max-w-full">
+    <h2 class="text-3xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+      Reference Sources
+    </h2>
+    <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {sources.map(source => (
+        <a href={source.href} class="rounded-xl border border-neutral-200 p-5 transition hover:bg-neutral-100 dark:border-neutral-800 dark:hover:bg-neutral-900">
+          <span class="inline-flex items-center text-sm font-black text-yellow-600 dark:text-yellow-400">
+            {source.label}
+            <Icon name="openInNew" />
+          </span>
+          <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">{source.note}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</MainLayout>

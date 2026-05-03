@@ -5,7 +5,11 @@ const navBarLinks = [
     url: '/zh/chess',
     children: [
       { name: 'Compassio', url: '/zh/compassio' },
-      { name: '案例研究', url: '/case-studies/dancenter-chess' },
+      { name: 'Dancenter 案例研究', url: '/case-studies/dancenter-chess' },
+      {
+        name: 'The School of Life 案例研究',
+        url: '/case-studies/the-school-of-life-chess',
+      },
     ],
   },
   { name: '服务', url: '/zh/services' },
@@ -23,7 +27,11 @@ const footerLinks = [
       { name: 'Compassio', url: '/zh/compassio' },
       { name: '产品', url: '/zh/products' },
       { name: '服务', url: '/zh/services' },
-      { name: '案例研究', url: '/case-studies/dancenter-chess' },
+      { name: 'Dancenter 案例研究', url: '/case-studies/dancenter-chess' },
+      {
+        name: 'The School of Life 案例研究',
+        url: '/case-studies/the-school-of-life-chess',
+      },
     ],
   },
   {
