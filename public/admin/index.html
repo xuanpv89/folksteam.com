@@ -313,6 +313,39 @@
         margin-top: 8px;
       }
 
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .button-row + .button-row {
+        margin-top: 10px;
+      }
+
+      .button-row button {
+        min-height: 38px;
+        padding: 8px 13px;
+        font-size: 13px;
+      }
+
+      .button-row .primary-action {
+        min-width: 168px;
+      }
+
+      .button-row .utility-action {
+        background: #fff;
+        color: var(--ink);
+        border: 1px solid #d4d4d4;
+      }
+
+      .button-row .danger-action {
+        background: #fff;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+      }
+
       pre {
         min-height: 560px;
         max-height: 72vh;
@@ -454,6 +487,11 @@
         min-height: 32px;
         padding: 6px 11px;
         font-size: 12px;
+      }
+
+      .draft-actions button {
+        min-height: 30px;
+        padding: 5px 10px;
       }
 
       .preview-card {
@@ -696,18 +734,25 @@
               />
             </label>
             <div class="actions">
-              <button type="button" id="publish-github">Publish to GitHub</button>
-              <button type="button" class="secondary" id="save-token">Save token locally</button>
-              <button type="button" class="secondary" id="clear-token">Clear token</button>
+              <div class="button-row">
+                <button type="button" class="primary-action" id="publish-github">Publish to GitHub</button>
+                <button type="button" class="utility-action" id="save-token">Save token</button>
+                <button type="button" class="danger-action" id="clear-token">Clear</button>
+              </div>
             </div>
           </div>
 
-          <div class="actions">
-            <button type="button" id="generate">Generate preview</button>
-            <button type="button" id="download">Download .md</button>
-            <button type="button" class="secondary" id="copy">Copy Markdown</button>
-            <button type="button" class="secondary" id="save-draft">Save draft</button>
-            <button type="reset" class="secondary">Reset</button>
+          <div class="form-section">
+            <h3>Editor actions</h3>
+            <div class="button-row">
+              <button type="button" class="primary-action" id="generate">Generate preview</button>
+              <button type="button" id="download">Download .md</button>
+              <button type="button" class="utility-action" id="copy">Copy Markdown</button>
+            </div>
+            <div class="button-row">
+              <button type="button" class="utility-action" id="save-draft">Save draft</button>
+              <button type="reset" class="utility-action">Reset</button>
+            </div>
           </div>
           <div class="toast" id="toast">Done.</div>
 
@@ -1017,7 +1062,7 @@ ${contents.join('\n\n')}
                 saved ${escapeHtml(formatSavedAt(draft.savedAt))}
               </div>
             </div>
-            <div class="actions">
+            <div class="draft-actions">
               <button type="button" data-load="${index}">Load</button>
               <button type="button" class="secondary" data-delete="${index}">Delete</button>
             </div>
