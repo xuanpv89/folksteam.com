@@ -110,8 +110,9 @@ const description =
     </div>
 
     <form
-      action="https://formsubmit.co/contact@folksteam.com"
+      action="/api/newsletter"
       method="POST"
+      data-newsletter-form
       class:list={[
         'mt-5 flex gap-2',
         variant === 'footer'
@@ -121,9 +122,7 @@ const description =
             : 'flex-col sm:flex-row md:mt-0',
       ]}
     >
-      <input type="hidden" name="_subject" value={copy.subject} />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="locale" value={locale} />
       <input
         type="hidden"
         name="source"
@@ -164,6 +163,7 @@ const description =
     </form>
 
     <p
+      data-newsletter-status
       class:list={[
         'mt-3 text-xs',
         compact || variant === 'footer'
@@ -175,3 +175,61 @@ const description =
     </p>
   </div>
 </section>
+
+<script is:inline>
+  if (!window.__folksNewsletterHandlerAttached) {
+    window.__folksNewsletterHandlerAttached = true;
+    document.addEventListener('submit', async event => {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement) || !form.matches('[data-newsletter-form]')) return;
+
+    event.preventDefault();
+
+    const status = form.parentElement?.querySelector('[data-newsletter-status]');
+    const submit = form.querySelector('button[type="submit"]');
+    const originalText = status?.textContent || '';
+
+    if (status) {
+      status.textContent = 'Submitting...';
+      status.className = 'mt-3 text-xs font-semibold text-yellow-700 dark:text-yellow-300';
+    }
+    if (submit instanceof HTMLButtonElement) submit.disabled = true;
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(form)),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || 'Unable to subscribe.');
+      }
+
+      form.reset();
+      if (status) {
+        status.textContent = result.message;
+        status.className = 'mt-3 text-xs font-semibold text-green-700 dark:text-green-300';
+      }
+    } catch (error) {
+      if (status) {
+        status.textContent =
+          error instanceof Error ? error.message : 'Unable to subscribe.';
+        status.className = 'mt-3 text-xs font-semibold text-red-700 dark:text-red-300';
+      }
+    } finally {
+      if (submit instanceof HTMLButtonElement) submit.disabled = false;
+      if (status) {
+        setTimeout(() => {
+          status.textContent = originalText;
+          status.className = 'mt-3 text-xs text-neutral-500 dark:text-neutral-500';
+        }, 7000);
+      }
+    }
+  });
+  }
+</script>

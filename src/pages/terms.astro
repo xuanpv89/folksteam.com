@@ -1,0 +1,44 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { SITE } from '@data/constants';
+
+const pageTitle = `Terms | ${SITE.title}`;
+const metaDescription =
+  'Folks Team website terms for using public content, resources, guides, case studies, and contact forms.';
+---
+
+<MainLayout
+  title={pageTitle}
+  customDescription={metaDescription}
+  customOgTitle="Terms | Folks Team"
+>
+  <section class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+    <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+      Terms
+    </p>
+    <h1 class="mt-4 text-4xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+      Terms of Use
+    </h1>
+    <div class="prose prose-neutral mt-8 max-w-none dark:prose-invert">
+      <p>
+        This website provides public information about Folks Team, C.H.E.S.S,
+        projects, case studies, products, and related resources.
+      </p>
+      <h2>Content</h2>
+      <p>
+        Content is provided for general information and strategic inspiration.
+        Case studies based on public information are concept studies unless
+        explicitly described as client work.
+      </p>
+      <h2>Use of the Site</h2>
+      <p>
+        Please do not misuse forms, copy protected materials without permission,
+        or interfere with the operation of the website.
+      </p>
+      <h2>Contact</h2>
+      <p>
+        For questions about these terms, email contact@folksteam.com.
+      </p>
+    </div>
+  </section>
+</MainLayout>

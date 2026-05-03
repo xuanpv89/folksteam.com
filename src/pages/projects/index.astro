@@ -1,0 +1,85 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { SITE } from '@data/constants';
+import compassioCover from '@images/emotion-compass-cover.png';
+
+const projects = [
+  {
+    label: 'C.H.E.S.S Application',
+    title: 'Project: Compassio',
+    description:
+      'A reflective card deck and facilitation system that helps people name, observe, and navigate emotions with more clarity.',
+    href: '/projects/compassio',
+    image: compassioCover,
+    alt: 'Compassio emotion card deck cover',
+  },
+];
+
+const pageTitle = `Projects | ${SITE.title}`;
+const metaDescription =
+  'Explore Folks Team projects built around C.H.E.S.S, emotional clarity, content systems, community, and practical growth tools.';
+---
+
+<MainLayout
+  title={pageTitle}
+  customDescription={metaDescription}
+  customOgTitle="Projects | Folks Team"
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${SITE.url}/projects`,
+    url: `${SITE.url}/projects`,
+    name: 'Projects | Folks Team',
+    description: metaDescription,
+    inLanguage: 'en-US',
+  }}
+>
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20 2xl:max-w-full">
+    <div class="max-w-3xl">
+      <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+        Projects
+      </p>
+      <h1 class="mt-4 text-4xl font-black tracking-tight text-neutral-900 md:text-6xl dark:text-neutral-100">
+        Practical systems built from the C.H.E.S.S model
+      </h1>
+      <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-400">
+        This space will collect Folks Team projects as they mature: tools,
+        products, learning systems, community experiments, and applied case
+        work. Compassio is the first public project in this collection.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-3">
+      {
+        projects.map(project => (
+          <article class="overflow-hidden rounded-2xl bg-white shadow-xl shadow-neutral-900/5 dark:bg-neutral-900">
+            <a href={project.href} class="group block">
+              <div class="aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+                <img
+                  src={project.image.src}
+                  alt={project.alt}
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-6">
+                <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+                  {project.label}
+                </p>
+                <h2 class="mt-3 text-2xl font-black text-neutral-900 dark:text-neutral-100">
+                  {project.title}
+                </h2>
+                <p class="mt-4 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+                  {project.description}
+                </p>
+                <span class="mt-6 inline-flex rounded-lg bg-yellow-500 px-5 py-3 text-sm font-bold text-white">
+                  View project
+                </span>
+              </div>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</MainLayout>

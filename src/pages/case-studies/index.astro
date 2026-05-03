@@ -1,0 +1,97 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { SITE } from '@data/constants';
+
+const caseStudies = [
+  {
+    label: 'Dance Education',
+    title: 'Dancenter Vietnam x C.H.E.S.S',
+    description:
+      'A concept case study mapping dance education, community, performance, programs, and personal sessions into a C.H.E.S.S growth system.',
+    href: '/case-studies/dancenter-chess',
+    image:
+      'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1200&q=85',
+    alt: 'Dance performance stage',
+  },
+  {
+    label: 'Emotional Education',
+    title: 'The School of Life x C.H.E.S.S',
+    description:
+      'A strategic adaptation of The School of Life format into content, hub, event, store, and session layers.',
+    href: '/case-studies/the-school-of-life-chess',
+    image:
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=85',
+    alt: 'People in an education workshop',
+  },
+];
+
+const pageTitle = `Case Studies | ${SITE.title}`;
+const metaDescription =
+  'Read C.H.E.S.S case study concepts from Folks Team, connecting content, hubs, events, offers, and sessions into practical growth systems.';
+---
+
+<MainLayout
+  title={pageTitle}
+  customDescription={metaDescription}
+  customOgTitle="Case Studies | Folks Team"
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${SITE.url}/case-studies`,
+    url: `${SITE.url}/case-studies`,
+    name: 'Case Studies | Folks Team',
+    description: metaDescription,
+    inLanguage: 'en-US',
+  }}
+>
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20 2xl:max-w-full">
+    <div class="grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-end">
+      <div>
+        <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+          Case Studies
+        </p>
+        <h1 class="mt-4 text-4xl font-black tracking-tight text-neutral-900 md:text-6xl dark:text-neutral-100">
+          How C.H.E.S.S turns existing brands into systems
+        </h1>
+      </div>
+      <p class="text-lg leading-8 text-neutral-600 dark:text-neutral-400">
+        These studies are strategic concepts based on public information. Each
+        one shows how a brand can connect content, community, events, products,
+        and personalized experiences into a clearer growth model.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-2">
+      {
+        caseStudies.map(study => (
+          <article class="overflow-hidden rounded-2xl bg-white shadow-xl shadow-neutral-900/5 dark:bg-neutral-900">
+            <a href={study.href} class="group block">
+              <div class="aspect-[16/9] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+                <img
+                  src={study.image}
+                  alt={study.alt}
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-6">
+                <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+                  {study.label}
+                </p>
+                <h2 class="mt-3 text-2xl font-black text-neutral-900 dark:text-neutral-100">
+                  {study.title}
+                </h2>
+                <p class="mt-4 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+                  {study.description}
+                </p>
+                <span class="mt-6 inline-flex rounded-lg bg-yellow-500 px-5 py-3 text-sm font-bold text-white">
+                  Read case study
+                </span>
+              </div>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</MainLayout>

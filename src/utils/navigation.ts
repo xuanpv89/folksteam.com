@@ -49,11 +49,11 @@ const footerLinks = [
 ];
 
 const socialLinks = {
-  facebook: 'https://www.facebook.com/',
-  x: 'https://twitter.com/',
+  facebook: '',
+  x: '',
   github: 'https://github.com/xuanpv89/folks-template-screwfast',
-  google: 'https://www.google.com/',
-  slack: 'https://slack.com/',
+  google: '',
+  slack: '',
 };
 
 export default {

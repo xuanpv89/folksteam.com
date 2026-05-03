@@ -1,0 +1,44 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { SITE } from '@data/constants';
+
+const pageTitle = `Privacy Policy | ${SITE.title}`;
+const metaDescription =
+  'Folks Team privacy policy for contact forms, newsletter signups, website analytics, and communication preferences.';
+---
+
+<MainLayout
+  title={pageTitle}
+  customDescription={metaDescription}
+  customOgTitle="Privacy Policy | Folks Team"
+>
+  <section class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+    <p class="text-sm font-black uppercase tracking-widest text-yellow-600 dark:text-yellow-400">
+      Privacy
+    </p>
+    <h1 class="mt-4 text-4xl font-black tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+      Privacy Policy
+    </h1>
+    <div class="prose prose-neutral mt-8 max-w-none dark:prose-invert">
+      <p>
+        Folks Team collects only the information needed to respond to messages,
+        manage newsletter signups, and improve the website experience.
+      </p>
+      <h2>Information We Collect</h2>
+      <p>
+        Contact forms may collect your name, email, phone number, and message.
+        Newsletter forms collect your email address and signup source.
+      </p>
+      <h2>How We Use It</h2>
+      <p>
+        We use submitted information to reply to enquiries, send requested
+        updates, and maintain a useful communication record.
+      </p>
+      <h2>Your Choices</h2>
+      <p>
+        You can ask us to update or remove your information by emailing
+        contact@folksteam.com.
+      </p>
+    </div>
+  </section>
+</MainLayout>

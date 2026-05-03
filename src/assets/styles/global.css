@@ -170,11 +170,12 @@
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  :where(article, .group):where(:hover, :focus-within) {
+  :where(main article, main .motion-card):where(:hover, :focus-within) {
     transform: translateY(-3px);
   }
 
-  :where(article, .group):where(:hover, :focus-within) :where(img, iframe) {
+  :where(main article, main .motion-card):where(:hover, :focus-within)
+    :where(img, iframe) {
     filter: saturate(1.04) contrast(1.02);
   }
 
@@ -186,8 +187,8 @@
   }
 
   :where(a:hover) :where(img),
-  :where(article:hover) :where(img),
-  :where(.group:hover) :where(img) {
+  :where(main article:hover) :where(img),
+  :where(main .motion-card:hover) :where(img) {
     transform: scale(1.025);
   }
 
@@ -218,7 +219,7 @@
     transform: scaleX(1);
   }
 
-  :where(main > section, main > article) {
+  :where(main > section:not([data-no-motion]), main > article:not([data-no-motion])) {
     animation: ft-rise-in 620ms both cubic-bezier(0.22, 1, 0.36, 1);
   }
 
