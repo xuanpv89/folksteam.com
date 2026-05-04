@@ -12,7 +12,8 @@ readTime: 4
 category: 'C.H.E.S.S'
 tags: []
 contents:
-  - 'A few years ago, while job hunting, I received a rather unusual offer. The role didn’t have a fixed title. In fact, it involved taking on three different positions. There was no clear job description either. The expectation was simple: rotate between roles after a period of time.'
+  - 'Float-er & Flow-er: Two Types of Talent in Organizations
+A few years ago, while job hunting, I received a rather unusual offer. The role didn’t have a fixed title. In fact, it involved taking on three different positions. There was no clear job description either. The expectation was simple: rotate between roles after a period of time.'
   - 'At that time, I found it exciting. After spending years in a single specialization and wanting a change, this “do a bit of everything” role felt refreshing.'
   - 'Looking back now, this kind of role is no longer unusual in today’s job market. It even has a name: Float-er.'
   - 'So what exactly is a Float-er? Why do organizations need them? And what do we call those who are not Float-ers?'
@@ -70,6 +71,7 @@ An organization made up only of Float-ers may lack depth and stability.'
   - 'A truly effective organization doesn’t just “flow”—it also needs to “float.”'
 ---
 
+Float-er & Flow-er: Two Types of Talent in Organizations
 A few years ago, while job hunting, I received a rather unusual offer. The role didn’t have a fixed title. In fact, it involved taking on three different positions. There was no clear job description either. The expectation was simple: rotate between roles after a period of time.
 
 At that time, I found it exciting. After spending years in a single specialization and wanting a change, this “do a bit of everything” role felt refreshing.
