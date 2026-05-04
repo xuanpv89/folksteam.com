@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
-const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
+const DEFAULT_SESSION_DAYS = 7;
 
 function sendJson(response, status, body, headers = {}) {
   response.status(status);
@@ -28,18 +28,51 @@ function sign(value, secret) {
 }
 
 function createSession(secret, username) {
+  const maxAge = getSessionMaxAge();
   const payload = JSON.stringify({
     username,
-    exp: Math.floor(Date.now() / 1000) + SESSION_MAX_AGE,
+    exp: Math.floor(Date.now() / 1000) + maxAge,
   });
   const encoded = base64Url(payload);
   return `${encoded}.${sign(encoded, secret)}`;
+}
+
+function getSessionMaxAge() {
+  const days = Number(process.env.ADMIN_SESSION_DAYS || DEFAULT_SESSION_DAYS);
+  const safeDays = Number.isFinite(days) && days > 0 ? Math.min(days, 30) : DEFAULT_SESSION_DAYS;
+  return Math.round(safeDays * 24 * 60 * 60);
 }
 
 function safeEqual(left, right) {
   const leftBuffer = Buffer.from(left);
   const rightBuffer = Buffer.from(right);
   return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
+}
+
+function getAdminUsers(adminSecret) {
+  const configuredUsers = process.env.ADMIN_USERS;
+  if (configuredUsers) {
+    try {
+      const users = JSON.parse(configuredUsers);
+      if (Array.isArray(users)) {
+        return users
+          .map(user => ({
+            username: String(user.username || '').trim(),
+            password: String(user.password || ''),
+          }))
+          .filter(user => user.username && user.password);
+      }
+    } catch {
+      return [];
+    }
+  }
+
+  return [
+    {
+      username: process.env.ADMIN_USER || 'admin',
+      password: process.env.ADMIN_PASSWORD || adminSecret,
+    },
+  ];
 }
 
 export default async function handler(request, response) {
@@ -61,10 +94,9 @@ export default async function handler(request, response) {
   }
 
   const adminSecret = process.env.ADMIN_SECRET;
-  const adminUser = process.env.ADMIN_USER || 'admin';
-  const adminPassword = process.env.ADMIN_PASSWORD || adminSecret;
+  const adminUsers = getAdminUsers(adminSecret);
 
-  if (!adminSecret || !adminPassword) {
+  if (!adminSecret || !adminUsers.length) {
     return sendJson(response, 500, {
       ok: false,
       message: 'Admin authentication is not configured.',
@@ -73,8 +105,9 @@ export default async function handler(request, response) {
 
   const username = String(body.username || '').trim();
   const password = String(body.password || '');
+  const user = adminUsers.find(candidate => candidate.username === username);
 
-  if (username !== adminUser || !safeEqual(password, adminPassword)) {
+  if (!user || !safeEqual(password, user.password)) {
     return sendJson(response, 401, {
       ok: false,
       message: 'Username or password is incorrect.',
@@ -85,7 +118,7 @@ export default async function handler(request, response) {
   const cookie = [
     `folks_admin_session=${session}`,
     'Path=/admin',
-    `Max-Age=${SESSION_MAX_AGE}`,
+    `Max-Age=${getSessionMaxAge()}`,
     'HttpOnly',
     'Secure',
     'SameSite=Lax',

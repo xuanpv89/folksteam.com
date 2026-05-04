@@ -114,6 +114,7 @@
           <a href="/blog">Blog EN</a>
           <a href="/vi/blog">Blog VI</a>
           <a class="secondary" href="/">Home</a>
+          <button type="button" class="secondary" data-admin-logout>Log out</button>
         </nav>
       </header>
 
@@ -528,5 +529,6 @@
       githubToken.value = localStorage.getItem('folksGithubToken') || '';
       render();
     </script>
+    <script src="/admin/admin-session.js"></script>
   </body>
 </html>
