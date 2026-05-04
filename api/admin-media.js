@@ -1,3 +1,5 @@
+import { getAdminSession } from './_admin-session.js';
+
 const GITHUB_API = 'https://api.github.com';
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = new Map([
@@ -118,10 +120,10 @@ export default async function handler(request, response) {
     });
   }
 
-  if (body.adminSecret !== adminSecret) {
+  if (!getAdminSession(request, adminSecret)) {
     return sendJson(response, 401, {
       ok: false,
-      message: 'Admin secret is incorrect.',
+      message: 'Admin session is missing or expired. Please sign in again.',
     });
   }
 

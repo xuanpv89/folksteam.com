@@ -513,6 +513,34 @@
         min-width: min(100%, 220px);
       }
 
+      .image-preview {
+        display: none;
+        gap: 8px;
+        align-items: center;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        background: #fff;
+        padding: 8px;
+      }
+
+      .image-preview.visible {
+        display: flex;
+      }
+
+      .image-preview img {
+        width: 86px;
+        height: 58px;
+        border-radius: 6px;
+        object-fit: cover;
+        background: #f5f5f5;
+      }
+
+      .image-preview span {
+        color: var(--muted);
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+
       .drafts {
         display: grid;
         gap: 10px;
@@ -659,6 +687,20 @@
         color: #333;
         font-size: 16px;
         line-height: 1.75;
+      }
+
+      .article-preview figure {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+      }
+
+      .article-preview figure img {
+        width: 100%;
+        max-height: 420px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #f5f5f5;
       }
 
       .section-title {
@@ -912,29 +954,52 @@
               </label>
             </div>
             <div class="media-actions">
-              <label>Upload card image
+              <label>Upload ảnh bài viết
                 <input type="file" accept="image/avif,image/jpeg,image/png,image/webp,image/gif" data-upload-field="cardImage" />
               </label>
-              <label>Upload author image
+              <label>Upload ảnh tác giả
                 <input type="file" accept="image/avif,image/jpeg,image/png,image/webp,image/gif" data-upload-field="authorImage" />
               </label>
+            </div>
+            <div class="image-preview" data-image-preview="cardImage">
+              <img alt="Card image preview" />
+              <span></span>
+            </div>
+            <div class="image-preview" data-image-preview="authorImage">
+              <img alt="Author image preview" />
+              <span></span>
             </div>
           </div>
 
           <div class="form-section" data-tab-panel="write">
             <h3>Nội dung</h3>
             <div class="block-toolbar" aria-label="Add content block">
-              <button type="button" data-add-block="heading">+ Heading</button>
-              <button type="button" data-add-block="paragraph">+ Paragraph</button>
+              <button type="button" data-add-block="paragraph">+ Text</button>
               <button type="button" data-add-block="image">+ Image</button>
               <button type="button" data-add-block="video">+ Video</button>
               <button type="button" data-add-block="quote">+ Quote</button>
-              <button type="button" data-add-block="bullets">+ Bullets</button>
-              <button type="button" data-add-block="numbers">+ Numbers</button>
-              <button type="button" data-add-block="link">+ Link</button>
-              <button type="button" data-add-block="divider">+ Divider</button>
+              <details class="advanced-box">
+                <summary>More blocks</summary>
+                <div class="button-row">
+                  <button type="button" data-add-block="heading">+ Heading</button>
+                  <button type="button" data-add-block="bullets">+ Bullets</button>
+                  <button type="button" data-add-block="numbers">+ Numbers</button>
+                  <button type="button" data-add-block="link">+ Link</button>
+                  <button type="button" data-add-block="divider">+ Divider</button>
+                </div>
+              </details>
             </div>
             <div class="block-list" id="block-list"></div>
+          </div>
+
+          <div data-tab-panel="write">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Drafts</p>
+                <h3>Draft đã lưu</h3>
+              </div>
+            </div>
+            <div class="drafts" id="drafts"></div>
           </div>
 
           <div data-tab-panel="publish" hidden>
@@ -955,31 +1020,17 @@
               file Markdown vào repo. Vercel sẽ tự deploy lại nếu project đang
               kết nối với GitHub.
             </p>
-            <label>
-              Admin secret
-              <input
-                id="adminSecret"
-                type="password"
-                autocomplete="off"
-                placeholder="ADMIN_SECRET"
-              />
-            </label>
-            <label class="check-row">
-              <input id="rememberAdminSecret" type="checkbox" />
-              Ghi nhớ Admin secret trên máy này
-            </label>
             <label class="check-row">
               <input id="allowUpdate" type="checkbox" />
-              Update existing post if slug already exists
+              Cập nhật bài cũ nếu slug đã tồn tại
             </label>
             <div class="status-log" id="publish-status">
-              Ready. Publish will commit to GitHub, then Vercel should deploy from main.
+              Sẵn sàng. Khi đăng, CMS sẽ commit lên GitHub và Vercel sẽ deploy từ main.
             </div>
             <div class="actions">
               <div class="button-row">
                 <button type="button" class="primary-action" id="publish-github">Đăng bài</button>
                 <button type="button" class="utility-action" id="save-cloud-draft">Lưu nháp</button>
-                <button type="button" class="danger-action" id="clear-secret">Clear</button>
               </div>
             </div>
             <details class="advanced-box">
@@ -995,7 +1046,7 @@
                 </label>
               </div>
               <label>
-                Summary paragraphs
+                Tóm tắt nội dung
                 <textarea id="contents" name="contents" placeholder="Tự tạo từ đoạn văn nếu để trống."></textarea>
               </label>
             </details>
@@ -1006,24 +1057,14 @@
             <div class="button-row">
               <button type="button" class="primary-action" id="generate">Cập nhật preview</button>
               <button type="button" id="download">Download .md</button>
-              <button type="button" class="utility-action" id="copy">Copy Markdown</button>
+              <button type="button" class="utility-action" id="copy">Copy mã Markdown</button>
             </div>
             <div class="button-row">
-              <button type="button" class="utility-action" id="save-draft">Save draft</button>
+              <button type="button" class="utility-action" id="save-draft">Lưu nháp</button>
               <button type="reset" class="utility-action">Reset</button>
             </div>
           </div>
           <div class="toast" id="toast">Done.</div>
-
-          <div data-tab-panel="publish" hidden>
-            <div class="section-title">
-              <div>
-                <p class="eyebrow">Local drafts</p>
-                <h3>Draft đã lưu</h3>
-              </div>
-            </div>
-            <div class="drafts" id="drafts"></div>
-          </div>
         </form>
 
         <section class="card preview-card">
@@ -1033,8 +1074,8 @@
               <h2>Post preview</h2>
             </div>
             <div class="preview-tabs" aria-label="Preview mode">
-              <button type="button" class="active" id="tab-live">Live</button>
-              <button type="button" id="tab-markdown">Markdown</button>
+              <button type="button" class="active" id="tab-live">Xem trước</button>
+              <button type="button" id="tab-markdown">Mã Markdown</button>
             </div>
           </div>
           <p class="hint">
@@ -1059,10 +1100,7 @@
       const publishStatus = document.getElementById('publish-status');
       const githubRepo = document.getElementById('githubRepo');
       const githubBranch = document.getElementById('githubBranch');
-      const adminSecret = document.getElementById('adminSecret');
-      const rememberAdminSecret = document.getElementById('rememberAdminSecret');
       const allowUpdate = document.getElementById('allowUpdate');
-      const adminSecretStorageKey = 'folksAdminSecret';
 
       const fields = [
         'locale',
@@ -1183,9 +1221,13 @@
               <input data-block-field="caption" value="${escapeHtml(block.caption)}" />
             </label>
             <div class="media-actions">
-              <label>Upload from computer
+              <label>Upload từ máy
                 <input type="file" accept="image/avif,image/jpeg,image/png,image/webp,image/gif" data-upload-image="${index}" />
               </label>
+            </div>
+            <div class="image-preview ${block.src ? 'visible' : ''}">
+              <img src="${escapeHtml(imagePreviewSrc(block.src))}" alt="Image block preview" />
+              <span>${escapeHtml(block.src || '')}</span>
             </div>
           `;
         }
@@ -1283,6 +1325,37 @@
         return src;
       }
 
+      function imagePreviewSrc(src) {
+        const value = String(src || '').trim();
+        if (!value) return '';
+        if (/^https?:\/\//.test(value) || value.startsWith('/')) return value;
+        if (value.startsWith('@/images/')) {
+          const repo = githubRepo.value.trim() || 'xuanpv89/folksteam.com';
+          const branch = githubBranch.value.trim() || 'main';
+          return `https://raw.githubusercontent.com/${repo}/${branch}/src/images/${value.replace('@/images/', '')}`;
+        }
+        return value;
+      }
+
+      function publicPostUrl(locale, slug) {
+        const prefix = locale === 'vi' ? '/vi/blog' : '/blog';
+        return `${window.location.origin}${prefix}/${slug}/`;
+      }
+
+      function updateMediaPreviews() {
+        ['cardImage', 'authorImage'].forEach(fieldId => {
+          const wrapper = document.querySelector(`[data-image-preview="${fieldId}"]`);
+          if (!wrapper) return;
+          const value = document.getElementById(fieldId).value.trim();
+          const src = imagePreviewSrc(value);
+          const image = wrapper.querySelector('img');
+          const label = wrapper.querySelector('span');
+          wrapper.classList.toggle('visible', Boolean(src));
+          image.src = src || '';
+          label.textContent = value;
+        });
+      }
+
       function youtubeEmbedUrl(value) {
         const url = String(value || '').trim();
         const watch = url.match(/[?&]v=([^&]+)/);
@@ -1358,14 +1431,6 @@
         if (!result.slug) errors.push('Slug');
 
         return errors;
-      }
-
-      function saveRememberedAdminSecret() {
-        if (rememberAdminSecret.checked) {
-          localStorage.setItem(adminSecretStorageKey, adminSecret.value.trim());
-        } else {
-          localStorage.removeItem(adminSecretStorageKey);
-        }
       }
 
       function escapeHtml(value) {
@@ -1446,10 +1511,8 @@ ${bodyMarkdown || contents.join('\n\n')}
               return `<p>${escapeHtmlWithBreaks(block.value)}</p>`;
             }
             if (block.type === 'image' && block.src) {
-              const src = block.src.startsWith('@/images/')
-                ? block.src.replace('@/images/', '/_astro/')
-                : block.src;
-              return `<figure><div class="path">${escapeHtml(block.src)}</div><p>${escapeHtml(block.alt || 'Image block')}</p>${block.caption ? `<p><em>${escapeHtml(block.caption)}</em></p>` : ''}</figure>`;
+              const src = imagePreviewSrc(block.src);
+              return `<figure><img src="${escapeHtml(src)}" alt="${escapeHtml(block.alt || 'Blog image')}" />${block.caption ? `<p><em>${escapeHtml(block.caption)}</em></p>` : ''}</figure>`;
             }
             if (block.type === 'video' && block.url) {
               return `<figure><div class="path">${escapeHtml(youtubeEmbedUrl(block.url))}</div><p>${escapeHtml(block.title || 'Video embed')}</p>${block.caption ? `<p><em>${escapeHtml(block.caption)}</em></p>` : ''}</figure>`;
@@ -1500,6 +1563,7 @@ ${bodyMarkdown || contents.join('\n\n')}
         const result = buildMarkdown();
         preview.textContent = result.markdown;
         renderArticlePreview(result);
+        updateMediaPreviews();
         return result;
       }
 
@@ -1554,6 +1618,7 @@ ${bodyMarkdown || contents.join('\n\n')}
       async function adminBlogRequest(payload) {
         const response = await fetch('/api/admin-blog', {
           method: 'POST',
+          credentials: 'same-origin',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -1573,6 +1638,7 @@ ${bodyMarkdown || contents.join('\n\n')}
       async function adminMediaRequest(payload) {
         const response = await fetch('/api/admin-media', {
           method: 'POST',
+          credentials: 'same-origin',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -1596,18 +1662,10 @@ ${bodyMarkdown || contents.join('\n\n')}
       }
 
       async function uploadImageBlock(index, payload) {
-        const secret = adminSecret.value.trim();
-        if (!secret) {
-          showToast('Bạn cần nhập Admin secret trước khi upload ảnh.', 'error');
-          return;
-        }
-
         const block = contentBlocks[index];
         if (!block) return;
-        saveRememberedAdminSecret();
         updatePublishStatus('Uploading image to GitHub...');
         const response = await adminMediaRequest({
-          adminSecret: secret,
           repo: githubRepo.value.trim(),
           branch: githubBranch.value.trim() || 'main',
           name: block.alt || block.caption || getValue('slug') || getValue('title'),
@@ -1624,16 +1682,8 @@ ${bodyMarkdown || contents.join('\n\n')}
       }
 
       async function uploadImageField(fieldId, payload) {
-        const secret = adminSecret.value.trim();
-        if (!secret) {
-          showToast('Bạn cần nhập Admin secret trước khi upload ảnh.', 'error');
-          return;
-        }
-
-        saveRememberedAdminSecret();
         updatePublishStatus('Uploading image to GitHub...');
         const response = await adminMediaRequest({
-          adminSecret: secret,
           repo: githubRepo.value.trim(),
           branch: githubBranch.value.trim() || 'main',
           name: `${fieldId}-${getValue('slug') || getValue('title') || 'blog-image'}`,
@@ -1652,18 +1702,12 @@ ${bodyMarkdown || contents.join('\n\n')}
         const result = updatePreview();
         const repo = githubRepo.value.trim();
         const branch = githubBranch.value.trim() || 'main';
-        const secret = adminSecret.value.trim();
         const validationErrors = validatePost(result);
 
         if (!repo.includes('/')) {
           showToast('Repository phải có dạng owner/repo.', 'error');
           return;
         }
-        if (!secret) {
-          showToast('Bạn cần nhập Admin secret.', 'error');
-          return;
-        }
-        saveRememberedAdminSecret();
         if (validationErrors.length) {
           showToast(`Chưa thể publish. Thiếu: ${validationErrors.join(', ')}.`, 'error');
           return;
@@ -1680,7 +1724,6 @@ ${bodyMarkdown || contents.join('\n\n')}
         try {
           const response = await adminBlogRequest({
             action,
-            adminSecret: secret,
             repo,
             branch,
             locale: getValue('locale'),
@@ -1691,10 +1734,14 @@ ${bodyMarkdown || contents.join('\n\n')}
 
           const verb = action === 'draft' ? 'Cloud draft saved' : 'Published';
           const deployMessage = response.deploy?.message || 'Check Vercel deployment status.';
-          updatePublishStatus(`${verb}: ${response.target}. ${deployMessage}`, [
+          const statusLinks = [
+            action === 'publish'
+              ? { label: 'Mở bài viết', url: publicPostUrl(getValue('locale'), result.slug) }
+              : null,
             { label: 'Open commit', url: response.commitUrl },
             { label: 'Open file', url: response.fileUrl },
-          ]);
+          ].filter(Boolean);
+          updatePublishStatus(`${verb}: ${response.target}. ${deployMessage}`, statusLinks);
           const commitLink = response.commitUrl;
           showToast(
             commitLink
@@ -1832,7 +1879,6 @@ ${bodyMarkdown || contents.join('\n\n')}
       blockList.addEventListener('click', event => {
         const removeIndex = event.target.dataset.removeBlock;
         const moveIndex = event.target.dataset.moveBlock;
-        const uploadUrlIndex = event.target.dataset.uploadUrl;
 
         if (removeIndex !== undefined) {
           syncBlocksFromDom();
@@ -1854,18 +1900,6 @@ ${bodyMarkdown || contents.join('\n\n')}
             updatePreview();
           }
         }
-
-        if (uploadUrlIndex !== undefined) {
-          const input = blockList.querySelector(`[data-image-url="${uploadUrlIndex}"]`);
-          const imageUrl = input?.value.trim();
-          if (!imageUrl) {
-            showToast('Paste an image URL first.', 'error');
-            return;
-          }
-          uploadImageBlock(Number(uploadUrlIndex), { imageUrl }).catch(error =>
-            showToast(`Upload lỗi: ${error.message}`, 'error')
-          );
-        }
       });
       blockList.addEventListener('change', event => {
         const uploadIndex = event.target.dataset.uploadImage;
@@ -1883,20 +1917,6 @@ ${bodyMarkdown || contents.join('\n\n')}
           readFileAsDataUrl(file)
             .then(dataUrl => uploadImageField(event.target.dataset.uploadField, { dataUrl, fileName: file.name }))
             .catch(error => showToast(`Upload lỗi: ${error.message}`, 'error'));
-        });
-      });
-      document.querySelectorAll('[data-upload-url-button]').forEach(button => {
-        button.addEventListener('click', () => {
-          const fieldId = button.dataset.uploadUrlButton;
-          const input = document.querySelector(`[data-upload-url-field="${fieldId}"]`);
-          const imageUrl = input?.value.trim();
-          if (!imageUrl) {
-            showToast('Paste an image URL first.', 'error');
-            return;
-          }
-          uploadImageField(fieldId, { imageUrl }).catch(error =>
-            showToast(`Upload lỗi: ${error.message}`, 'error')
-          );
         });
       });
       form.addEventListener('reset', () => setTimeout(() => {
@@ -1920,16 +1940,8 @@ ${bodyMarkdown || contents.join('\n\n')}
       document.getElementById('quick-save-draft').addEventListener('click', saveDraft);
       document.getElementById('quick-publish').addEventListener('click', () => {
         setEditorTab('publish');
-        adminSecret.focus();
       });
       document.getElementById('save-cloud-draft').addEventListener('click', saveCloudDraft);
-      document.getElementById('clear-secret').addEventListener('click', () => {
-        adminSecret.value = '';
-        rememberAdminSecret.checked = false;
-        localStorage.removeItem(adminSecretStorageKey);
-        showToast('Đã xóa Admin secret khỏi form và trình duyệt.');
-      });
-      rememberAdminSecret.addEventListener('change', saveRememberedAdminSecret);
       document.getElementById('tab-live').addEventListener('click', () => {
         articlePreview.classList.remove('hidden');
         preview.classList.add('hidden');
@@ -1963,11 +1975,7 @@ ${bodyMarkdown || contents.join('\n\n')}
       }
       githubBranch.value = localStorage.getItem('folksGithubBranch') || githubBranch.value;
       localStorage.removeItem('folksGithubToken');
-      const savedAdminSecret = localStorage.getItem(adminSecretStorageKey);
-      if (savedAdminSecret) {
-        adminSecret.value = savedAdminSecret;
-        rememberAdminSecret.checked = true;
-      }
+      localStorage.removeItem('folksAdminSecret');
       renderBlocks();
       renderDrafts();
       updatePreview();

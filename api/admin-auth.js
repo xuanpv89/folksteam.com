@@ -117,7 +117,7 @@ export default async function handler(request, response) {
   const session = createSession(adminSecret, username);
   const cookie = [
     `folks_admin_session=${session}`,
-    'Path=/admin',
+    'Path=/',
     `Max-Age=${getSessionMaxAge()}`,
     'HttpOnly',
     'Secure',
