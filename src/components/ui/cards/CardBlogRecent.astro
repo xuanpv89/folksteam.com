@@ -48,9 +48,12 @@ interface Props {
           ? `/${recentBlogLocale}/blog/${blogSlug}/`
           : `/blog/${blogSlug}/`}
       >
-        {blogEntry.data.description}
+        {blogEntry.data.title}
       </a>
     </h2>
+    <p class="mt-4 text-pretty text-neutral-600 dark:text-neutral-400">
+      {blogEntry.data.description}
+    </p>
     {/* Container for the author's avatar and metadata */}
     <div class="mt-6 flex items-center sm:mt-10">
       <AvatarBlogLarge blogEntry={blogEntry} />
