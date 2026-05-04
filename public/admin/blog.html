@@ -719,7 +719,7 @@
             <div class="row">
               <label>
                 Repository
-                <input id="githubRepo" value="xuanpv89/folks-template-screwfast" />
+                <input id="githubRepo" value="xuanpv89/folksteam.com" />
               </label>
               <label>
                 Branch
@@ -850,6 +850,22 @@
           .filter(Boolean);
       }
 
+      function validatePost(result) {
+        const title = getValue('title');
+        const description = getValue('description');
+        const cardImageAlt = getValue('cardImageAlt');
+        const contents = listFromTextarea(getValue('contents'));
+        const errors = [];
+
+        if (!title) errors.push('Title');
+        if (!description) errors.push('Description');
+        if (!cardImageAlt) errors.push('Card image alt');
+        if (!contents.length) errors.push('Contents');
+        if (!result.slug) errors.push('Slug');
+
+        return errors;
+      }
+
       function escapeHtml(value) {
         return String(value || '')
           .replaceAll('&', '&amp;')
@@ -977,13 +993,18 @@ ${contents.join('\n\n')}
         const repo = githubRepo.value.trim();
         const branch = githubBranch.value.trim() || 'main';
         const token = githubToken.value.trim();
+        const validationErrors = validatePost(result);
 
         if (!repo.includes('/')) {
-          showToast('Repository phải có dạng owner/repo.');
+          showToast('Repository phải có dạng owner/repo.', 'error');
           return;
         }
         if (!token) {
-          showToast('Bạn cần nhập GitHub token trước khi publish.');
+          showToast('Bạn cần nhập GitHub token trước khi publish.', 'error');
+          return;
+        }
+        if (validationErrors.length) {
+          showToast(`Chưa thể publish. Thiếu: ${validationErrors.join(', ')}.`, 'error');
           return;
         }
 
@@ -1011,12 +1032,17 @@ ${contents.join('\n\n')}
             ...(sha ? { sha } : {}),
           };
 
-          await githubRequest(commitUrl, token, {
+          const published = await githubRequest(commitUrl, token, {
             method: 'PUT',
             body: JSON.stringify(body),
           });
 
-          showToast(`Đã publish ${result.target} lên GitHub.`);
+          const commitLink = published?.commit?.html_url;
+          showToast(
+            commitLink
+              ? `Đã publish ${result.target}. Commit: ${commitLink}`
+              : `Đã publish ${result.target} lên GitHub.`
+          );
         } catch (error) {
           showToast(`Publish lỗi: ${error.message}`, 'error');
         } finally {
@@ -1153,7 +1179,14 @@ ${contents.join('\n\n')}
         githubToken.value = '';
         showToast('Đã xóa token khỏi trình duyệt.');
       });
-      githubRepo.value = localStorage.getItem('folksGithubRepo') || githubRepo.value;
+      const savedGithubRepo = localStorage.getItem('folksGithubRepo');
+      githubRepo.value =
+        !savedGithubRepo || savedGithubRepo === 'xuanpv89/folks-template-screwfast'
+          ? 'xuanpv89/folksteam.com'
+          : savedGithubRepo;
+      if (savedGithubRepo === 'xuanpv89/folks-template-screwfast') {
+        localStorage.setItem('folksGithubRepo', 'xuanpv89/folksteam.com');
+      }
       githubBranch.value = localStorage.getItem('folksGithubBranch') || githubBranch.value;
       githubToken.value = localStorage.getItem('folksGithubToken') || '';
       renderDrafts();

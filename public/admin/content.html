@@ -200,7 +200,7 @@
             <div class="row">
               <label>
                 Repository
-                <input id="githubRepo" value="xuanpv89/folks-template-screwfast" />
+                <input id="githubRepo" value="xuanpv89/folksteam.com" />
               </label>
               <label>
                 Branch
@@ -516,7 +516,14 @@
       document.getElementById('publish-github').addEventListener('click', () => {
         publishToGithub().catch(error => showToast(`Publish lỗi: ${error.message}`, 'error'));
       });
-      githubRepo.value = localStorage.getItem('folksGithubRepo') || githubRepo.value;
+      const savedGithubRepo = localStorage.getItem('folksGithubRepo');
+      githubRepo.value =
+        !savedGithubRepo || savedGithubRepo === 'xuanpv89/folks-template-screwfast'
+          ? 'xuanpv89/folksteam.com'
+          : savedGithubRepo;
+      if (savedGithubRepo === 'xuanpv89/folks-template-screwfast') {
+        localStorage.setItem('folksGithubRepo', 'xuanpv89/folksteam.com');
+      }
       githubBranch.value = localStorage.getItem('folksGithubBranch') || githubBranch.value;
       githubToken.value = localStorage.getItem('folksGithubToken') || '';
       render();

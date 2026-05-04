@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: xuanpv89/folks-template-screwfast
+  repo: xuanpv89/folksteam.com
   branch: main
 
 local_backend: true
