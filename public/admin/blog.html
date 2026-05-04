@@ -446,6 +446,73 @@
         width: auto;
       }
 
+      .block-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .block-toolbar button {
+        min-height: 34px;
+        border: 1px solid #d4d4d4;
+        background: #fff;
+        color: var(--ink);
+        padding: 7px 11px;
+        font-size: 12px;
+      }
+
+      .block-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .content-block {
+        display: grid;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 12px;
+      }
+
+      .block-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .block-head strong {
+        font-size: 13px;
+      }
+
+      .block-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .block-actions button,
+      .media-actions button {
+        min-height: 30px;
+        border: 1px solid #d4d4d4;
+        background: #fff;
+        color: var(--ink);
+        padding: 5px 9px;
+        font-size: 12px;
+      }
+
+      .media-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: end;
+      }
+
+      .media-actions label {
+        min-width: min(100%, 220px);
+      }
+
       .drafts {
         display: grid;
         gap: 10px;
@@ -783,14 +850,44 @@
                 <input id="authorImageAlt" name="authorImageAlt" value="Folks Team author" required />
               </label>
             </div>
+            <div class="media-actions">
+              <label>Upload card image
+                <input type="file" accept="image/avif,image/jpeg,image/png,image/webp,image/gif" data-upload-field="cardImage" />
+              </label>
+              <label>Card image URL
+                <input data-upload-url-field="cardImage" placeholder="https://example.com/card.jpg" />
+              </label>
+              <button type="button" data-upload-url-button="cardImage">Upload card URL</button>
+            </div>
+            <div class="media-actions">
+              <label>Upload author image
+                <input type="file" accept="image/avif,image/jpeg,image/png,image/webp,image/gif" data-upload-field="authorImage" />
+              </label>
+              <label>Author image URL
+                <input data-upload-url-field="authorImage" placeholder="https://example.com/avatar.jpg" />
+              </label>
+              <button type="button" data-upload-url-button="authorImage">Upload author URL</button>
+            </div>
           </div>
 
           <div class="form-section">
             <h3>Content</h3>
             <label>
-              Contents
-              <textarea id="contents" name="contents" placeholder="Mỗi đoạn cách nhau bằng một dòng trống." required></textarea>
+              Summary paragraphs
+              <textarea id="contents" name="contents" placeholder="Used for SEO/card excerpts. Leave empty to generate from paragraph blocks."></textarea>
             </label>
+            <div class="block-toolbar" aria-label="Add content block">
+              <button type="button" data-add-block="heading">+ Heading</button>
+              <button type="button" data-add-block="paragraph">+ Paragraph</button>
+              <button type="button" data-add-block="image">+ Image</button>
+              <button type="button" data-add-block="video">+ Video</button>
+              <button type="button" data-add-block="quote">+ Quote</button>
+              <button type="button" data-add-block="bullets">+ Bullets</button>
+              <button type="button" data-add-block="numbers">+ Numbers</button>
+              <button type="button" data-add-block="link">+ Link</button>
+              <button type="button" data-add-block="divider">+ Divider</button>
+            </div>
+            <div class="block-list" id="block-list"></div>
           </div>
 
           <div>
@@ -899,6 +996,7 @@
       const toast = document.getElementById('toast');
       const draftsEl = document.getElementById('drafts');
       const downloadLink = document.getElementById('download-link');
+      const blockList = document.getElementById('block-list');
       const articlePreview = document.getElementById('article-preview');
       const publishStatus = document.getElementById('publish-status');
       const githubRepo = document.getElementById('githubRepo');
@@ -922,6 +1020,12 @@
         'authorImage',
         'authorImageAlt',
         'contents',
+      ];
+      let contentBlocks = [
+        {
+          type: 'paragraph',
+          value: '',
+        },
       ];
 
       function today() {
@@ -959,11 +1063,238 @@
           .filter(Boolean);
       }
 
+      function defaultBlock(type) {
+        if (type === 'heading') return { type, level: 2, value: '' };
+        if (type === 'image') return { type, src: '', alt: '', caption: '' };
+        if (type === 'video') return { type, url: '', title: '', caption: '' };
+        if (type === 'quote') return { type, value: '', cite: '' };
+        if (type === 'bullets' || type === 'numbers') return { type, value: '' };
+        if (type === 'link') return { type, label: '', url: '' };
+        if (type === 'divider') return { type };
+        return { type: 'paragraph', value: '' };
+      }
+
+      function blockTitle(type) {
+        return {
+          heading: 'Heading',
+          paragraph: 'Paragraph',
+          image: 'Image',
+          video: 'Video',
+          quote: 'Quote',
+          bullets: 'Bullet list',
+          numbers: 'Numbered list',
+          link: 'Link button',
+          divider: 'Divider',
+        }[type] || 'Paragraph';
+      }
+
+      function renderBlockFields(block, index) {
+        if (block.type === 'heading') {
+          return `
+            <div class="row">
+              <label>Level
+                <select data-block-field="level">
+                  <option value="2" ${Number(block.level || 2) === 2 ? 'selected' : ''}>H2</option>
+                  <option value="3" ${Number(block.level || 2) === 3 ? 'selected' : ''}>H3</option>
+                </select>
+              </label>
+              <label>Heading text
+                <input data-block-field="value" value="${escapeHtml(block.value)}" />
+              </label>
+            </div>
+          `;
+        }
+
+        if (block.type === 'paragraph') {
+          return `<label>Paragraph<textarea data-block-field="value">${escapeHtml(block.value)}</textarea></label>`;
+        }
+
+        if (block.type === 'image') {
+          return `
+            <div class="row">
+              <label>Image path or URL
+                <input data-block-field="src" value="${escapeHtml(block.src)}" placeholder="@/images/blog/uploads/image.jpg" />
+              </label>
+              <label>Alt text
+                <input data-block-field="alt" value="${escapeHtml(block.alt)}" />
+              </label>
+            </div>
+            <label>Caption
+              <input data-block-field="caption" value="${escapeHtml(block.caption)}" />
+            </label>
+            <div class="media-actions">
+              <label>Upload from computer
+                <input type="file" accept="image/avif,image/jpeg,image/png,image/webp,image/gif" data-upload-image="${index}" />
+              </label>
+              <label>Or copy image URL
+                <input data-image-url="${index}" placeholder="https://example.com/image.jpg" />
+              </label>
+              <button type="button" data-upload-url="${index}">Upload URL</button>
+            </div>
+          `;
+        }
+
+        if (block.type === 'video') {
+          return `
+            <label>YouTube or embed URL
+              <input data-block-field="url" value="${escapeHtml(block.url)}" placeholder="https://www.youtube.com/watch?v=..." />
+            </label>
+            <div class="row">
+              <label>Title
+                <input data-block-field="title" value="${escapeHtml(block.title)}" />
+              </label>
+              <label>Caption
+                <input data-block-field="caption" value="${escapeHtml(block.caption)}" />
+              </label>
+            </div>
+          `;
+        }
+
+        if (block.type === 'quote') {
+          return `
+            <label>Quote<textarea data-block-field="value">${escapeHtml(block.value)}</textarea></label>
+            <label>Citation
+              <input data-block-field="cite" value="${escapeHtml(block.cite)}" />
+            </label>
+          `;
+        }
+
+        if (block.type === 'bullets' || block.type === 'numbers') {
+          return `<label>Items, one per line<textarea data-block-field="value">${escapeHtml(block.value)}</textarea></label>`;
+        }
+
+        if (block.type === 'link') {
+          return `
+            <div class="row">
+              <label>Button label
+                <input data-block-field="label" value="${escapeHtml(block.label)}" />
+              </label>
+              <label>URL
+                <input data-block-field="url" value="${escapeHtml(block.url)}" />
+              </label>
+            </div>
+          `;
+        }
+
+        return '<p class="hint">Divider block.</p>';
+      }
+
+      function renderBlocks() {
+        blockList.innerHTML = '';
+        contentBlocks.forEach((block, index) => {
+          const item = document.createElement('div');
+          item.className = 'content-block';
+          item.dataset.blockIndex = String(index);
+          item.innerHTML = `
+            <div class="block-head">
+              <strong>${blockTitle(block.type)}</strong>
+              <div class="block-actions">
+                <button type="button" data-move-block="${index}" data-direction="-1">Up</button>
+                <button type="button" data-move-block="${index}" data-direction="1">Down</button>
+                <button type="button" data-remove-block="${index}">Remove</button>
+              </div>
+            </div>
+            ${renderBlockFields(block, index)}
+          `;
+          blockList.appendChild(item);
+        });
+      }
+
+      function syncBlocksFromDom() {
+        blockList.querySelectorAll('.content-block').forEach(item => {
+          const index = Number(item.dataset.blockIndex);
+          const block = contentBlocks[index];
+          if (!block) return;
+          item.querySelectorAll('[data-block-field]').forEach(field => {
+            block[field.dataset.blockField] = field.value;
+          });
+        });
+      }
+
+      function addBlock(type) {
+        syncBlocksFromDom();
+        contentBlocks.push(defaultBlock(type));
+        renderBlocks();
+        updatePreview();
+      }
+
+      function markdownImagePath(src) {
+        if (!src) return '';
+        if (/^https?:\/\//.test(src)) return src;
+        if (src.startsWith('@/images/')) {
+          return `../../../images/${src.replace('@/images/', '')}`;
+        }
+        return src;
+      }
+
+      function youtubeEmbedUrl(value) {
+        const url = String(value || '').trim();
+        const watch = url.match(/[?&]v=([^&]+)/);
+        const short = url.match(/youtu\.be\/([^?]+)/);
+        const embed = url.match(/youtube(?:-nocookie)?\.com\/embed\/([^?]+)/);
+        const id = watch?.[1] || short?.[1] || embed?.[1];
+        return id ? `https://www.youtube-nocookie.com/embed/${id}` : url;
+      }
+
+      function buildBodyMarkdown() {
+        syncBlocksFromDom();
+        return contentBlocks
+          .map(block => {
+            if (block.type === 'heading' && block.value) {
+              return `${'#'.repeat(Number(block.level || 2))} ${block.value}`;
+            }
+            if (block.type === 'paragraph' && block.value) {
+              return block.value;
+            }
+            if (block.type === 'image' && block.src) {
+              const image = `![${block.alt || 'Blog image'}](${markdownImagePath(block.src)})`;
+              return block.caption ? `${image}\n\n_${block.caption}_` : image;
+            }
+            if (block.type === 'video' && block.url) {
+              const embed = youtubeEmbedUrl(block.url);
+              return `<iframe src="${embed}" title="${escapeHtml(block.title || 'Video')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>${block.caption ? `\n\n_${block.caption}_` : ''}`;
+            }
+            if (block.type === 'quote' && block.value) {
+              const quote = block.value
+                .split('\n')
+                .map(line => `> ${line}`)
+                .join('\n');
+              return block.cite ? `${quote}\n>\n> -- ${block.cite}` : quote;
+            }
+            if ((block.type === 'bullets' || block.type === 'numbers') && block.value) {
+              return block.value
+                .split('\n')
+                .map((line, index) => line.trim() && (block.type === 'bullets' ? `- ${line.trim()}` : `${index + 1}. ${line.trim()}`))
+                .filter(Boolean)
+                .join('\n');
+            }
+            if (block.type === 'link' && block.label && block.url) {
+              return `[${block.label}](${block.url})`;
+            }
+            if (block.type === 'divider') {
+              return '---';
+            }
+            return '';
+          })
+          .filter(Boolean)
+          .join('\n\n');
+      }
+
+      function summaryFromBlocks() {
+        syncBlocksFromDom();
+        return contentBlocks
+          .filter(block => ['paragraph', 'quote'].includes(block.type) && block.value)
+          .map(block => block.value.trim())
+          .slice(0, 6);
+      }
+
       function validatePost(result) {
         const title = getValue('title');
         const description = getValue('description');
         const cardImageAlt = getValue('cardImageAlt');
-        const contents = listFromTextarea(getValue('contents'));
+        const contents = listFromTextarea(getValue('contents')).length
+          ? listFromTextarea(getValue('contents'))
+          : summaryFromBlocks();
         const errors = [];
 
         if (!title) errors.push('Title');
@@ -996,7 +1327,10 @@
         const data = Object.fromEntries(fields.map(id => [id, getValue(id)]));
         const slug = slugify(data.slug || data.title || 'new-blog-post');
         const tags = tagList(data.tags);
-        const contents = listFromTextarea(data.contents);
+        const bodyMarkdown = buildBodyMarkdown();
+        const contents = listFromTextarea(data.contents).length
+          ? listFromTextarea(data.contents)
+          : summaryFromBlocks();
         const target = `src/content/blog/${data.locale}/${slug}.md`;
         targetPath.textContent = target;
 
@@ -1025,7 +1359,7 @@ contents:
 ${contents.map(item => `  - ${quote(item)}`).join('\n')}
 ---
 
-${contents.join('\n\n')}
+${bodyMarkdown || contents.join('\n\n')}
 `,
         };
       }
@@ -1035,9 +1369,45 @@ ${contents.join('\n\n')}
         const title = data.title || 'Untitled post';
         const description = data.description || 'Short description will appear here.';
         const tags = data.tags.length ? data.tags : ['draft'];
-        const contents = data.contents.length
-          ? data.contents
-          : ['Write at least one paragraph to see the live article preview.'];
+        const body = contentBlocks
+          .map(block => {
+            if (block.type === 'heading' && block.value) {
+              const tag = Number(block.level || 2) === 3 ? 'h3' : 'h2';
+              return `<${tag}>${escapeHtml(block.value)}</${tag}>`;
+            }
+            if (block.type === 'paragraph' && block.value) {
+              return `<p>${escapeHtml(block.value)}</p>`;
+            }
+            if (block.type === 'image' && block.src) {
+              const src = block.src.startsWith('@/images/')
+                ? block.src.replace('@/images/', '/_astro/')
+                : block.src;
+              return `<figure><div class="path">${escapeHtml(block.src)}</div><p>${escapeHtml(block.alt || 'Image block')}</p>${block.caption ? `<p><em>${escapeHtml(block.caption)}</em></p>` : ''}</figure>`;
+            }
+            if (block.type === 'video' && block.url) {
+              return `<figure><div class="path">${escapeHtml(youtubeEmbedUrl(block.url))}</div><p>${escapeHtml(block.title || 'Video embed')}</p>${block.caption ? `<p><em>${escapeHtml(block.caption)}</em></p>` : ''}</figure>`;
+            }
+            if (block.type === 'quote' && block.value) {
+              return `<blockquote>${escapeHtml(block.value)}${block.cite ? `<br><strong>${escapeHtml(block.cite)}</strong>` : ''}</blockquote>`;
+            }
+            if ((block.type === 'bullets' || block.type === 'numbers') && block.value) {
+              const tag = block.type === 'bullets' ? 'ul' : 'ol';
+              return `<${tag}>${block.value
+                .split('\n')
+                .map(item => item.trim() && `<li>${escapeHtml(item.trim())}</li>`)
+                .filter(Boolean)
+                .join('')}</${tag}>`;
+            }
+            if (block.type === 'link' && block.label && block.url) {
+              return `<p><a href="${escapeHtml(block.url)}">${escapeHtml(block.label)}</a></p>`;
+            }
+            if (block.type === 'divider') {
+              return '<hr>';
+            }
+            return '';
+          })
+          .filter(Boolean)
+          .join('');
 
         articlePreview.innerHTML = `
           <div>
@@ -1054,7 +1424,7 @@ ${contents.join('\n\n')}
             ${tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}
           </div>
           <div class="article-body">
-            ${contents.map(item => `<p>${escapeHtml(item)}</p>`).join('')}
+            ${body || '<p>Write content blocks to see the live article preview.</p>'}
           </div>
         `;
       }
@@ -1133,6 +1503,82 @@ ${contents.join('\n\n')}
         return data;
       }
 
+      async function adminMediaRequest(payload) {
+        const response = await fetch('/api/admin-media', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          throw new Error(data?.message || `Media API error ${response.status}`);
+        }
+        return data;
+      }
+
+      function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(new Error('Could not read file.'));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function uploadImageBlock(index, payload) {
+        const secret = adminSecret.value.trim();
+        if (!secret) {
+          showToast('Bạn cần nhập Admin secret trước khi upload ảnh.', 'error');
+          return;
+        }
+
+        const block = contentBlocks[index];
+        if (!block) return;
+        updatePublishStatus('Uploading image to GitHub...');
+        const response = await adminMediaRequest({
+          adminSecret: secret,
+          repo: githubRepo.value.trim(),
+          branch: githubBranch.value.trim() || 'main',
+          name: block.alt || block.caption || getValue('slug') || getValue('title'),
+          ...payload,
+        });
+        block.src = response.imagePath;
+        renderBlocks();
+        updatePreview();
+        updatePublishStatus(`Uploaded image: ${response.imagePath}`, [
+          { label: 'Open commit', url: response.commitUrl },
+          { label: 'Open file', url: response.fileUrl },
+        ]);
+        showToast('Image uploaded.');
+      }
+
+      async function uploadImageField(fieldId, payload) {
+        const secret = adminSecret.value.trim();
+        if (!secret) {
+          showToast('Bạn cần nhập Admin secret trước khi upload ảnh.', 'error');
+          return;
+        }
+
+        updatePublishStatus('Uploading image to GitHub...');
+        const response = await adminMediaRequest({
+          adminSecret: secret,
+          repo: githubRepo.value.trim(),
+          branch: githubBranch.value.trim() || 'main',
+          name: `${fieldId}-${getValue('slug') || getValue('title') || 'blog-image'}`,
+          ...payload,
+        });
+        document.getElementById(fieldId).value = response.imagePath;
+        updatePreview();
+        updatePublishStatus(`Uploaded image: ${response.imagePath}`, [
+          { label: 'Open commit', url: response.commitUrl },
+          { label: 'Open file', url: response.fileUrl },
+        ]);
+        showToast('Image uploaded.');
+      }
+
       async function submitToAdminApi(action) {
         const result = updatePreview();
         const repo = githubRepo.value.trim();
@@ -1202,7 +1648,11 @@ ${contents.join('\n\n')}
       }
 
       function currentDraft() {
-        return Object.fromEntries(fields.map(id => [id, getValue(id)]));
+        syncBlocksFromDom();
+        return {
+          ...Object.fromEntries(fields.map(id => [id, getValue(id)])),
+          blocks: contentBlocks,
+        };
       }
 
       function readDrafts() {
@@ -1274,6 +1724,8 @@ ${contents.join('\n\n')}
           const element = document.getElementById(id);
           if (element && draft[id] !== undefined) element.value = draft[id];
         });
+        contentBlocks = Array.isArray(draft.blocks) && draft.blocks.length ? draft.blocks : [defaultBlock('paragraph')];
+        renderBlocks();
         updatePreview();
         showToast('Đã load draft.');
       }
@@ -1300,9 +1752,88 @@ ${contents.join('\n\n')}
       });
 
       form.addEventListener('input', updatePreview);
+      document.querySelectorAll('[data-add-block]').forEach(button => {
+        button.addEventListener('click', () => addBlock(button.dataset.addBlock));
+      });
+      blockList.addEventListener('input', event => {
+        syncBlocksFromDom();
+        updatePreview();
+      });
+      blockList.addEventListener('click', event => {
+        const removeIndex = event.target.dataset.removeBlock;
+        const moveIndex = event.target.dataset.moveBlock;
+        const uploadUrlIndex = event.target.dataset.uploadUrl;
+
+        if (removeIndex !== undefined) {
+          syncBlocksFromDom();
+          contentBlocks.splice(Number(removeIndex), 1);
+          if (!contentBlocks.length) contentBlocks.push(defaultBlock('paragraph'));
+          renderBlocks();
+          updatePreview();
+        }
+
+        if (moveIndex !== undefined) {
+          syncBlocksFromDom();
+          const index = Number(moveIndex);
+          const direction = Number(event.target.dataset.direction);
+          const nextIndex = index + direction;
+          if (nextIndex >= 0 && nextIndex < contentBlocks.length) {
+            const [block] = contentBlocks.splice(index, 1);
+            contentBlocks.splice(nextIndex, 0, block);
+            renderBlocks();
+            updatePreview();
+          }
+        }
+
+        if (uploadUrlIndex !== undefined) {
+          const input = blockList.querySelector(`[data-image-url="${uploadUrlIndex}"]`);
+          const imageUrl = input?.value.trim();
+          if (!imageUrl) {
+            showToast('Paste an image URL first.', 'error');
+            return;
+          }
+          uploadImageBlock(Number(uploadUrlIndex), { imageUrl }).catch(error =>
+            showToast(`Upload lỗi: ${error.message}`, 'error')
+          );
+        }
+      });
+      blockList.addEventListener('change', event => {
+        const uploadIndex = event.target.dataset.uploadImage;
+        if (uploadIndex === undefined) return;
+        const file = event.target.files?.[0];
+        if (!file) return;
+        readFileAsDataUrl(file)
+          .then(dataUrl => uploadImageBlock(Number(uploadIndex), { dataUrl, fileName: file.name }))
+          .catch(error => showToast(`Upload lỗi: ${error.message}`, 'error'));
+      });
+      document.querySelectorAll('[data-upload-field]').forEach(input => {
+        input.addEventListener('change', event => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          readFileAsDataUrl(file)
+            .then(dataUrl => uploadImageField(event.target.dataset.uploadField, { dataUrl, fileName: file.name }))
+            .catch(error => showToast(`Upload lỗi: ${error.message}`, 'error'));
+        });
+      });
+      document.querySelectorAll('[data-upload-url-button]').forEach(button => {
+        button.addEventListener('click', () => {
+          const fieldId = button.dataset.uploadUrlButton;
+          const input = document.querySelector(`[data-upload-url-field="${fieldId}"]`);
+          const imageUrl = input?.value.trim();
+          if (!imageUrl) {
+            showToast('Paste an image URL first.', 'error');
+            return;
+          }
+          uploadImageField(fieldId, { imageUrl }).catch(error =>
+            showToast(`Upload lỗi: ${error.message}`, 'error')
+          );
+        });
+      });
       form.addEventListener('reset', () => setTimeout(() => {
         document.getElementById('pubDate').value = today();
         document.getElementById('slug').value = 'new-blog-post';
+        contentBlocks = [defaultBlock('paragraph')];
+        renderBlocks();
         updatePreview();
       }));
       draftsEl.addEventListener('click', event => {
@@ -1343,6 +1874,7 @@ ${contents.join('\n\n')}
       }
       githubBranch.value = localStorage.getItem('folksGithubBranch') || githubBranch.value;
       localStorage.removeItem('folksGithubToken');
+      renderBlocks();
       renderDrafts();
       updatePreview();
     </script>

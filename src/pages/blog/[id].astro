@@ -29,6 +29,8 @@ export async function getStaticPaths() {
 
 // Get the current post's data
 const { post } = Astro.props;
+const { Content } = await post.render();
+const hasBody = Boolean(post.body?.trim());
 
 const blogPosts: CollectionEntry<'blog'>[] = await getCollection(
   'blog',
@@ -116,24 +118,30 @@ const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
       {/* Blog post contents */}
       <div class="mb-5 space-y-5 md:mb-8 md:space-y-8">
         {
-          post.data.contents.map((content: string, index: any) =>
-            index === 1 ? (
-              <>
+          hasBody ? (
+            <div class="blog-body prose prose-lg max-w-none prose-neutral dark:prose-invert prose-img:rounded-xl">
+              <Content />
+            </div>
+          ) : (
+            post.data.contents.map((content: string, index: any) =>
+              index === 1 ? (
+                <>
+                  <p class="text-lg text-pretty text-neutral-700 dark:text-neutral-300">
+                    {content}
+                  </p>
+                  <Image
+                    class="w-full rounded-xl object-cover"
+                    src={post.data.cardImage}
+                    alt={post.data.cardImageAlt}
+                    draggable={'false'}
+                    format={'avif'}
+                  />
+                </>
+              ) : (
                 <p class="text-lg text-pretty text-neutral-700 dark:text-neutral-300">
                   {content}
                 </p>
-                <Image
-                  class="w-full rounded-xl object-cover"
-                  src={post.data.cardImage}
-                  alt={post.data.cardImageAlt}
-                  draggable={'false'}
-                  format={'avif'}
-                />
-              </>
-            ) : (
-              <p class="text-lg text-pretty text-neutral-700 dark:text-neutral-300">
-                {content}
-              </p>
+              )
             )
           )
         }
@@ -218,3 +226,11 @@ const ogTitle = `${post.data.title} | Blog | ${SITE.title}`;
     </div>
   </section>
 </MainLayout>
+
+<style is:global>
+  .blog-body iframe {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    border-radius: 0.75rem;
+  }
+</style>
