@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-04T17:34:54.386Z",
+  "updatedAt": "2026-05-05T06:21:46.877Z",
   "pages": [
     {
       "id": "home",
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "id": "about-us",
+      "id": "about",
       "title": "About Us",
       "path": "/about",
       "sections": [
@@ -58,21 +58,14 @@
       ]
     },
     {
-      "id": "new-page",
-      "title": "New Page",
-      "path": "/new-page",
+      "id": "trang-moi",
+      "title": "Trang mới",
+      "path": "/trang-moi",
       "sections": [
         {
-          "id": "intro",
-          "title": "Intro",
-          "fields": [
-            {
-              "key": "newField",
-              "label": "New field",
-              "type": "text",
-              "value": "test content cms"
-            }
-          ]
+          "id": "gioi-thieu",
+          "title": "Giới thiệu",
+          "fields": []
         }
       ]
     }
