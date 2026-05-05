@@ -127,6 +127,15 @@
       }
       .hint { color: var(--muted); font-size: 13px; line-height: 1.55; }
       .field-meta { display: grid; gap: 6px; margin: 10px 0 14px; color: var(--muted); font-size: 13px; }
+      .mini-preview {
+        display: block;
+        max-width: 100%;
+        max-height: 180px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        object-fit: contain;
+        background: #fafafa;
+      }
       .publish-log {
         display: grid;
         gap: 8px;
@@ -140,6 +149,7 @@
       }
       .publish-log a { color: var(--brand-dark); font-weight: 850; }
       .empty { border: 1px dashed #cbd5c9; border-radius: 8px; background: #fbfcfa; color: var(--muted); padding: 14px; line-height: 1.6; }
+      .type-pill { display: inline-flex; width: fit-content; border-radius: 999px; background: var(--brand-soft); color: var(--brand-dark); padding: 5px 9px; font-size: 12px; font-weight: 900; }
       .tools { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 14px; }
       details summary { cursor: pointer; font-weight: 900; }
       .toast { display: none; margin-top: 10px; border-radius: 8px; background: #ecfdf5; color: #065f46; padding: 10px 12px; font-size: 13px; font-weight: 800; }
@@ -314,6 +324,12 @@
         return normalizeText(node.nodeValue).length > 1;
       }
 
+      function labelForElementField(type, value, fallback) {
+        const text = normalizeText(value || fallback || '');
+        if (!text) return type === 'image' ? 'Ảnh' : type === 'link' ? 'Đường dẫn' : 'Nội dung';
+        return text.length > 54 ? `${text.slice(0, 54)}...` : text;
+      }
+
       function pageKey(path) {
         return path === '/' ? 'home' : slugify(path.replace(/^\/+/, '') || 'home');
       }
@@ -325,11 +341,38 @@
 
       function extractPage(path, html) {
         const doc = new DOMParser().parseFromString(html, 'text/html');
+        const pageTitle = doc.title || path;
+        const pageDescription = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
         doc.querySelectorAll('script,style,noscript,svg,canvas,iframe,nav,footer').forEach(element => element.remove());
         const containers = [...doc.body.querySelectorAll('section,article,main')];
         const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
         const groups = new Map();
         let index = 0;
+        let linkIndex = 0;
+        let imageIndex = 0;
+
+        groups.set('seo', {
+          id: 'seo',
+          title: 'SEO của trang',
+          fields: [
+            {
+              key: 'seo-title',
+              label: 'Tiêu đề SEO',
+              type: 'text',
+              value: pageTitle,
+              match: pageTitle,
+              elementType: 'seo-title',
+            },
+            {
+              key: 'seo-description',
+              label: 'Mô tả SEO',
+              type: 'textarea',
+              value: pageDescription,
+              match: pageDescription,
+              elementType: 'seo-description',
+            },
+          ].filter(field => field.value),
+        });
 
         while (walker.nextNode()) {
           const node = walker.currentNode;
@@ -355,12 +398,71 @@
             type: text.length > 90 ? 'textarea' : 'text',
             value: text,
             match: text,
+            elementType: 'text',
           });
         }
 
+        doc.body.querySelectorAll('a[href]').forEach(link => {
+          const href = link.getAttribute('href') || '';
+          if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+          const sectionElement = link.closest('section,article,main') || doc.body;
+          const sectionIndex = containers.indexOf(sectionElement);
+          const sectionKey = sectionIndex >= 0 ? `section-${sectionIndex + 1}` : 'page-content';
+          if (!groups.has(sectionKey)) {
+            groups.set(sectionKey, {
+              id: sectionKey,
+              title: sectionTitleFromElement(sectionElement, sectionIndex >= 0 ? `Mục ${sectionIndex + 1}` : 'Nội dung trang'),
+              fields: [],
+            });
+          }
+          linkIndex += 1;
+          groups.get(sectionKey).fields.push({
+            key: `link-${linkIndex}`,
+            label: `Link: ${labelForElementField('link', link.textContent, href)}`,
+            type: 'url',
+            value: href,
+            match: href,
+            elementType: 'link',
+          });
+        });
+
+        doc.body.querySelectorAll('img').forEach(image => {
+          const src = image.getAttribute('src') || '';
+          const alt = image.getAttribute('alt') || '';
+          const sectionElement = image.closest('section,article,main') || doc.body;
+          const sectionIndex = containers.indexOf(sectionElement);
+          const sectionKey = sectionIndex >= 0 ? `section-${sectionIndex + 1}` : 'page-content';
+          if (!groups.has(sectionKey)) {
+            groups.set(sectionKey, {
+              id: sectionKey,
+              title: sectionTitleFromElement(sectionElement, sectionIndex >= 0 ? `Mục ${sectionIndex + 1}` : 'Nội dung trang'),
+              fields: [],
+            });
+          }
+          imageIndex += 1;
+          if (src) {
+            groups.get(sectionKey).fields.push({
+              key: `image-${imageIndex}`,
+              label: `Ảnh: ${labelForElementField('image', alt, src)}`,
+              type: 'image',
+              value: src,
+              match: src,
+              elementType: 'image',
+            });
+          }
+          groups.get(sectionKey).fields.push({
+            key: `alt-${imageIndex}`,
+            label: `Mô tả ảnh: ${labelForElementField('image', alt, src)}`,
+            type: 'text',
+            value: alt,
+            match: alt,
+            elementType: 'alt',
+          });
+        });
+
         return {
           id: pageKey(path),
-          title: doc.title || path,
+          title: pageTitle,
           path,
           sections: [...groups.values()].filter(section => section.fields.length),
         };
@@ -369,10 +471,12 @@
       function mergeScannedPage(scannedPage, existingPage) {
         if (!existingPage) return scannedPage;
         const existingByMatch = new Map();
+        const existingByKey = new Map();
         (existingPage.sections || []).forEach(section => {
           (section.fields || []).forEach(field => {
             const match = normalizeText(field.match || field.original || field.value);
             if (match) existingByMatch.set(match, field);
+            if (field.key) existingByKey.set(field.key, field);
           });
         });
 
@@ -381,7 +485,7 @@
           sections: scannedPage.sections.map(section => ({
             ...section,
             fields: section.fields.map(field => {
-              const existing = existingByMatch.get(normalizeText(field.match));
+              const existing = existingByKey.get(field.key) || existingByMatch.get(normalizeText(field.match));
               return existing ? { ...field, value: existing.value ?? field.value } : field;
             }),
           })),
@@ -492,6 +596,62 @@
         return null;
       }
 
+      function fieldTypeLabel(field) {
+        const type = field.elementType || field.type || 'text';
+        if (type === 'link') return 'Link';
+        if (type === 'image') return 'Ảnh';
+        if (type === 'alt') return 'Mô tả ảnh';
+        if (type === 'seo-title') return 'SEO title';
+        if (type === 'seo-description') return 'SEO description';
+        return 'Text';
+      }
+
+      function selectPreviewField(doc, field, target) {
+        doc.querySelectorAll('.visual-cms-active').forEach(element => element.classList.remove('visual-cms-active'));
+        target.classList.add('visual-cms-active');
+        selectedField = { page: currentPage(), ...findField(currentPage(), field.key), target };
+        renderFieldEditor();
+      }
+
+      function injectElementEditors(doc, page) {
+        const linkFields = allFields(page).filter(({ field }) => field.elementType === 'link');
+        const imageFields = allFields(page).filter(({ field }) => field.elementType === 'image' || field.elementType === 'alt');
+        const links = [...doc.querySelectorAll('main a[href]')];
+        const images = [...doc.querySelectorAll('main img')];
+
+        linkFields.forEach(({ field }) => {
+          const index = Number(String(field.key).replace('link-', '')) - 1;
+          const link = links[index];
+          if (!link) return;
+          link.dataset.visualCmsKey = field.key;
+          link.dataset.visualCmsType = 'link';
+          link.setAttribute('href', field.value || link.getAttribute('href') || '#');
+          link.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            selectPreviewField(doc, field, link);
+          });
+        });
+
+        imageFields.forEach(({ field }) => {
+          const index = Number(String(field.key).replace(/^(image|alt)-/, '')) - 1;
+          const image = images[index];
+          if (!image) return;
+          image.dataset.visualCmsKey = field.key;
+          image.dataset.visualCmsType = field.elementType;
+          if (field.elementType === 'image' && field.value) {
+            image.setAttribute('src', field.value);
+            image.removeAttribute('srcset');
+          }
+          if (field.elementType === 'alt') image.setAttribute('alt', field.value || '');
+          image.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            selectPreviewField(doc, field, image);
+          });
+        });
+      }
+
       function injectPreviewEditor() {
         const page = currentPage();
         const doc = pageFrame.contentDocument;
@@ -504,9 +664,12 @@
         const style = doc.createElement('style');
         style.textContent = `
           [data-visual-cms-key] { outline: 2px dashed rgba(79,177,111,.62); outline-offset: 3px; cursor: pointer; border-radius: 4px; }
+          [data-visual-cms-type="link"] { outline-color: rgba(59,130,246,.68); }
+          [data-visual-cms-type="image"], [data-visual-cms-type="alt"] { outline-color: rgba(245,158,11,.76); }
           [data-visual-cms-key]:hover, [data-visual-cms-key].visual-cms-active { outline: 3px solid #4fb16f; background: rgba(79,177,111,.12); }
         `;
         doc.head.appendChild(style);
+        injectElementEditors(doc, page);
 
         const nodes = [];
         const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
@@ -516,6 +679,7 @@
 
         const used = new Set();
         allFields(page).forEach(({ field }) => {
+          if (field.elementType && field.elementType !== 'text') return;
           const original = normalizeText(field.match || field.original || '');
           let nodeIndex = -1;
           if (original) {
@@ -539,7 +703,7 @@
             event.stopPropagation();
             doc.querySelectorAll('.visual-cms-active').forEach(element => element.classList.remove('visual-cms-active'));
             wrapper.classList.add('visual-cms-active');
-            selectedField = { page, ...findField(page, field.key), wrapper };
+            selectedField = { page, ...findField(page, field.key), target: wrapper };
             renderFieldEditor();
           });
         });
@@ -568,22 +732,37 @@
         editorTitle.textContent = field.label || 'Nội dung đang chọn';
         editorHint.textContent = currentPage()?.path || '';
         fieldEditor.className = '';
+        const inputType = field.type === 'url' || field.type === 'image' ? 'url' : 'text';
         const control =
           field.type === 'textarea'
             ? `<textarea id="field-value">${escapeHtml(field.value || '')}</textarea>`
-            : `<input id="field-value" value="${escapeHtml(field.value || '')}" />`;
+            : `<input id="field-value" type="${inputType}" value="${escapeHtml(field.value || '')}" />`;
+        const preview =
+          field.elementType === 'image' && field.value
+            ? `<img class="mini-preview" src="${escapeHtml(field.value)}" alt="" />`
+            : '';
         fieldEditor.innerHTML = `
+          <span class="type-pill">${escapeHtml(fieldTypeLabel(field))}</span>
           <label>
             Nội dung
             ${control}
           </label>
+          ${preview}
           <div class="field-meta">
             <span>Mục: ${escapeHtml(selectedField.section?.title || 'Nội dung trang')}</span>
           </div>
         `;
         document.getElementById('field-value').addEventListener('input', event => {
           field.value = event.target.value;
-          if (selectedField.wrapper) selectedField.wrapper.textContent = field.value;
+          const target = selectedField.target;
+          if (target) {
+            if (field.elementType === 'link') target.setAttribute('href', field.value || '#');
+            else if (field.elementType === 'image') {
+              target.setAttribute('src', field.value || '');
+              target.removeAttribute('srcset');
+            } else if (field.elementType === 'alt') target.setAttribute('alt', field.value || '');
+            else target.textContent = field.value;
+          }
           hasUnsavedChanges = true;
         });
         saveFieldButton.disabled = false;
@@ -591,8 +770,11 @@
 
       function buildPublishSummary() {
         const pageCount = state.pages?.length || 0;
-        const fieldCount = (state.pages || []).reduce((total, page) => total + allFields(page).length, 0);
-        return `Bạn sắp đăng ${pageCount} trang, ${fieldCount} dòng nội dung.`;
+        const fields = (state.pages || []).flatMap(page => allFields(page).map(({ field }) => field));
+        const textCount = fields.filter(field => !field.elementType || field.elementType === 'text').length;
+        const linkCount = fields.filter(field => field.elementType === 'link').length;
+        const imageCount = fields.filter(field => field.elementType === 'image' || field.elementType === 'alt').length;
+        return `Bạn sắp đăng ${pageCount} trang, ${textCount} dòng chữ, ${linkCount} link và ${imageCount} trường ảnh.`;
       }
 
       async function publishContent() {

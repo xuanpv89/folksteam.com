@@ -95,6 +95,54 @@ interface Props {
           return nodes;
         }
 
+        function applyElementField(field) {
+          const key = String(field.key || '');
+          const value = String(field.value ?? '');
+          if (!value) return false;
+
+          if (key.startsWith('link-')) {
+            const links = [...document.querySelectorAll('main a[href]')];
+            const index = Number(key.replace('link-', '')) - 1;
+            const link = links[index];
+            if (!link) return false;
+            link.setAttribute('href', value);
+            return true;
+          }
+
+          if (key.startsWith('image-')) {
+            const images = [...document.querySelectorAll('main img')];
+            const index = Number(key.replace('image-', '')) - 1;
+            const image = images[index];
+            if (!image) return false;
+            image.setAttribute('src', value);
+            image.removeAttribute('srcset');
+            return true;
+          }
+
+          if (key.startsWith('alt-')) {
+            const images = [...document.querySelectorAll('main img')];
+            const index = Number(key.replace('alt-', '')) - 1;
+            const image = images[index];
+            if (!image) return false;
+            image.setAttribute('alt', value);
+            return true;
+          }
+
+          if (key === 'seo-title') {
+            document.title = value;
+            return true;
+          }
+
+          const metaName = key === 'seo-description' ? 'description' : '';
+          if (metaName) {
+            const meta = document.querySelector(`meta[name="${metaName}"]`);
+            if (meta) meta.setAttribute('content', value);
+            return true;
+          }
+
+          return false;
+        }
+
         function pageMatches(page) {
           const candidate = String(page.path || '').replace(/\/$/, '') || '/';
           return candidate === pagePath;
@@ -118,6 +166,8 @@ interface Props {
             fields.forEach(field => {
               const replacement = String(field.value ?? '');
               if (!replacement) return;
+
+              if (applyElementField(field)) return;
 
               const original = normalize(field.match || field.original || '');
               let nodeIndex = -1;
