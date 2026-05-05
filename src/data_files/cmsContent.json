@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T10:39:02.555Z",
+  "updatedAt": "2026-05-05T10:48:25.637Z",
   "pages": [
     {
       "id": "home",
@@ -20,7 +20,7 @@
               "key": "subtitle",
               "label": "Subtitle",
               "type": "textarea",
-              "value": "A strategic framework for building marketing, community, and scalable growth systems."
+              "value": "folks A strategic framework for building marketing, community, and scalable growth systems."
             },
             {
               "key": "primaryCta",
