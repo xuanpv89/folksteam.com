@@ -1,5 +1,7 @@
 import cmsContent from '@data/cmsContent.json';
 
+export const prerender = true;
+
 export function GET() {
   return new Response(JSON.stringify(cmsContent), {
     headers: {
