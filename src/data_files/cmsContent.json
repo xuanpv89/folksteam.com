@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T06:21:46.877Z",
+  "updatedAt": "2026-05-05T06:21:59.917Z",
   "pages": [
     {
       "id": "home",
@@ -65,7 +65,14 @@
         {
           "id": "gioi-thieu",
           "title": "Giới thiệu",
-          "fields": []
+          "fields": [
+            {
+              "key": "noiDungMoi",
+              "label": "Nội dung mới",
+              "type": "text",
+              "value": ""
+            }
+          ]
         }
       ]
     }
