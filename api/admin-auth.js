@@ -79,7 +79,7 @@ export default async function handler(request, response) {
   if (request.method !== 'POST') {
     return sendJson(response, 405, {
       ok: false,
-      message: 'Method not allowed.',
+      message: 'Phương thức không được hỗ trợ.',
     });
   }
 
@@ -89,7 +89,7 @@ export default async function handler(request, response) {
   } catch {
     return sendJson(response, 400, {
       ok: false,
-      message: 'Invalid JSON body.',
+      message: 'Dữ liệu gửi lên không hợp lệ.',
     });
   }
 
@@ -99,7 +99,7 @@ export default async function handler(request, response) {
   if (!adminSecret || !adminUsers.length) {
     return sendJson(response, 500, {
       ok: false,
-      message: 'Admin authentication is not configured.',
+      message: 'Admin chưa được cấu hình.',
     });
   }
 
@@ -110,7 +110,7 @@ export default async function handler(request, response) {
   if (!user || !safeEqual(password, user.password)) {
     return sendJson(response, 401, {
       ok: false,
-      message: 'Username or password is incorrect.',
+      message: 'Sai tên đăng nhập hoặc mật khẩu.',
     });
   }
 
@@ -129,7 +129,7 @@ export default async function handler(request, response) {
     200,
     {
       ok: true,
-      message: 'Signed in.',
+      message: 'Đã đăng nhập.',
     },
     {
       'Set-Cookie': cookie,

@@ -110,23 +110,6 @@ async function triggerDeployHook() {
 }
 
 export default async function handler(request, response) {
-  if (request.method !== 'POST') {
-    return sendJson(response, 405, {
-      ok: false,
-      message: 'Phương thức không được hỗ trợ.',
-    });
-  }
-
-  let body;
-  try {
-    body = await readJson(request);
-  } catch {
-    return sendJson(response, 400, {
-      ok: false,
-      message: 'Dữ liệu gửi lên không hợp lệ.',
-    });
-  }
-
   const adminSecret = process.env.ADMIN_SECRET;
   const githubToken = process.env.GITHUB_TOKEN;
 
@@ -141,6 +124,59 @@ export default async function handler(request, response) {
     return sendJson(response, 401, {
       ok: false,
       message: 'Phiên đăng nhập admin đã hết hạn. Hãy đăng nhập lại.',
+    });
+  }
+
+  if (request.method === 'GET') {
+    const requestUrl = new URL(request.url, 'https://folksteam.com');
+    const repo = String(requestUrl.searchParams.get('repo') || process.env.GITHUB_REPO || 'xuanpv89/folksteam.com').trim();
+    const branch = String(requestUrl.searchParams.get('branch') || process.env.GITHUB_BRANCH || 'main').trim();
+
+    if (!isSafeRepo(repo) || !isSafeBranch(branch)) {
+      return sendJson(response, 400, {
+        ok: false,
+        message: 'Kho GitHub hoặc nhánh không hợp lệ.',
+      });
+    }
+
+    try {
+      const apiPath = encodeURIComponent(TARGET_PATH).replace(/%2F/g, '/');
+      const file = await githubRequest(
+        `/repos/${repo}/contents/${apiPath}?ref=${encodeURIComponent(branch)}`,
+        githubToken
+      );
+      const json = Buffer.from(file.content || '', 'base64').toString('utf8');
+
+      return sendJson(response, 200, {
+        ok: true,
+        target: TARGET_PATH,
+        repo,
+        branch,
+        sha: file.sha,
+        content: JSON.parse(json),
+      });
+    } catch (error) {
+      return sendJson(response, error.status || 502, {
+        ok: false,
+        message: error.message,
+      });
+    }
+  }
+
+  if (request.method !== 'POST') {
+    return sendJson(response, 405, {
+      ok: false,
+      message: 'Phương thức không được hỗ trợ.',
+    });
+  }
+
+  let body;
+  try {
+    body = await readJson(request);
+  } catch {
+    return sendJson(response, 400, {
+      ok: false,
+      message: 'Dữ liệu gửi lên không hợp lệ.',
     });
   }
 

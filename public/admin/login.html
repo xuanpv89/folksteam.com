@@ -4,11 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <title>Sign in | Folks Team CMS</title>
+    <title>Đăng nhập | Folks Team CMS</title>
     <link rel="icon" type="image/png" href="/admin-favicon.png?v=admin-3" />
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
-
       :root {
         color-scheme: light;
         --ink: #262626;
@@ -18,7 +16,7 @@
         --brand-dark: #2f7c48;
         --paper: #e8ebe7;
         font-family:
-          'Be Vietnam Pro', Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
           'Segoe UI', sans-serif;
       }
 
@@ -164,17 +162,17 @@
           <img src="/folks-brand-mark.jpg" alt="Folks Team logo" />
           <div>
             <p class="eyebrow">Folks Team CMS</p>
-            <h1 id="title">Sign in</h1>
+            <h1 id="title">Đăng nhập</h1>
           </div>
         </div>
-        <p>Đăng nhập để mở Admin Hub, Blog Manager và Content CMS.</p>
+        <p>Đăng nhập để quản lý nội dung website Folks Team.</p>
         <form id="login-form">
           <label>
-            Username
+            Tên đăng nhập
             <input id="username" name="username" autocomplete="username" value="admin" required />
           </label>
           <label>
-            Password
+            Mật khẩu
             <input
               id="password"
               name="password"
@@ -185,8 +183,8 @@
             />
           </label>
           <p class="error" id="error-message">Không đăng nhập được.</p>
-          <button id="submit-button" type="submit">Sign in</button>
-          <p class="hint">Dùng mật khẩu ADMIN_PASSWORD hoặc ADMIN_SECRET đã đặt trên Vercel.</p>
+          <button id="submit-button" type="submit">Đăng nhập</button>
+          <p class="hint">Nếu quên mật khẩu, hãy liên hệ người quản trị website.</p>
         </form>
       </section>
     </main>
@@ -200,7 +198,7 @@
         event.preventDefault();
         errorMessage.classList.remove('show');
         submitButton.disabled = true;
-        submitButton.textContent = 'Signing in...';
+        submitButton.textContent = 'Đang đăng nhập...';
 
         try {
           const response = await fetch('/api/admin-auth', {
@@ -216,7 +214,7 @@
 
           const data = await response.json().catch(() => null);
           if (!response.ok) {
-            throw new Error(data?.message || 'Sign in failed.');
+            throw new Error(data?.message || 'Không đăng nhập được.');
           }
 
           const params = new URLSearchParams(window.location.search);
@@ -227,7 +225,7 @@
           errorMessage.classList.add('show');
         } finally {
           submitButton.disabled = false;
-          submitButton.textContent = 'Sign in';
+          submitButton.textContent = 'Đăng nhập';
         }
       });
     </script>
