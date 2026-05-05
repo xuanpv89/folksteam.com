@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T20:34:01.808Z",
+  "updatedAt": "2026-05-05T20:38:23.768Z",
   "pages": [
     {
       "id": "home",
@@ -98,7 +98,7 @@
               "key": "text-7",
               "label": "Get Started",
               "type": "text",
-              "value": "Get Started",
+              "value": "Get Started!",
               "match": "Get Started",
               "elementType": "text"
             },
