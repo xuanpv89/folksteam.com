@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T19:42:46.955Z",
+  "updatedAt": "2026-05-05T19:51:28.332Z",
   "pages": [
     {
       "id": "folks-team",
@@ -1973,7 +1973,7 @@
               "key": "text-6",
               "label": "Open CMS",
               "type": "text",
-              "value": "Open CMS",
+              "value": "For Admin",
               "match": "Open CMS"
             }
           ]
