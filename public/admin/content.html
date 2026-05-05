@@ -93,6 +93,27 @@
         background: #171717; color: #f9f4df; font-size: 13px; line-height: 1.55; padding: 16px; white-space: pre-wrap;
       }
       .publish-box { display: grid; gap: 12px; border: 1px solid #bde8cb; border-radius: 8px; background: var(--brand-soft); padding: 14px; margin-top: 14px; }
+      .status-log {
+        display: grid; gap: 8px; border: 1px solid #d4d4d4; border-radius: 8px;
+        background: #fff; color: var(--muted); padding: 12px; font-size: 13px;
+      }
+      .status-log a { color: var(--brand-dark); font-weight: 800; }
+      .preview-tabs {
+        display: inline-flex; gap: 6px; border: 1px solid var(--line); border-radius: 999px;
+        background: #f5f5f5; padding: 4px;
+      }
+      .preview-tabs button { min-height: 32px; border-radius: 999px; background: transparent; color: var(--muted); padding: 6px 12px; font-size: 12px; }
+      .preview-tabs button.active { background: var(--brand); color: #fff; }
+      .content-preview {
+        display: grid; gap: 14px; min-height: 560px; max-height: 72vh; overflow: auto;
+        border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 16px;
+      }
+      .preview-page, .preview-section { display: grid; gap: 8px; border: 1px solid #eee7d8; border-radius: 8px; background: #fafafa; padding: 12px; }
+      .preview-section { background: #fff; }
+      .preview-field { display: grid; gap: 4px; border-top: 1px solid #eee; padding-top: 8px; }
+      .preview-field strong { font-size: 13px; }
+      .preview-field div { white-space: pre-wrap; }
+      .hidden { display: none; }
       .toast { display: none; margin-top: 10px; border-radius: 8px; background: #ecfdf5; color: #065f46; padding: 10px 12px; font-size: 13px; font-weight: 700; }
       .toast.error { background: #fef2f2; color: #991b1b; }
       .toast.show { display: block; }
@@ -109,21 +130,21 @@
           </div>
         </div>
         <nav class="nav" aria-label="Admin links">
-          <a href="/admin/">Admin Hub</a>
+          <a href="/admin/">Trang admin</a>
           <a href="/admin/blog.html">Blog Manager</a>
           <a href="/blog">Blog EN</a>
           <a href="/vi/blog">Blog VI</a>
           <a class="secondary" href="/">Home</a>
-          <button type="button" class="secondary" data-admin-logout>Log out</button>
+          <button type="button" class="secondary" data-admin-logout>Đăng xuất</button>
         </nav>
       </header>
 
       <section class="hero-panel">
-        <p class="eyebrow">Page content workspace</p>
-        <h2>Quản lý nội dung theo từng trang, section và đoạn copy.</h2>
+        <p class="eyebrow">Không gian soạn nội dung</p>
+        <h2>Quản lý nội dung theo từng trang, phần và đoạn copy.</h2>
         <p>
-          CMS này tạo một file JSON trung tâm cho nội dung site. Bạn có thể lưu
-          draft trên trình duyệt, export JSON, hoặc publish lên GitHub vào
+          CMS này tạo một file dữ liệu trung tâm cho nội dung site. Bạn có thể lưu
+          nháp trên trình duyệt, tải dữ liệu, hoặc đăng lên GitHub vào
           <code>src/data_files/cmsContent.json</code>.
         </p>
       </section>
@@ -132,93 +153,105 @@
         <aside class="card sidebar">
           <div class="section-title">
             <div>
-              <p class="eyebrow">Pages</p>
+              <p class="eyebrow">Danh sách trang</p>
               <h2>Trang</h2>
             </div>
           </div>
           <div class="list" id="page-list"></div>
           <div class="actions" style="margin-top:14px">
-            <button type="button" id="add-page">Add page</button>
+            <button type="button" id="add-page">Thêm trang</button>
           </div>
         </aside>
 
         <section class="card">
           <div class="section-title">
             <div>
-              <p class="eyebrow">Editor</p>
-              <h2 id="editor-title">Page editor</h2>
+              <p class="eyebrow">Trình soạn</p>
+              <h2 id="editor-title">Soạn nội dung trang</h2>
             </div>
           </div>
 
           <div class="row">
             <label>
-              Page title
+              Tên trang
               <input id="page-title" />
             </label>
             <label>
-              Page path
+              Đường dẫn trang
               <input id="page-path" />
             </label>
+          </div>
+          <div class="button-row" style="margin-top:12px">
+            <button type="button" class="secondary" id="move-page-up">Đưa trang lên</button>
+            <button type="button" class="secondary" id="move-page-down">Đưa trang xuống</button>
+            <button type="button" class="danger" id="delete-page">Xóa trang</button>
           </div>
 
           <div class="section-title" style="margin-top:18px">
             <div>
-              <p class="eyebrow">Sections</p>
-              <h3>Section trong trang</h3>
+              <p class="eyebrow">Các phần</p>
+              <h3>Phần nội dung trong trang</h3>
             </div>
-            <button type="button" id="add-section">Add section</button>
+            <button type="button" id="add-section">Thêm phần</button>
           </div>
           <div class="list" id="section-list"></div>
+          <div class="button-row" style="margin-top:12px">
+            <button type="button" class="secondary" id="move-section-up">Đưa phần lên</button>
+            <button type="button" class="secondary" id="move-section-down">Đưa phần xuống</button>
+            <button type="button" class="danger" id="delete-section">Xóa phần</button>
+          </div>
 
           <div class="publish-box">
-            <h3>Selected section</h3>
+            <h3>Phần đang chọn</h3>
             <div class="row">
               <label>
-                Section ID
+                Mã phần nội dung
                 <input id="section-id" />
               </label>
               <label>
-                Section title
+                Tên phần nội dung
                 <input id="section-title-input" />
               </label>
             </div>
             <div class="section-title" style="margin-top:8px">
               <div>
-                <p class="eyebrow">Fields</p>
-                <h3>Từng đoạn nội dung</h3>
+                <p class="eyebrow">Nội dung nhỏ</p>
+                <h3>Từng trường nội dung</h3>
               </div>
-              <button type="button" id="add-field">Add field</button>
+              <button type="button" id="add-field">Thêm trường</button>
             </div>
             <div class="field-list" id="field-list"></div>
           </div>
 
           <div class="publish-box">
-            <h3>Publish JSON to GitHub</h3>
+            <h3>Đăng nội dung</h3>
             <p class="hint">
-              Token cần quyền <strong>Contents: Read and write</strong>. Khi
-              publish, CMS sẽ commit file JSON vào repo.
+              CMS sẽ dùng phiên đăng nhập admin và GitHub token trong Vercel env,
+              không cần nhập token trong trình duyệt.
             </p>
-            <div class="row">
-              <label>
-                Repository
-                <input id="githubRepo" value="xuanpv89/folksteam.com" />
-              </label>
-              <label>
-                Branch
-                <input id="githubBranch" value="main" />
-              </label>
+            <div class="status-log" id="publish-status">
+              Sẵn sàng. Khi đăng, CMS sẽ commit vào <code>src/data_files/cmsContent.json</code>.
             </div>
-            <label>
-              GitHub token
-              <input id="githubToken" type="password" autocomplete="off" placeholder="github_pat_..." />
-            </label>
+            <details>
+              <summary>Cài đặt nâng cao</summary>
+              <div class="row" style="margin-top:12px">
+                <label>
+                  Kho GitHub
+                  <input id="githubRepo" value="xuanpv89/folksteam.com" />
+                </label>
+                <label>
+                  Nhánh
+                  <input id="githubBranch" value="main" />
+                </label>
+              </div>
+            </details>
           </div>
 
           <div class="button-row" style="margin-top:14px">
-            <button type="button" id="save-local">Save draft</button>
-            <button type="button" class="secondary" id="export-json">Download JSON</button>
-            <button type="button" class="secondary" id="copy-json">Copy JSON</button>
-            <button type="button" id="publish-github">Publish to GitHub</button>
+            <button type="button" id="save-local">Lưu nháp</button>
+            <button type="button" class="secondary" id="export-json">Tải JSON</button>
+            <button type="button" class="secondary" id="copy-json">Copy dữ liệu</button>
+            <button type="button" id="publish-github">Đăng nội dung</button>
           </div>
           <div class="toast" id="toast">Done.</div>
         </section>
@@ -226,12 +259,17 @@
         <section class="card preview-card">
           <div class="section-title">
             <div>
-              <p class="eyebrow">Preview</p>
-              <h2>JSON preview</h2>
+              <p class="eyebrow">Xem trước</p>
+              <h2>Xem trước</h2>
+            </div>
+            <div class="preview-tabs" aria-label="Preview mode">
+              <button type="button" class="active" id="tab-readable">Xem nội dung</button>
+              <button type="button" id="tab-json">JSON nâng cao</button>
             </div>
           </div>
           <div class="path">src/data_files/cmsContent.json</div>
-          <pre id="preview"></pre>
+          <div class="content-preview" id="content-preview"></div>
+          <pre id="preview" class="hidden"></pre>
         </section>
       </section>
     </main>
@@ -282,6 +320,8 @@
       const sectionList = document.getElementById('section-list');
       const fieldList = document.getElementById('field-list');
       const preview = document.getElementById('preview');
+      const contentPreview = document.getElementById('content-preview');
+      const publishStatus = document.getElementById('publish-status');
       const toast = document.getElementById('toast');
       const pageTitle = document.getElementById('page-title');
       const pagePath = document.getElementById('page-path');
@@ -289,7 +329,6 @@
       const sectionTitle = document.getElementById('section-title-input');
       const githubRepo = document.getElementById('githubRepo');
       const githubBranch = document.getElementById('githubBranch');
-      const githubToken = document.getElementById('githubToken');
 
       function slugify(value) {
         return String(value || 'item').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -300,6 +339,25 @@
         toast.classList.toggle('error', type === 'error');
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), type === 'error' ? 5200 : 2400);
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#039;');
+      }
+
+      function updatePublishStatus(message, links = []) {
+        publishStatus.innerHTML = `
+          <div>${escapeHtml(message)}</div>
+          ${links
+            .filter(link => link.url)
+            .map(link => `<div><a href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">${escapeHtml(link.label)}</a></div>`)
+            .join('')}
+        `;
       }
 
       function currentPage() {
@@ -351,20 +409,22 @@
             : `<input data-field-value="${index}" value="${String(field.value || '').replaceAll('"', '&quot;')}" />`;
           wrapper.innerHTML = `
             <div class="row">
-              <label>Field key<input data-field-key="${index}" value="${field.key}" /></label>
-              <label>Label<input data-field-label="${index}" value="${field.label}" /></label>
+              <label>Mã nội dung<input data-field-key="${index}" value="${field.key}" /></label>
+              <label>Tên hiển thị<input data-field-label="${index}" value="${field.label}" /></label>
             </div>
             <div class="row" style="margin-top:12px">
-              <label>Type
+              <label>Kiểu nội dung
                 <select data-field-type="${index}">
-                  <option value="text" ${field.type === 'text' ? 'selected' : ''}>Text</option>
-                  <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Textarea</option>
+                  <option value="text" ${field.type === 'text' ? 'selected' : ''}>Một dòng</option>
+                  <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Nhiều dòng</option>
                 </select>
               </label>
-              <label>Value${input}</label>
+              <label>Nội dung${input}</label>
             </div>
             <div class="actions">
-              <button type="button" class="danger" data-remove-field="${index}">Remove field</button>
+              <button type="button" class="secondary" data-move-field="${index}" data-direction="-1">Đưa lên</button>
+              <button type="button" class="secondary" data-move-field="${index}" data-direction="1">Đưa xuống</button>
+              <button type="button" class="danger" data-remove-field="${index}">Xóa trường</button>
             </div>
           `;
           fieldList.appendChild(wrapper);
@@ -378,12 +438,40 @@
         pagePath.value = page.path;
         sectionId.value = section.id;
         sectionTitle.value = section.title;
-        document.getElementById('editor-title').textContent = `${page.title} content`;
+        document.getElementById('editor-title').textContent = `Nội dung: ${page.title}`;
       }
 
       function updatePreview() {
         state.updatedAt = new Date().toISOString();
         preview.textContent = JSON.stringify(state, null, 2);
+        contentPreview.innerHTML = state.pages
+          .map(page => `
+            <article class="preview-page">
+              <div>
+                <p class="eyebrow">${escapeHtml(page.path || '/')}</p>
+                <h3>${escapeHtml(page.title || 'Chưa có tên trang')}</h3>
+              </div>
+              ${(page.sections || [])
+                .map(section => `
+                  <section class="preview-section">
+                    <div>
+                      <strong>${escapeHtml(section.title || 'Chưa có tên phần')}</strong>
+                      <p class="hint">${escapeHtml(section.id || 'chua-co-ma-phan')}</p>
+                    </div>
+                    ${(section.fields || [])
+                      .map(field => `
+                        <div class="preview-field">
+                          <strong>${escapeHtml(field.label || field.key || 'Trường nội dung')}</strong>
+                          <div>${escapeHtml(field.value || 'Chưa có nội dung')}</div>
+                        </div>
+                      `)
+                      .join('')}
+                  </section>
+                `)
+                .join('')}
+            </article>
+          `)
+          .join('');
       }
 
       function render() {
@@ -421,88 +509,161 @@
         URL.revokeObjectURL(link.href);
       }
 
-      function toBase64Utf8(value) {
-        const bytes = new TextEncoder().encode(value);
-        let binary = '';
-        bytes.forEach(byte => { binary += String.fromCharCode(byte); });
-        return btoa(binary);
+      function validateContent() {
+        const errors = [];
+        state.pages.forEach(page => {
+          if (!page.title?.trim()) errors.push('Có trang thiếu tên.');
+          if (!page.path?.trim().startsWith('/')) errors.push(`${page.title || 'Trang'}: đường dẫn phải bắt đầu bằng "/".`);
+          page.sections.forEach(section => {
+            if (!section.id?.trim()) errors.push(`${page.title}: có phần thiếu mã.`);
+            if (!section.title?.trim()) errors.push(`${page.title}: có phần thiếu tên.`);
+            const keys = new Set();
+            section.fields.forEach(field => {
+              if (!field.key?.trim()) errors.push(`${section.title}: có trường thiếu mã nội dung.`);
+              if (keys.has(field.key)) errors.push(`${section.title}: mã "${field.key}" bị trùng.`);
+              keys.add(field.key);
+              if (!field.label?.trim()) errors.push(`${section.title}: có trường thiếu tên hiển thị.`);
+            });
+          });
+        });
+        return errors;
       }
 
-      async function githubRequest(url, token, options = {}) {
-        const response = await fetch(url, {
-          ...options,
+      async function adminContentRequest(payload) {
+        const response = await fetch('/api/admin-content', {
+          method: 'POST',
+          credentials: 'same-origin',
           headers: {
-            Accept: 'application/vnd.github+json',
-            Authorization: `Bearer ${token}`,
-            'X-GitHub-Api-Version': '2022-11-28',
-            ...(options.headers || {}),
+            'Content-Type': 'application/json',
           },
+          body: JSON.stringify(payload),
         });
-        const text = await response.text();
-        const data = text ? JSON.parse(text) : null;
         if (!response.ok) {
-          const error = new Error(data?.message || `GitHub API error ${response.status}`);
+          const data = await response.json().catch(() => null);
+          const error = new Error(data?.message || `Admin content API error ${response.status}`);
           error.status = response.status;
           throw error;
         }
-        return data;
+        return response.json();
       }
 
       async function publishToGithub() {
         saveCurrentFromInputs();
         const repo = githubRepo.value.trim();
         const branch = githubBranch.value.trim() || 'main';
-        const token = githubToken.value.trim();
-        if (!repo.includes('/') || !token) {
-          showToast('Nhập repo và GitHub token trước khi publish.', 'error');
+        const validationErrors = validateContent();
+
+        if (!repo.includes('/')) {
+          showToast('Repository phải có dạng owner/repo.', 'error');
           return;
         }
-        const target = 'src/data_files/cmsContent.json';
-        const apiPath = encodeURIComponent(target).replace(/%2F/g, '/');
-        const url = `https://api.github.com/repos/${repo}/contents/${apiPath}?ref=${encodeURIComponent(branch)}`;
-        let sha;
-        try {
-          const existing = await githubRequest(url, token);
-          sha = existing.sha;
-        } catch (error) {
-          if (error.status !== 404) throw error;
+        if (validationErrors.length) {
+          showToast(`Chưa thể đăng: ${validationErrors[0]}`, 'error');
+          return;
         }
-        await githubRequest(`https://api.github.com/repos/${repo}/contents/${apiPath}`, token, {
-          method: 'PUT',
-          body: JSON.stringify({
-            message: 'Update CMS page content',
-            content: toBase64Utf8(JSON.stringify(state, null, 2)),
+
+        const button = document.getElementById('publish-github');
+        button.disabled = true;
+        button.textContent = 'Đang đăng...';
+        updatePublishStatus('Đang commit nội dung lên GitHub...');
+
+        try {
+          const result = await adminContentRequest({
+            repo,
             branch,
-            ...(sha ? { sha } : {}),
-          }),
-        });
-        showToast('Đã publish cmsContent.json lên GitHub.');
+            content: state,
+          });
+          updatePublishStatus(`${result.target} đã được cập nhật. ${result.deploy?.message || ''}`, [
+            { label: 'Mở commit trên GitHub', url: result.commitUrl },
+            { label: 'Mở file đã cập nhật', url: result.fileUrl },
+          ]);
+          showToast('Đã đăng nội dung lên GitHub.');
+        } finally {
+          button.disabled = false;
+          button.textContent = 'Đăng nội dung';
+        }
+      }
+
+      function moveItem(items, index, direction) {
+        const nextIndex = index + direction;
+        if (nextIndex < 0 || nextIndex >= items.length) return index;
+        const [item] = items.splice(index, 1);
+        items.splice(nextIndex, 0, item);
+        return nextIndex;
+      }
+
+      function deleteSelectedPage() {
+        if (state.pages.length <= 1) {
+          showToast('Cần giữ lại ít nhất một trang.', 'error');
+          return;
+        }
+        state.pages.splice(pageIndex, 1);
+        pageIndex = Math.max(0, pageIndex - 1);
+        sectionIndex = 0;
+        render();
+      }
+
+      function deleteSelectedSection() {
+        const page = currentPage();
+        if (page.sections.length <= 1) {
+          showToast('Cần giữ lại ít nhất một phần nội dung.', 'error');
+          return;
+        }
+        page.sections.splice(sectionIndex, 1);
+        sectionIndex = Math.max(0, sectionIndex - 1);
+        render();
       }
 
       document.addEventListener('input', event => {
         if (event.target.closest('.card')) saveCurrentFromInputs();
       });
       document.getElementById('add-page').addEventListener('click', () => {
-        state.pages.push({ id: 'new-page', title: 'New Page', path: '/new-page', sections: [{ id: 'intro', title: 'Intro', fields: [] }] });
+        state.pages.push({ id: 'trang-moi', title: 'Trang mới', path: '/trang-moi', sections: [{ id: 'gioi-thieu', title: 'Giới thiệu', fields: [] }] });
         pageIndex = state.pages.length - 1;
         sectionIndex = 0;
         render();
       });
       document.getElementById('add-section').addEventListener('click', () => {
-        currentPage().sections.push({ id: 'new-section', title: 'New Section', fields: [] });
+        currentPage().sections.push({ id: 'phan-moi', title: 'Phần mới', fields: [] });
         sectionIndex = currentPage().sections.length - 1;
         render();
       });
       document.getElementById('add-field').addEventListener('click', () => {
-        currentSection().fields.push({ key: 'newField', label: 'New field', type: 'text', value: '' });
+        currentSection().fields.push({ key: 'noiDungMoi', label: 'Nội dung mới', type: 'text', value: '' });
         render();
       });
       fieldList.addEventListener('click', event => {
-        const index = event.target.dataset.removeField;
-        if (index === undefined) return;
-        currentSection().fields.splice(Number(index), 1);
+        const removeIndex = event.target.dataset.removeField;
+        const moveIndex = event.target.dataset.moveField;
+
+        if (removeIndex !== undefined) {
+          currentSection().fields.splice(Number(removeIndex), 1);
+          render();
+        }
+
+        if (moveIndex !== undefined) {
+          moveItem(currentSection().fields, Number(moveIndex), Number(event.target.dataset.direction));
+          render();
+        }
+      });
+      document.getElementById('move-page-up').addEventListener('click', () => {
+        pageIndex = moveItem(state.pages, pageIndex, -1);
         render();
       });
+      document.getElementById('move-page-down').addEventListener('click', () => {
+        pageIndex = moveItem(state.pages, pageIndex, 1);
+        render();
+      });
+      document.getElementById('delete-page').addEventListener('click', deleteSelectedPage);
+      document.getElementById('move-section-up').addEventListener('click', () => {
+        sectionIndex = moveItem(currentPage().sections, sectionIndex, -1);
+        render();
+      });
+      document.getElementById('move-section-down').addEventListener('click', () => {
+        sectionIndex = moveItem(currentPage().sections, sectionIndex, 1);
+        render();
+      });
+      document.getElementById('delete-section').addEventListener('click', deleteSelectedSection);
       document.getElementById('save-local').addEventListener('click', () => {
         saveCurrentFromInputs();
         localStorage.setItem('folksContentCms', JSON.stringify(state));
@@ -515,7 +676,22 @@
         showToast('Đã copy JSON.');
       });
       document.getElementById('publish-github').addEventListener('click', () => {
-        publishToGithub().catch(error => showToast(`Publish lỗi: ${error.message}`, 'error'));
+        publishToGithub().catch(error => {
+          updatePublishStatus(`Đăng nội dung bị lỗi: ${error.message}`);
+          showToast(`Đăng lỗi: ${error.message}`, 'error');
+        });
+      });
+      document.getElementById('tab-readable').addEventListener('click', () => {
+        contentPreview.classList.remove('hidden');
+        preview.classList.add('hidden');
+        document.getElementById('tab-readable').classList.add('active');
+        document.getElementById('tab-json').classList.remove('active');
+      });
+      document.getElementById('tab-json').addEventListener('click', () => {
+        contentPreview.classList.add('hidden');
+        preview.classList.remove('hidden');
+        document.getElementById('tab-readable').classList.remove('active');
+        document.getElementById('tab-json').classList.add('active');
       });
       const savedGithubRepo = localStorage.getItem('folksGithubRepo');
       githubRepo.value =
@@ -526,7 +702,7 @@
         localStorage.setItem('folksGithubRepo', 'xuanpv89/folksteam.com');
       }
       githubBranch.value = localStorage.getItem('folksGithubBranch') || githubBranch.value;
-      githubToken.value = localStorage.getItem('folksGithubToken') || '';
+      localStorage.removeItem('folksGithubToken');
       render();
     </script>
     <script src="/admin/admin-session.js"></script>
