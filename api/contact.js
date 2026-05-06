@@ -158,16 +158,6 @@ export default async function handler(request, response) {
     process.env.CONTACT_FROM_EMAIL ||
     'Folks Team Website <onboarding@resend.dev>';
 
-  if (!apiKey) {
-    return sendJson(response, 500, {
-      ok: false,
-      message:
-        locale === 'vi'
-          ? 'Máy chủ chưa cấu hình RESEND_API_KEY.'
-          : 'Server is missing RESEND_API_KEY.',
-    });
-  }
-
   const fullName = [firstName, lastName].filter(Boolean).join(' ');
   const now = new Date().toISOString();
   const referer = String(request.headers.referer || request.headers.referrer || '').trim();
@@ -208,43 +198,55 @@ export default async function handler(request, response) {
     <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
   `;
 
-  const resendResponse = await fetch(RESEND_API_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: fromEmail,
-      to: [toEmail],
-      reply_to: email,
-      subject,
-      html,
-    }),
-  });
-
-  if (!resendResponse.ok) {
-    const detail = await resendResponse.text();
-    return sendJson(response, 502, {
-      ok: false,
-      message:
-        locale === 'vi'
-          ? 'Không gửi được email. Vui lòng kiểm tra cấu hình Resend.'
-          : 'Email could not be sent. Please check the Resend setup.',
-      detail,
-    });
-  }
-
   let leadSaved = false;
+  let emailSent = false;
   try {
     leadSaved = Boolean(await saveLeadSubmission(lead));
   } catch (error) {
     console.error('Could not save contact lead', error);
   }
 
+  if (apiKey) {
+    try {
+      const resendResponse = await fetch(RESEND_API_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [toEmail],
+          reply_to: email,
+          subject,
+          html,
+        }),
+      });
+
+      if (!resendResponse.ok) {
+        console.error('Could not send contact email', await resendResponse.text());
+      } else {
+        emailSent = true;
+      }
+    } catch (error) {
+      console.error('Could not send contact email', error);
+    }
+  }
+
+  if (!leadSaved && !emailSent) {
+    return sendJson(response, 500, {
+      ok: false,
+      message:
+        locale === 'vi'
+          ? 'Máy chủ chưa lưu được thông tin. Vui lòng thử lại hoặc gửi email trực tiếp.'
+          : 'Server could not save the message. Please try again or email us directly.',
+    });
+  }
+
   return sendJson(response, 200, {
     ok: true,
     leadSaved,
+    emailSent,
     message:
       locale === 'vi'
         ? 'Đã gửi thông tin. Chúng tôi sẽ phản hồi sớm.'
