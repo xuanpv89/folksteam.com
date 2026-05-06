@@ -918,13 +918,15 @@
         </div>
         <nav class="nav" aria-label="Admin links">
           <a href="/admin/">Admin Hub</a>
-          <a class="secondary" href="/admin/console.html">Admin Console</a>
-          <a href="/admin/content.html">Content CMS</a>
+          <a class="secondary" href="/admin/operations.html">Control Center</a>
+          <a class="secondary" href="/admin/console.html">Console kỹ thuật</a>
+          <a href="/admin/content.html">Visual Editor</a>
+          <a class="secondary" href="/admin/text.html">Bulk Text Editor</a>
           <a href="/blog">Blog EN</a>
           <a href="/vi/blog">Blog VI</a>
-          <a class="secondary" href="/">Home</a>
+          <a class="secondary" href="/">Xem website</a>
           <a class="secondary" href="/admin/guide.html">Hướng dẫn</a>
-          <button type="button" class="secondary" data-admin-logout>Log out</button>
+          <button type="button" class="secondary" data-admin-logout>Đăng xuất</button>
         </nav>
       </header>
 
@@ -1062,7 +1064,7 @@
                   <option>C.H.E.S.S</option>
                   <option>Strategy</option>
                   <option>Growth Systems</option>
-                  <option>Operations</option>
+                  <option>Vận hành</option>
                   <option>Brand & Culture</option>
                   <option>Marketing Models</option>
                 </select>
@@ -2005,7 +2007,7 @@ ${bodyMarkdown || contents.join('\n\n')}
 
         const data = await response.json().catch(() => null);
         if (!response.ok || data?.ok === false) {
-          throw new Error(data?.message || `Operations API error ${response.status}`);
+          throw new Error(data?.message || `Control Center API error ${response.status}`);
         }
         return data;
       }
