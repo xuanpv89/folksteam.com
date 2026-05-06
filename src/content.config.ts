@@ -87,6 +87,13 @@ const blogCollection = defineCollection({
       readTime: z.number(),
       category: z.string(),
       tags: z.array(z.string()).optional(),
+      translations: z
+        .object({
+          en: z.string().optional(),
+          vi: z.string().optional(),
+          zh: z.string().optional(),
+        })
+        .optional(),
       videos: z
         .array(
           z.object({

@@ -521,6 +521,16 @@
         font-weight: 800;
       }
 
+      .calendar-card {
+        display: grid;
+        gap: 6px;
+        border: 1px solid #d7eadc;
+        border-radius: 8px;
+        background: var(--brand-soft);
+        padding: 12px;
+        color: #20472f;
+      }
+
       .check-row {
         display: flex;
         gap: 8px;
@@ -1029,6 +1039,10 @@
                 <input id="role" name="role" value="Biên tập" />
               </label>
             </div>
+            <div class="calendar-card" id="editorial-calendar">
+              <strong>Editorial calendar</strong>
+              <span>Chọn ngày đăng để xem lịch xuất bản.</span>
+            </div>
 
             <div class="row">
               <label>
@@ -1058,6 +1072,21 @@
                 <input id="tags" name="tags" placeholder="marketing, cộng đồng, chiến lược" />
               </label>
             </div>
+            <h3>Liên kết bài đa ngôn ngữ</h3>
+            <div class="row">
+              <label>
+                Bản EN liên quan
+                <input id="linkedEn" name="linkedEn" placeholder="/blog/example-post/" />
+              </label>
+              <label>
+                Bản VI liên quan
+                <input id="linkedVi" name="linkedVi" placeholder="/vi/blog/vi-du-bai-viet/" />
+              </label>
+            </div>
+            <label>
+              Bản ZH liên quan
+              <input id="linkedZh" name="linkedZh" placeholder="/zh/blog/example-post/" />
+            </label>
           </div>
 
           <div class="form-section" data-tab-panel="settings" hidden>
@@ -1239,6 +1268,7 @@
       const autosaveStatus = document.getElementById('autosave-status');
       const nextStepText = document.getElementById('next-step-text');
       const readinessList = document.getElementById('readiness-list');
+      const editorialCalendar = document.getElementById('editorial-calendar');
       let autosaveTimer;
       let lastAutosaveAt = null;
 
@@ -1257,6 +1287,9 @@
         'cardImageAlt',
         'authorImage',
         'authorImageAlt',
+        'linkedEn',
+        'linkedVi',
+        'linkedZh',
         'contents',
       ];
       let contentBlocks = [
@@ -1505,6 +1538,24 @@
         });
       }
 
+      function updateEditorialCalendar() {
+        const pubDate = getValue('pubDate') || today();
+        const locale = getValue('locale').toUpperCase();
+        const title = getValue('title') || 'Bài chưa có tiêu đề';
+        const date = new Date(`${pubDate}T09:00:00`);
+        const weekday = Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString('vi-VN', {
+          weekday: 'long',
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        });
+        editorialCalendar.innerHTML = `
+          <strong>${escapeHtml(weekday)}</strong>
+          <span>${escapeHtml(locale)} · ${escapeHtml(title)}</span>
+          <span>${date < new Date(new Date().toDateString()) ? 'Ngày đăng đang ở quá khứ.' : 'Sẵn sàng đưa vào lịch xuất bản.'}</span>
+        `;
+      }
+
       function youtubeEmbedUrl(value) {
         const url = String(value || '').trim();
         const watch = url.match(/[?&]v=([^&]+)/);
@@ -1678,6 +1729,11 @@
         const tags = tagList(data.tags);
         const bodyMarkdown = buildBodyMarkdown();
         const cardImageAlt = data.cardImageAlt || data.title || data.description || 'Blog cover image';
+        const translations = Object.entries({
+          en: data.linkedEn,
+          vi: data.linkedVi,
+          zh: data.linkedZh,
+        }).filter(([, value]) => value);
         const contents = listFromTextarea(data.contents).length
           ? listFromTextarea(data.contents)
           : summaryFromBlocks();
@@ -1705,6 +1761,7 @@ cardImageAlt: ${quote(cardImageAlt)}
 readTime: ${Number(data.readTime || 4)}
 category: ${quote(data.category || 'C.H.E.S.S')}
 tags: [${tags.map(quote).join(', ')}]
+${translations.length ? `translations:\n${translations.map(([key, value]) => `  ${key}: ${quote(value)}`).join('\n')}` : 'translations: {}'}
 contents:
 ${contents.map(item => `  - ${quote(item)}`).join('\n')}
 ---
@@ -1782,6 +1839,7 @@ ${bodyMarkdown || contents.join('\n\n')}
         preview.textContent = result.markdown;
         renderArticlePreview(result);
         updateMediaPreviews();
+        updateEditorialCalendar();
         updateReadiness(result);
         return result;
       }
@@ -2273,6 +2331,9 @@ ${bodyMarkdown || contents.join('\n\n')}
         if (uploadIndex === undefined) return;
         const file = event.target.files?.[0];
         if (!file) return;
+        if (file.size > 1024 * 1024) {
+          updatePublishStatus(`Cảnh báo: ảnh "${file.name}" nặng ${Math.round(file.size / 1024)} KB. Nên resize/crop trước khi đăng nếu không cần ảnh lớn.`);
+        }
         readFileAsDataUrl(file)
           .then(dataUrl => uploadImageBlock(Number(uploadIndex), { dataUrl, fileName: file.name }))
           .catch(error => showToast(`Upload lỗi: ${error.message}`, 'error'));
@@ -2281,6 +2342,9 @@ ${bodyMarkdown || contents.join('\n\n')}
         input.addEventListener('change', event => {
           const file = event.target.files?.[0];
           if (!file) return;
+          if (file.size > 1024 * 1024) {
+            updatePublishStatus(`Cảnh báo: ảnh "${file.name}" nặng ${Math.round(file.size / 1024)} KB. Nên resize/crop trước khi đăng nếu không cần ảnh lớn.`);
+          }
           readFileAsDataUrl(file)
             .then(dataUrl => uploadImageField(event.target.dataset.uploadField, { dataUrl, fileName: file.name }))
             .catch(error => showToast(`Upload lỗi: ${error.message}`, 'error'));
