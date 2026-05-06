@@ -1,4 +1,24 @@
 {
-  "updatedAt": null,
-  "items": []
+  "updatedAt": "2026-05-06T20:30:14.749Z",
+  "items": [
+    {
+      "id": "review-1778099414749",
+      "title": "test 1test1test1test1test1test1 test1test1test1test1test1",
+      "type": "blog",
+      "target": "src/data_files/blogDrafts/en/test1.md",
+      "status": "review",
+      "owner": "Folks Team",
+      "note": "Blog EN chờ duyệt. Draft: src/data_files/blogDrafts/en/test1.md. Public URL: https://www.folksteam.com/blog/test1/",
+      "createdAt": "2026-05-06T20:30:14.749Z",
+      "updatedAt": "2026-05-06T20:30:14.749Z",
+      "history": [
+        {
+          "status": "review",
+          "actor": "admin",
+          "note": "Blog EN chờ duyệt. Draft: src/data_files/blogDrafts/en/test1.md. Public URL: https://www.folksteam.com/blog/test1/",
+          "createdAt": "2026-05-06T20:30:14.749Z"
+        }
+      ]
+    }
+  ]
 }
