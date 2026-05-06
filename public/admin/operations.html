@@ -251,16 +251,17 @@
           <div class="toolbar">
             <div>
               <p class="eyebrow">Media library</p>
-              <h2>Thu vien anh</h2>
+              <h2>Thư viện ảnh</h2>
             </div>
             <div class="actions">
-              <a class="button secondary" href="/admin/blog.html">Upload qua Blog Manager</a>
+              <a class="button secondary" href="/admin/console.html#media">Upload ảnh</a>
+              <a class="button secondary" href="/admin/blog.html">Dùng trong Blog</a>
               <button type="button" id="reload-media">Reload</button>
             </div>
           </div>
           <label>
-            Tim media
-            <input id="media-search" placeholder="Nhap ten anh, folder, path..." />
+            Tìm media
+            <input id="media-search" placeholder="Nhập tên ảnh, folder, path..." />
           </label>
           <div class="media-grid" id="media-grid" style="margin-top: 12px;"></div>
         </div>
@@ -580,6 +581,7 @@
               <code class="path">${escapeHtml(event.target || '-')}</code>
               <span class="muted">${escapeHtml(event.createdAt || '')}</span>
               ${event.commitUrl ? `<a href="${event.commitUrl}" target="_blank" rel="noreferrer">Open commit</a>` : ''}
+              ${event.commitSha && event.target && !/\.(avif|gif|ico|jpe?g|png|svg|webp)$/i.test(event.target) ? `<button type="button" class="secondary" data-rollback-target="${escapeHtml(event.target)}" data-rollback-commit="${escapeHtml(event.commitSha)}">Rollback file này</button>` : ''}
               ${event.note ? `<p>${escapeHtml(event.note)}</p>` : ''}
             </div>`).join('')
           : '<p class="muted">Chua co audit event.</p>';
@@ -697,8 +699,12 @@
               <strong>${escapeHtml(item.name)}</strong>
               <code>${escapeHtml(item.displayPath)}</code>
               <span class="muted">${escapeHtml(item.folder)} / ${Math.round((item.size || 0) / 1024)} KB</span>
+              <div class="actions">
+                <button type="button" class="secondary" data-copy-media="${escapeHtml(item.displayPath)}">Copy URL</button>
+                <a class="button secondary" href="${escapeHtml(item.rawUrl)}" target="_blank" rel="noreferrer">Mở ảnh</a>
+              </div>
             </div>`).join('')
-          : '<p class="muted">Khong tim thay media.</p>';
+          : '<p class="muted">Không tìm thấy media.</p>';
       }
 
       async function loadMedia() {
@@ -936,6 +942,23 @@
         await loadAudit();
       }
 
+      async function rollbackAuditFile(target, commitSha) {
+        if (!window.confirm(`Rollback file "${target}" về phiên bản trước commit ${commitSha.slice(0, 7)}?`)) return;
+        const result = await api('/api/admin-operations?module=audit', {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'rollback-commit-file',
+            target,
+            commitSha,
+          }),
+        });
+        toast('Đã tạo commit rollback.');
+        await loadAudit();
+        state.dashboard = null;
+        loadDashboard().catch(error => toast(error.message, true));
+        if (result.result?.commitUrl) window.open(result.result.commitUrl, '_blank', 'noopener');
+      }
+
       document.addEventListener('click', event => {
         const tab = event.target.closest('[data-view-tab]');
         if (tab) setView(tab.dataset.viewTab);
@@ -946,8 +969,20 @@
         const collectionButton = event.target.closest('[data-collection-path]');
         if (collectionButton) openCollectionFile(collectionButton.dataset.collectionPath).catch(error => toast(error.message, true));
 
+        const copyMediaButton = event.target.closest('[data-copy-media]');
+        if (copyMediaButton) {
+          navigator.clipboard.writeText(copyMediaButton.dataset.copyMedia).then(() => toast('Đã copy media URL.'));
+          return;
+        }
+
         const subscriberButton = event.target.closest('[data-subscriber-id]');
         if (subscriberButton) fillSubscriber(subscriberButton.dataset.subscriberId);
+
+        const rollbackButton = event.target.closest('[data-rollback-target]');
+        if (rollbackButton) {
+          rollbackAuditFile(rollbackButton.dataset.rollbackTarget, rollbackButton.dataset.rollbackCommit).catch(error => toast(error.message, true));
+          return;
+        }
 
         const reviewAction = event.target.closest('[data-review-action]');
         if (reviewAction) {

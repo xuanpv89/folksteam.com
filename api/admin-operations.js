@@ -5,6 +5,7 @@ import {
   REVIEW_QUEUE_TARGET_PATH,
   SUBSCRIBERS_TARGET_PATH,
   appendAuditEvent,
+  apiPath,
   deleteFile,
   listTree,
   loadJsonFile,
@@ -59,6 +60,20 @@ function isSafeMediaTarget(target) {
     MEDIA_EXTENSIONS.test(target) &&
     !target.includes('..') &&
     !target.includes('\\')
+  );
+}
+
+function isSafeRollbackTarget(target) {
+  return (
+    [
+      'src/data_files/',
+      'src/content/',
+      'src/pages/',
+      'public/admin/',
+    ].some(prefix => target.startsWith(prefix)) &&
+    !target.includes('..') &&
+    !target.includes('\\') &&
+    !MEDIA_EXTENSIONS.test(target)
   );
 }
 
@@ -371,6 +386,35 @@ async function handleAudit(request, response, admin, body) {
   if (request.method === 'GET') {
     const store = await loadJsonFile(admin.token, AUDIT_TARGET_PATH, { events: [] });
     return sendJson(response, 200, { ok: true, events: Array.isArray(store.content.events) ? store.content.events : [], updatedAt: store.content.updatedAt || null, sha: store.sha });
+  }
+
+  if (body.action === 'rollback-commit-file') {
+    const target = String(body.target || '').trim();
+    const commitSha = String(body.commitSha || '').trim();
+    if (!isSafeRollbackTarget(target) || !commitSha) {
+      return sendJson(response, 400, { ok: false, message: 'Rollback target or commit SHA is invalid.' });
+    }
+
+    const commit = await githubRequest(`/repos/${admin.repo}/commits/${encodeURIComponent(commitSha)}`, admin.token);
+    const parentSha = commit?.parents?.[0]?.sha;
+    if (!parentSha) return sendJson(response, 400, { ok: false, message: 'Commit has no parent to restore from.' });
+
+    const previousFile = await githubRequest(
+      `/repos/${admin.repo}/contents/${apiPath(target)}?ref=${encodeURIComponent(parentSha)}`,
+      admin.token
+    );
+    const currentFile = await readTextFile(admin.token, target);
+    const previousContent = Buffer.from(previousFile.content || '', 'base64').toString('utf8');
+    const result = await saveTextFile(admin.token, target, previousContent, currentFile.sha, `Rollback ${target} to before ${commitSha.slice(0, 7)}`);
+    await appendAuditEvent(admin.token, {
+      type: 'rollback',
+      actor: admin.session.username,
+      target,
+      note: `Restored from parent commit ${parentSha.slice(0, 7)}.`,
+      commitSha: result.commitSha,
+      commitUrl: result.commitUrl,
+    });
+    return sendJson(response, 200, { ok: true, result, restoredFrom: parentSha });
   }
 
   if (body.action === 'restore-file') {

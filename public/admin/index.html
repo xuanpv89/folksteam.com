@@ -268,6 +268,42 @@
         font-weight: 800;
       }
 
+      .global-search {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 24px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 16px;
+        box-shadow: 0 18px 45px rgb(38 38 38 / 8%);
+      }
+
+      .global-search input {
+        width: 100%;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        padding: 12px 14px;
+        font: inherit;
+      }
+
+      .search-results,
+      .notification-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .search-result,
+      .notification {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fafafa;
+        padding: 10px 12px;
+      }
+
+      .notification.warn { border-color: #fde68a; background: #fffbeb; }
+      .notification.urgent { border-color: #fecaca; background: #fff7f7; }
+
       @media (min-width: 820px) {
         .grid {
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -384,6 +420,15 @@
         </p>
       </section>
 
+      <section class="global-search" aria-label="Global admin search">
+        <div>
+          <p class="eyebrow">Global search</p>
+          <h2>Tìm nhanh trong toàn bộ admin</h2>
+        </div>
+        <input id="global-search" placeholder="Ví dụ: lead, review, SEO, ảnh, rollback, blog..." />
+        <div class="search-results" id="global-search-results"></div>
+      </section>
+
       <section class="dashboard" aria-label="Admin dashboard">
         <div class="dashboard-head">
           <div>
@@ -393,6 +438,7 @@
           <button type="button" class="button secondary" id="refresh-dashboard">Làm mới</button>
         </div>
         <div class="dashboard-status" id="dashboard-status">Đang tải số liệu admin...</div>
+        <div class="notification-list" id="notification-list"></div>
         <div class="metric-grid" id="dashboard-metrics"></div>
         <div class="attention-grid" id="dashboard-attention"></div>
       </section>
@@ -520,6 +566,23 @@
       const dashboardStatus = document.getElementById('dashboard-status');
       const dashboardMetrics = document.getElementById('dashboard-metrics');
       const dashboardAttention = document.getElementById('dashboard-attention');
+      const notificationList = document.getElementById('notification-list');
+      const globalSearch = document.getElementById('global-search');
+      const globalSearchResults = document.getElementById('global-search-results');
+
+      const adminSearchItems = [
+        { title: 'Lead Inbox', keywords: 'lead khách contact email sla tag priority duplicate', url: '/admin/leads.html' },
+        { title: 'Visual Content Editor', keywords: 'content cms sửa trang preview mobile autosave publish', url: '/admin/content.html' },
+        { title: 'Bulk Text Editor', keywords: 'text manager bulk search replace json copy', url: '/admin/text.html' },
+        { title: 'Blog Manager', keywords: 'blog draft review seo image alt calendar publish', url: '/admin/blog.html' },
+        { title: 'Control Center', keywords: 'operations health audit rollback subscribers media seo review', url: '/admin/operations.html' },
+        { title: 'SEO Center', keywords: 'seo title description alt draft blog issue', url: '/admin/operations.html#seo' },
+        { title: 'Review Queue', keywords: 'draft review approved publish duyệt', url: '/admin/operations.html#review' },
+        { title: 'Media Library', keywords: 'ảnh image upload copy url alt crop resize', url: '/admin/operations.html#media' },
+        { title: 'Audit & Rollback', keywords: 'audit log rollback commit snapshot restore', url: '/admin/operations.html#audit' },
+        { title: 'Console kỹ thuật', keywords: 'console deploy security upload config kỹ thuật', url: '/admin/console.html' },
+        { title: 'Hướng dẫn', keywords: 'guide quy trình role publisher editor admin', url: '/admin/guide.html' },
+      ];
 
       function escapeHtml(value) {
         return String(value || '')
@@ -562,6 +625,27 @@
         el.classList.toggle('ready', !warning);
       }
 
+      function renderGlobalSearch() {
+        const keyword = globalSearch.value.trim().toLowerCase();
+        const items = adminSearchItems.filter(item => !keyword || `${item.title} ${item.keywords}`.toLowerCase().includes(keyword)).slice(0, 7);
+        globalSearchResults.innerHTML = items
+          .map(item => `<a class="search-result" href="${escapeHtml(item.url)}"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.keywords)}</p></a>`)
+          .join('');
+      }
+
+      function renderNotifications(data = {}) {
+        const metrics = data.metrics || {};
+        const notifications = [
+          metrics.staleNewLeads ? { type: 'urgent', title: `${metrics.staleNewLeads} lead quá 24h`, url: '/admin/leads.html' } : null,
+          metrics.newLeads ? { type: 'warn', title: `${metrics.newLeads} lead mới cần xử lý`, url: '/admin/leads.html' } : null,
+          metrics.pendingReviews ? { type: 'warn', title: `${metrics.pendingReviews} mục đang chờ review`, url: '/admin/operations.html#review' } : null,
+          !metrics.pendingReviews && !metrics.newLeads ? { type: '', title: 'Không có cảnh báo vận hành lớn.', url: '/admin/operations.html' } : null,
+        ].filter(Boolean);
+        notificationList.innerHTML = notifications
+          .map(item => `<a class="notification ${item.type}" href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a>`)
+          .join('');
+      }
+
       async function loadDashboard() {
         dashboardStatus.textContent = 'Đang tải số liệu admin...';
         dashboardMetrics.innerHTML = '';
@@ -576,6 +660,7 @@
           }
           const metrics = data.metrics || {};
           dashboardStatus.textContent = `Repo ${data.repo || '-'} / ${data.branch || '-'} · cập nhật ${compactDate(data.updatedAt)}`;
+          renderNotifications(data);
           dashboardMetrics.innerHTML = [
             metricCard('Lead mới', metrics.newLeads || 0),
             metricCard('Đang xử lý', metrics.workingLeads || 0),
@@ -593,6 +678,7 @@
           ].join('');
         } catch (error) {
           dashboardStatus.textContent = error instanceof Error ? error.message : 'Không tải được dashboard.';
+          notificationList.innerHTML = '<div class="notification urgent">Không tải được notification center.</div>';
           dashboardMetrics.innerHTML = [
             metricCard('Lead mới', '-'),
             metricCard('Đang xử lý', '-'),
@@ -603,6 +689,8 @@
       }
 
       document.getElementById('refresh-dashboard').addEventListener('click', loadDashboard);
+      globalSearch.addEventListener('input', renderGlobalSearch);
+      renderGlobalSearch();
       loadDashboard();
     </script>
   </body>
