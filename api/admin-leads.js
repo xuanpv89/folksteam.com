@@ -3,6 +3,7 @@ import { appendAuditEvent } from './_admin-data.js';
 import { loadLeadStore, readJson, saveLeadStore, sendJson } from './_lead-store.js';
 
 const STATUSES = new Set(['new', 'contacted', 'working', 'done', 'ignored']);
+const PRIORITIES = new Set(['low', 'normal', 'high', 'urgent']);
 
 function leadLabel(lead) {
   return lead.name || lead.email || lead.id || 'lead';
@@ -68,6 +69,10 @@ export default async function handler(request, response) {
   const status = String(body.status || '').trim();
   const note = String(body.note || '').trim();
   const owner = String(body.owner || '').trim();
+  const priority = String(body.priority || '').trim();
+  const tags = (Array.isArray(body.tags) ? body.tags : String(body.tags || '').split(','))
+    .map(tag => String(tag || '').trim())
+    .filter(Boolean);
 
   if (!id) {
     return sendJson(response, 400, {
@@ -80,6 +85,13 @@ export default async function handler(request, response) {
     return sendJson(response, 400, {
       ok: false,
       message: 'Trạng thái lead không hợp lệ.',
+    });
+  }
+
+  if (priority && !PRIORITIES.has(priority)) {
+    return sendJson(response, 400, {
+      ok: false,
+      message: 'Mức ưu tiên lead không hợp lệ.',
     });
   }
 
@@ -101,6 +113,8 @@ export default async function handler(request, response) {
       ...current,
       status: status || current.status || 'new',
       owner: owner || current.owner || '',
+      priority: priority || current.priority || 'normal',
+      tags: tags.length ? [...new Set(tags)].slice(0, 8) : Array.isArray(current.tags) ? current.tags : [],
       updatedAt: now,
       notes: Array.isArray(current.notes) ? current.notes.slice() : [],
       events: Array.isArray(current.events) ? current.events.slice() : [],
@@ -117,6 +131,7 @@ export default async function handler(request, response) {
     next.events.unshift({
       type: 'admin-update',
       status: next.status,
+      priority: next.priority,
       note: note ? 'added' : '',
       createdAt: now,
     });
@@ -136,6 +151,7 @@ export default async function handler(request, response) {
         actor: requireAdminSession(request, adminSecret)?.username || 'admin',
         target: id,
         status: next.status,
+        priority: next.priority,
         commitSha: saved.commitSha,
         commitUrl: saved.commitUrl,
       });

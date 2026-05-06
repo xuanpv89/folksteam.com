@@ -15,6 +15,39 @@
   }
 
   var nativeFetch = window.fetch.bind(window);
+  var redirectingToLogin = false;
+
+  function loginUrl() {
+    var next = window.location.pathname + window.location.search + window.location.hash;
+    return '/admin/login.html?next=' + encodeURIComponent(next);
+  }
+
+  function showSessionExpired() {
+    if (redirectingToLogin || window.location.pathname.endsWith('/admin/login.html')) return;
+    redirectingToLogin = true;
+    var banner = document.createElement('div');
+    banner.setAttribute('role', 'alert');
+    banner.style.cssText = [
+      'position:fixed',
+      'left:16px',
+      'right:16px',
+      'top:16px',
+      'z-index:99999',
+      'border:1px solid #fecaca',
+      'border-radius:8px',
+      'background:#fef2f2',
+      'color:#991b1b',
+      'box-shadow:0 18px 55px rgb(38 38 38 / 18%)',
+      'padding:12px 14px',
+      'font:850 14px/1.45 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'
+    ].join(';');
+    banner.textContent = 'Phiên đăng nhập admin đã hết hạn. CMS đang chuyển bạn về trang đăng nhập...';
+    document.body.appendChild(banner);
+    window.setTimeout(function () {
+      window.location.assign(loginUrl());
+    }, 900);
+  }
+
   window.fetch = function (input, init) {
     var url = typeof input === 'string' ? input : input && input.url;
     var options = init ? Object.assign({}, init) : {};
@@ -31,7 +64,10 @@
       options.credentials = options.credentials || 'same-origin';
     }
 
-    return nativeFetch(input, options);
+    return nativeFetch(input, options).then(function (response) {
+      if (isAdminApi && response.status === 401) showSessionExpired();
+      return response;
+    });
   };
 
   function signOut() {
@@ -41,6 +77,11 @@
       window.location.assign('/admin/login.html');
     });
   }
+
+  window.FolksAdminSession = {
+    showSessionExpired: showSessionExpired,
+    loginUrl: loginUrl
+  };
 
   function addLogoutButtons() {
     document.querySelectorAll('[data-admin-logout]').forEach(function (button) {

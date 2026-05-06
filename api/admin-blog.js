@@ -1,4 +1,4 @@
-import { requireAdminSession } from './_admin-session.js';
+import { hasAdminRole, requireAdminSession } from './_admin-session.js';
 import { appendAuditEvent } from './_admin-data.js';
 
 const GITHUB_API = 'https://api.github.com';
@@ -126,7 +126,8 @@ export default async function handler(request, response) {
     });
   }
 
-  if (!requireAdminSession(request, adminSecret, { csrf: true })) {
+  const session = requireAdminSession(request, adminSecret, { csrf: true });
+  if (!session) {
     return sendJson(response, 401, {
       ok: false,
       message: 'Admin session is missing or expired. Please sign in again.',
@@ -134,6 +135,12 @@ export default async function handler(request, response) {
   }
 
   const action = body.action === 'draft' ? 'draft' : 'publish';
+  if (action === 'publish' && !hasAdminRole(session, ['publisher'])) {
+    return sendJson(response, 403, {
+      ok: false,
+      message: 'This account can save drafts, but publishing requires publisher or admin access.',
+    });
+  }
   const repo = targetRepo();
   const branch = targetBranch();
   const slug = slugify(body.slug);

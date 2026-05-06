@@ -31,12 +31,14 @@ function sign(value, secret) {
   return createHmac('sha256', secret).update(value).digest('base64url');
 }
 
-function createSession(secret, username) {
+function createSession(secret, user) {
   const maxAge = getSessionMaxAge();
   const csrf = randomBytes(32).toString('base64url');
+  const username = typeof user === 'string' ? user : user.username;
+  const role = typeof user === 'string' ? (username === 'admin' ? 'admin' : 'editor') : user.role || 'editor';
   const payload = JSON.stringify({
     username,
-    role: username === 'admin' ? 'admin' : 'editor',
+    role,
     csrf,
     exp: Math.floor(Date.now() / 1000) + maxAge,
   });
@@ -70,6 +72,7 @@ function getAdminUsers(adminSecret) {
           .map(user => ({
             username: String(user.username || '').trim(),
             password: String(user.password || ''),
+            role: String(user.role || (user.username === 'admin' ? 'admin' : 'editor')).trim(),
           }))
           .filter(user => user.username && user.password);
       }
@@ -82,6 +85,7 @@ function getAdminUsers(adminSecret) {
     {
       username: process.env.ADMIN_USER || 'admin',
       password: process.env.ADMIN_PASSWORD || adminSecret,
+      role: 'admin',
     },
   ];
 }
@@ -178,7 +182,7 @@ export default async function handler(request, response) {
   }
 
   clearFailedLogin(key);
-  const session = createSession(adminSecret, username);
+  const session = createSession(adminSecret, user);
   const sessionCookie = [
     `folks_admin_session=${session.token}`,
     'Path=/',

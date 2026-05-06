@@ -206,6 +206,33 @@
         color: #525252;
       }
 
+      .badge.priority-high,
+      .badge.priority-urgent {
+        background: #fef2f2;
+        color: #991b1b;
+      }
+
+      .badge.priority-normal {
+        background: #f5f5f5;
+        color: #525252;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .sla-warning {
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        background: #fff7f7;
+        color: #991b1b;
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 850;
+      }
+
       .detail-panel {
         position: sticky;
         top: 12px;
@@ -340,6 +367,7 @@
       <section class="surface toolbar">
         <div class="filters" aria-label="Bộ lọc lead">
           <button type="button" class="secondary active" data-filter="all">Tất cả</button>
+          <button type="button" class="secondary" data-filter="urgent">Cần xử lý</button>
           <button type="button" class="secondary" data-filter="new">Mới</button>
           <button type="button" class="secondary" data-filter="contacted">Đã liên hệ</button>
           <button type="button" class="secondary" data-filter="working">Đang xử lý</button>
@@ -371,6 +399,12 @@
         working: 'Đang xử lý',
         done: 'Đã xong',
         ignored: 'Bỏ qua',
+      };
+      const priorityLabels = {
+        low: 'Thấp',
+        normal: 'Bình thường',
+        high: 'Cao',
+        urgent: 'Khẩn cấp',
       };
 
       let leads = [];
@@ -412,11 +446,19 @@
         return `mailto:${encodeURIComponent(lead.email || '')}?subject=${subject}`;
       }
 
+      function isStaleLead(lead) {
+        if ((lead.status || 'new') !== 'new' || !lead.createdAt) return false;
+        return Date.now() - new Date(lead.createdAt).getTime() > 24 * 60 * 60 * 1000;
+      }
+
       function filteredLeads() {
         const keyword = searchInput.value.trim().toLowerCase();
         return leads.filter(lead => {
-          const statusMatch = activeFilter === 'all' || lead.status === activeFilter;
-          const text = [lead.name, lead.email, lead.phone, lead.message, lead.locale, lead.owner]
+          const statusMatch =
+            activeFilter === 'all' ||
+            lead.status === activeFilter ||
+            (activeFilter === 'urgent' && (lead.priority === 'urgent' || isStaleLead(lead)));
+          const text = [lead.name, lead.email, lead.phone, lead.message, lead.locale, lead.owner, lead.priority, ...(lead.tags || [])]
             .join(' ')
             .toLowerCase();
           return statusMatch && (!keyword || text.includes(keyword));
@@ -455,7 +497,11 @@
                     <strong>${escapeHtml(lead.name || 'Chưa có tên')}</strong>
                     <span class="lead-meta">${escapeHtml(lead.email || '-')} · ${formatDate(lead.createdAt)}</span>
                   </span>
-                  <span class="badge ${escapeHtml(lead.status || 'new')}">${escapeHtml(statusLabels[lead.status] || lead.status || 'Mới')}</span>
+                  <span class="tag-row">
+                    ${isStaleLead(lead) ? '<span class="badge priority-urgent">Quá 24h</span>' : ''}
+                    <span class="badge priority-${escapeHtml(lead.priority || 'normal')}">${escapeHtml(priorityLabels[lead.priority] || priorityLabels.normal)}</span>
+                    <span class="badge ${escapeHtml(lead.status || 'new')}">${escapeHtml(statusLabels[lead.status] || lead.status || 'Mới')}</span>
+                  </span>
                 </span>
                 <span class="lead-message">${escapeHtml(lead.message || '')}</span>
               </button>
@@ -486,6 +532,7 @@
         }
 
         const notes = Array.isArray(lead.notes) ? lead.notes : [];
+        const tags = Array.isArray(lead.tags) ? lead.tags : [];
         leadDetail.innerHTML = `
           <div class="detail-head">
             <div>
@@ -493,8 +540,14 @@
               <h2>${escapeHtml(lead.name || 'Chưa có tên')}</h2>
               <div class="lead-meta">${escapeHtml(lead.email || '-')} · ${formatDate(lead.createdAt)}</div>
             </div>
-            <span class="badge ${escapeHtml(lead.status || 'new')}">${escapeHtml(statusLabels[lead.status] || lead.status || 'Mới')}</span>
+            <span class="tag-row">
+              ${isStaleLead(lead) ? '<span class="badge priority-urgent">Quá 24h</span>' : ''}
+              <span class="badge priority-${escapeHtml(lead.priority || 'normal')}">${escapeHtml(priorityLabels[lead.priority] || priorityLabels.normal)}</span>
+              <span class="badge ${escapeHtml(lead.status || 'new')}">${escapeHtml(statusLabels[lead.status] || lead.status || 'Mới')}</span>
+            </span>
           </div>
+
+          ${isStaleLead(lead) ? '<div class="sla-warning">Lead này đã ở trạng thái Mới quá 24 giờ. Nên phản hồi hoặc gán người phụ trách ngay.</div>' : ''}
 
           <div class="button-row">
             <a class="button" href="${mailto(lead)}">Trả lời email</a>
@@ -507,6 +560,8 @@
             <div class="info-card"><span>Ngôn ngữ</span><strong>${escapeHtml((lead.locale || 'en').toUpperCase())}</strong></div>
             <div class="info-card"><span>Người phụ trách</span><strong>${escapeHtml(lead.owner || 'Chưa gán')}</strong></div>
             <div class="info-card"><span>Cập nhật</span><strong>${formatDate(lead.updatedAt)}</strong></div>
+            <div class="info-card"><span>Tag</span><strong>${tags.length ? tags.map(escapeHtml).join(', ') : '-'}</strong></div>
+            <div class="info-card"><span>Ưu tiên</span><strong>${escapeHtml(priorityLabels[lead.priority] || priorityLabels.normal)}</strong></div>
           </div>
 
           <div>
@@ -526,6 +581,18 @@
             <label class="field">
               <span>Người phụ trách</span>
               <input id="lead-owner" value="${escapeHtml(lead.owner || '')}" placeholder="Ví dụ: Xuân, Marketing..." />
+            </label>
+            <label class="field">
+              <span>Ưu tiên</span>
+              <select id="lead-priority">
+                ${Object.entries(priorityLabels)
+                  .map(([value, label]) => `<option value="${value}" ${(lead.priority || 'normal') === value ? 'selected' : ''}>${label}</option>`)
+                  .join('')}
+              </select>
+            </label>
+            <label class="field">
+              <span>Tag</span>
+              <input id="lead-tags" value="${escapeHtml(tags.join(', '))}" placeholder="Ví dụ: workshop, crm, urgent..." />
             </label>
             <label class="field full">
               <span>Ghi chú nội bộ mới</span>
@@ -577,6 +644,12 @@
       async function updateLead(id) {
         const status = document.getElementById('lead-status').value;
         const owner = document.getElementById('lead-owner').value;
+        const priority = document.getElementById('lead-priority').value;
+        const tags = document
+          .getElementById('lead-tags')
+          .value.split(',')
+          .map(tag => tag.trim())
+          .filter(Boolean);
         const note = document.getElementById('lead-note').value;
 
         try {
@@ -586,7 +659,7 @@
               Accept: 'application/json',
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id, status, owner, note }),
+            body: JSON.stringify({ id, status, owner, priority, tags, note }),
           });
           const result = await response.json();
           if (!response.ok || !result.ok) throw new Error(result.message || 'Không lưu được lead.');

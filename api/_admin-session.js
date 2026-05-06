@@ -67,3 +67,11 @@ export function requireAdminSession(request, secret, options = {}) {
 
   return session;
 }
+
+export function hasAdminRole(session, allowedRoles = []) {
+  const role = String(session?.role || 'editor');
+  const allowed = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
+  if (!allowed.length) return true;
+  if (role === 'admin') return true;
+  return allowed.includes(role);
+}

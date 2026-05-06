@@ -189,6 +189,85 @@
         background: var(--brand-soft);
       }
 
+      .dashboard {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 24px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 18px;
+        box-shadow: 0 18px 45px rgb(38 38 38 / 8%);
+      }
+
+      .dashboard-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .metric-grid,
+      .attention-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      @media (min-width: 760px) {
+        .metric-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .attention-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .metric-card,
+      .attention-card {
+        display: grid;
+        gap: 8px;
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fafafa;
+        padding: 14px;
+      }
+
+      .metric-card span,
+      .attention-card span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .metric-card strong {
+        font-size: 30px;
+        line-height: 1;
+      }
+
+      .attention-card.warn {
+        border-color: #fde68a;
+        background: #fffbeb;
+      }
+
+      .attention-card.urgent {
+        border-color: #fecaca;
+        background: #fff7f7;
+      }
+
+      .dashboard-status {
+        border: 1px solid #bde8cb;
+        border-radius: 8px;
+        background: var(--brand-soft);
+        padding: 12px;
+        color: #20472f;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
       @media (min-width: 820px) {
         .grid {
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -295,15 +374,27 @@
 
       <section class="hero">
         <div>
-          <p class="eyebrow">CMS navigation</p>
-          <h2>Chọn module cần quản lý</h2>
+          <p class="eyebrow">CMS dashboard</p>
+          <h2>Việc cần xử lý hôm nay</h2>
         </div>
         <p>
-          Trang này giữ vai trò cổng điều hướng cho CMS. Blog Manager và Content
-          CMS đã được tách riêng để sau này có thể thêm media library, landing
-          page builder, case study manager hoặc quản lý newsletter mà không làm
-          rối một màn hình.
+          Đây là màn hình chính cho admin hằng ngày: xem lead mới, review đang chờ,
+          tình trạng hệ thống và mở đúng công cụ cần dùng. Các trang kỹ thuật như
+          Console được giữ riêng để tránh làm rối workflow biên tập.
         </p>
+      </section>
+
+      <section class="dashboard" aria-label="Admin dashboard">
+        <div class="dashboard-head">
+          <div>
+            <p class="eyebrow">Live overview</p>
+            <h2>Trạng thái website</h2>
+          </div>
+          <button type="button" class="button secondary" id="refresh-dashboard">Làm mới</button>
+        </div>
+        <div class="dashboard-status" id="dashboard-status">Đang tải số liệu admin...</div>
+        <div class="metric-grid" id="dashboard-metrics"></div>
+        <div class="attention-grid" id="dashboard-attention"></div>
       </section>
 
       <section class="task-board" aria-label="Quick admin tasks">
@@ -323,13 +414,13 @@
           <strong>Upload ảnh</strong>
           <span>Đưa ảnh vào repo và lấy đường dẫn dùng cho bài/trang.</span>
         </a>
-        <a class="task-link" href="/admin/console.html#deployments">
+        <a class="task-link" href="/admin/operations.html#audit">
           <strong>Kiểm tra sau khi đăng</strong>
-          <span>Theo dõi deploy, checklist live và lịch sử thao tác.</span>
+          <span>Xem audit, health check và trạng thái vận hành sau publish.</span>
         </a>
         <a class="task-link primary" href="/admin/operations.html">
-          <strong>Quan ly van hanh</strong>
-          <span>Dashboard, health check, products/pages, media, subscribers va audit.</span>
+          <strong>Quản lý vận hành</strong>
+          <span>Dashboard, health check, products/pages, media, subscribers và audit.</span>
         </a>
       </section>
 
@@ -339,8 +430,8 @@
             <div class="icon">A</div>
             <h2>Admin Console</h2>
             <p>
-              Phiên bản mục tiêu cho workflow Draft, Preview, Review, Publish,
-              bảo mật, media, deploy, audit và rollback.
+              Khu vực kỹ thuật cho media upload, deploy checklist, bảo mật và công cụ
+              kiểm tra nâng cao.
             </p>
           </div>
           <span class="status ready">New</span>
@@ -351,8 +442,8 @@
             <div class="icon">O</div>
             <h2>Operations</h2>
             <p>
-              Bang dieu khien quan ly website nang cao: dashboard, cau hinh server,
-              collections, media library, newsletter subscribers, audit va SEO checklist.
+              Bảng điều khiển vận hành: dashboard, cấu hình server, collections,
+              media library, newsletter subscribers, audit và SEO checklist.
             </p>
           </div>
           <span class="status ready">New</span>
@@ -425,5 +516,83 @@
       </p>
     </main>
     <script src="/admin/admin-session.js"></script>
+    <script>
+      const dashboardStatus = document.getElementById('dashboard-status');
+      const dashboardMetrics = document.getElementById('dashboard-metrics');
+      const dashboardAttention = document.getElementById('dashboard-attention');
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#039;');
+      }
+
+      function compactDate(value) {
+        if (!value) return '-';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return String(value);
+        return date.toLocaleString('vi-VN', {
+          dateStyle: 'short',
+          timeStyle: 'short',
+        });
+      }
+
+      function metricCard(label, value) {
+        return `<article class="metric-card"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value ?? 0)}</strong></article>`;
+      }
+
+      function attentionCard(label, value, note, href, type = '') {
+        return `
+          <article class="attention-card ${type}">
+            <span>${escapeHtml(label)}</span>
+            <strong>${escapeHtml(value)}</strong>
+            <p>${escapeHtml(note)}</p>
+            <a class="button secondary" href="${escapeHtml(href)}">Mở</a>
+          </article>
+        `;
+      }
+
+      async function loadDashboard() {
+        dashboardStatus.textContent = 'Đang tải số liệu admin...';
+        dashboardMetrics.innerHTML = '';
+        dashboardAttention.innerHTML = '';
+        try {
+          const response = await fetch('/api/admin-operations?module=dashboard', {
+            credentials: 'same-origin',
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || data.ok === false) {
+            throw new Error(data.message || `Không tải được dashboard (${response.status}).`);
+          }
+          const metrics = data.metrics || {};
+          dashboardStatus.textContent = `Repo ${data.repo || '-'} / ${data.branch || '-'} · cập nhật ${compactDate(data.updatedAt)}`;
+          dashboardMetrics.innerHTML = [
+            metricCard('Lead mới', metrics.newLeads || 0),
+            metricCard('Đang xử lý', metrics.workingLeads || 0),
+            metricCard('Chờ review', metrics.pendingReviews || 0),
+            metricCard('Audit events', metrics.auditEvents || 0),
+          ].join('');
+          dashboardAttention.innerHTML = [
+            attentionCard('Lead cần phản hồi', metrics.newLeads || 0, metrics.staleNewLeads ? `${metrics.staleNewLeads} lead đã quá 24h.` : 'Không có lead quá hạn.', '/admin/leads.html', metrics.staleNewLeads ? 'urgent' : ''),
+            attentionCard('Review queue', metrics.pendingReviews || 0, data.latest?.reviewAt ? `Mới nhất: ${compactDate(data.latest.reviewAt)}` : 'Chưa có mục review.', '/admin/operations.html#review', metrics.pendingReviews ? 'warn' : ''),
+            attentionCard('Health check', data.contentCounts?.adminPages || 0, 'Kiểm tra cấu hình GitHub, Vercel, email và biến môi trường.', '/admin/operations.html#health'),
+          ].join('');
+        } catch (error) {
+          dashboardStatus.textContent = error instanceof Error ? error.message : 'Không tải được dashboard.';
+          dashboardMetrics.innerHTML = [
+            metricCard('Lead mới', '-'),
+            metricCard('Đang xử lý', '-'),
+            metricCard('Chờ review', '-'),
+            metricCard('Audit events', '-'),
+          ].join('');
+        }
+      }
+
+      document.getElementById('refresh-dashboard').addEventListener('click', loadDashboard);
+      loadDashboard();
+    </script>
   </body>
 </html>

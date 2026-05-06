@@ -1,4 +1,4 @@
-import { requireAdminSession } from './_admin-session.js';
+import { hasAdminRole, requireAdminSession } from './_admin-session.js';
 import {
   githubRequest,
   isSafeBranch,
@@ -33,6 +33,14 @@ export function requireAdmin(request, response, options = {}) {
     sendJson(response, 401, {
       ok: false,
       message: 'Admin session is missing or expired. Please sign in again.',
+    });
+    return null;
+  }
+
+  if (options.roles && !hasAdminRole(session, options.roles)) {
+    sendJson(response, 403, {
+      ok: false,
+      message: 'Tài khoản hiện tại không có quyền thực hiện thao tác này.',
     });
     return null;
   }

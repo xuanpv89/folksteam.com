@@ -441,7 +441,15 @@ export default async function handler(request, response) {
 
   if (module === 'health') return handleHealth(request, response);
 
-  const admin = requireAdmin(request, response);
+  const adminOnlyAction =
+    request.method === 'POST' &&
+    ((module === 'library' && body.action === 'delete') ||
+      (module === 'subscribers' && body.action === 'delete') ||
+      (module === 'review' && body.action === 'delete') ||
+      (module === 'audit' && body.action === 'restore-file'));
+  const admin = requireAdmin(request, response, {
+    roles: adminOnlyAction ? ['admin'] : ['editor', 'publisher', 'admin'],
+  });
   if (!admin) return;
 
   try {

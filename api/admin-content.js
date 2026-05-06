@@ -1,4 +1,4 @@
-import { requireAdminSession } from './_admin-session.js';
+import { hasAdminRole, requireAdminSession } from './_admin-session.js';
 import { appendAuditEvent } from './_admin-data.js';
 
 const GITHUB_API = 'https://api.github.com';
@@ -131,7 +131,8 @@ export default async function handler(request, response) {
     });
   }
 
-  if (!requireAdminSession(request, adminSecret, { csrf: request.method !== 'GET' })) {
+  const session = requireAdminSession(request, adminSecret, { csrf: request.method !== 'GET' });
+  if (!session) {
     return sendJson(response, 401, {
       ok: false,
       message: 'Phiên đăng nhập admin đã hết hạn. Hãy đăng nhập lại.',
@@ -177,6 +178,13 @@ export default async function handler(request, response) {
     return sendJson(response, 405, {
       ok: false,
       message: 'Phương thức không được hỗ trợ.',
+    });
+  }
+
+  if (!hasAdminRole(session, ['publisher'])) {
+    return sendJson(response, 403, {
+      ok: false,
+      message: 'Tài khoản hiện tại chỉ được sửa/lưu nháp. Cần quyền publisher hoặc admin để đăng lên website.',
     });
   }
 
