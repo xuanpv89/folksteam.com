@@ -526,6 +526,24 @@
         showToast('Đã lưu trên máy này.');
       }
 
+      function applySavedDraft(draft, latestSha) {
+        state = draft.content;
+        baseSha = latestSha || draft.baseSha || baseSha;
+
+        const isStaleDraft = draft.baseSha && latestSha && draft.baseSha !== latestSha;
+        if (isStaleDraft) {
+          localStorage.setItem(draftKey, JSON.stringify({ ...draft, baseSha }));
+          setSourceStatus(
+            'Đang dùng bản lưu trên máy này',
+            'CMS đã cập nhật mốc online mới nhất cho bản lưu. Hãy kiểm tra rồi đăng lại.',
+            'warning'
+          );
+          return;
+        }
+
+        setSourceStatus('Đang dùng bản lưu trên máy này', 'Bạn có thể đăng hoặc tải lại nội dung online.', 'warning');
+      }
+
       function isEditableTextNode(node) {
         const parent = node.parentElement;
         if (!parent) return false;
@@ -1175,9 +1193,7 @@
 
           const draft = getSavedDraft();
           if (draft?.content?.pages?.length) {
-            state = draft.content;
-            baseSha = draft.baseSha || baseSha;
-            setSourceStatus('Đang dùng bản lưu trên máy này', 'Bạn có thể đăng hoặc tải lại nội dung online.', 'warning');
+            applySavedDraft(draft, published.sha);
           } else {
             setSourceStatus('Đã tải nội dung online', 'Click vào chữ trong preview để sửa.');
           }

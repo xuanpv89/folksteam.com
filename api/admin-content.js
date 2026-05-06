@@ -193,6 +193,7 @@ export default async function handler(request, response) {
   const branch = targetBranch();
   const content = body.content;
   const baseSha = String(body.baseSha || '').trim();
+  const shouldBlockStalePublish = process.env.CMS_BLOCK_STALE_PUBLISH === 'true';
   const validationErrors = validateContent(content);
 
   if (!isSafeRepo(repo) || !isSafeBranch(branch)) {
@@ -238,7 +239,7 @@ export default async function handler(request, response) {
     });
   }
 
-  if (baseSha && sha && baseSha !== sha) {
+  if (shouldBlockStalePublish && baseSha && sha && baseSha !== sha) {
     return sendJson(response, 409, {
       ok: false,
       code: 'CONTENT_CHANGED',
