@@ -456,7 +456,7 @@
 
       async function loadDashboard() {
         $('#dashboard-metrics').innerHTML = '<p class="muted">Dang tai...</p>';
-        const data = await api('/api/admin-dashboard');
+        const data = await api('/api/admin-operations?module=dashboard');
         state.dashboard = data;
         renderMetrics(data.metrics);
         renderLeads(data.recentLeads);
@@ -482,7 +482,7 @@
 
       async function loadHealth() {
         $('#health-checks').innerHTML = '<p class="muted">Dang kiem tra...</p>';
-        const data = await api('/api/admin-health');
+        const data = await api('/api/admin-operations?module=health');
         state.health = data;
         renderHealth(data);
       }
@@ -505,13 +505,13 @@
       async function loadCollection() {
         state.selectedCollection = $('#collection-select').value;
         $('#collection-list').innerHTML = '<p class="muted">Dang tai...</p>';
-        const data = await api(`/api/admin-collections?collection=${encodeURIComponent(state.selectedCollection)}`);
+        const data = await api(`/api/admin-operations?module=collections&collection=${encodeURIComponent(state.selectedCollection)}`);
         state.collectionItems = data.items || [];
         renderCollectionList();
       }
 
       async function openCollectionFile(path) {
-        const data = await api(`/api/admin-collections?collection=${encodeURIComponent(state.selectedCollection)}&target=${encodeURIComponent(path)}`);
+        const data = await api(`/api/admin-operations?module=collections&collection=${encodeURIComponent(state.selectedCollection)}&target=${encodeURIComponent(path)}`);
         $('#collection-editor-title').textContent = data.summary?.title || path;
         $('#collection-target').value = data.target;
         $('#collection-content').value = data.content;
@@ -522,7 +522,7 @@
       async function saveCollectionFile() {
         const target = $('#collection-target').value.trim();
         const content = $('#collection-content').value;
-        const result = await api('/api/admin-collections', {
+        const result = await api('/api/admin-operations?module=collections', {
           method: 'POST',
           body: JSON.stringify({
             collection: state.selectedCollection,
@@ -552,7 +552,7 @@
 
       async function loadMedia() {
         $('#media-grid').innerHTML = '<p class="muted">Dang tai media...</p>';
-        const data = await api('/api/admin-library');
+        const data = await api('/api/admin-operations?module=library');
         state.mediaItems = data.items || [];
         renderMedia();
       }
@@ -575,7 +575,7 @@
 
       async function loadSubscribers() {
         $('#subscriber-list').innerHTML = '<p class="muted">Dang tai...</p>';
-        const data = await api('/api/admin-subscribers');
+        const data = await api('/api/admin-operations?module=subscribers');
         state.subscribers = data.subscribers || [];
         renderSubscribers();
       }
@@ -594,7 +594,7 @@
 
       async function saveSubscriber(event) {
         event.preventDefault();
-        await api('/api/admin-subscribers', {
+        await api('/api/admin-operations?module=subscribers', {
           method: 'POST',
           body: JSON.stringify({
             id: $('#subscriber-id').value,
@@ -630,7 +630,7 @@
 
       async function loadAudit() {
         $('#audit-list').innerHTML = '<p class="muted">Dang tai audit...</p>';
-        const data = await api('/api/admin-audit');
+        const data = await api('/api/admin-operations?module=audit');
         state.audit = data.events || [];
         renderEvents(state.audit, '#audit-list');
       }
@@ -652,7 +652,7 @@
 
       async function loadReview() {
         $('#review-list').innerHTML = '<p class="muted">Dang tai review queue...</p>';
-        const data = await api('/api/admin-review');
+        const data = await api('/api/admin-operations?module=review');
         state.review = data.items || [];
         renderReview();
       }
@@ -671,7 +671,7 @@
 
       async function saveReview(event) {
         event.preventDefault();
-        await api('/api/admin-review', {
+        await api('/api/admin-operations?module=review', {
           method: 'POST',
           body: JSON.stringify({
             id: $('#review-id').value,
@@ -691,7 +691,7 @@
 
       async function saveAuditNote(event) {
         event.preventDefault();
-        await api('/api/admin-audit', {
+        await api('/api/admin-operations?module=audit', {
           method: 'POST',
           body: JSON.stringify({
             type: 'manual-note',
