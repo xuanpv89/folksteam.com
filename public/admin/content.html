@@ -39,13 +39,13 @@
         justify-content: space-between;
         gap: 14px;
         margin-bottom: 16px;
-        padding: 14px;
+        padding: 12px 14px;
       }
       .brand { display: flex; align-items: center; gap: 12px; }
-      .brand img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; }
+      .brand img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
       .eyebrow { margin: 0; color: var(--brand-dark); font-size: 12px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
       h1, h2, h3, p { margin-top: 0; }
-      h1 { margin-bottom: 0; font-size: clamp(28px, 4vw, 42px); line-height: 1; }
+      h1 { margin-bottom: 0; font-size: clamp(26px, 3vw, 36px); line-height: 1; }
       h2 { margin-bottom: 10px; font-size: 22px; }
 
       .nav, .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -99,6 +99,20 @@
         font-weight: 800;
       }
       .page-summary span { border: 1px solid var(--line); border-radius: 999px; background: #fff; padding: 5px 8px; }
+      .search-row { position: relative; display: grid; gap: 6px; }
+      .search-row input { padding-right: 44px; }
+      .search-clear {
+        display: none;
+        position: absolute;
+        right: 8px;
+        bottom: 24px;
+        min-height: 28px;
+        width: 28px;
+        padding: 0 !important;
+        border-radius: 999px;
+        line-height: 1;
+      }
+      .search-meta { min-height: 18px; color: var(--muted); font-size: 12px; font-weight: 800; }
       .page-group {
         display: grid;
         gap: 8px;
@@ -184,6 +198,11 @@
       }
       .hint { color: var(--muted); font-size: 13px; line-height: 1.55; }
       .field-meta { display: grid; gap: 6px; margin: 10px 0 14px; color: var(--muted); font-size: 13px; }
+      .change-pill { display: inline-flex; width: fit-content; border-radius: 999px; background: #f5f5f5; color: var(--muted); padding: 5px 9px; font-size: 12px; font-weight: 900; }
+      .change-pill.changed { background: #fffbeb; color: #854d0e; }
+      .field-diff { display: grid; gap: 6px; margin-top: 10px; }
+      .field-diff.empty { display: none; }
+      .field-diff code { display: block; white-space: pre-wrap; word-break: break-word; border-radius: 6px; padding: 8px; font-family: inherit; font-size: 12px; line-height: 1.45; }
       .mini-preview {
         display: block;
         max-width: 100%;
@@ -256,6 +275,8 @@
       .page-filter { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
       .page-filter button { min-height: 32px; padding: 6px 10px !important; font-size: 12px !important; }
       .page-filter button.active { border-color: #bde8cb !important; background: var(--brand-soft) !important; color: #20472f !important; }
+      .filter-panel { margin-top: 12px; }
+      .filter-panel summary { color: var(--brand-dark); font-size: 13px; }
       .diff-list { display: grid; gap: 8px; max-height: 320px; overflow: auto; }
       .diff-item { border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 10px; }
       .diff-item strong { display: block; margin-bottom: 6px; font-size: 13px; }
@@ -302,12 +323,17 @@
             <strong>Đang tải nội dung...</strong>
             <small>Editor đang chuẩn bị danh sách trang.</small>
           </div>
-          <label>
+          <label class="search-row">
             Tìm trang
             <input id="page-search" placeholder="Home, About, Services..." />
+            <button type="button" class="secondary search-clear" id="page-search-clear" aria-label="Xóa tìm kiếm">x</button>
+            <span class="search-meta" id="page-search-meta"></span>
           </label>
           <div id="page-summary" class="page-summary"></div>
-          <div id="page-filter" class="page-filter" aria-label="Page filters"></div>
+          <details class="filter-panel">
+            <summary>Bộ lọc trang</summary>
+            <div id="page-filter" class="page-filter" aria-label="Page filters"></div>
+          </details>
           <div class="list" id="page-list" style="margin-top:12px"></div>
           <details class="tools">
             <summary>Công cụ nâng cao</summary>
@@ -341,10 +367,10 @@
           <div class="actions sticky-actions" style="margin-top:14px">
             <button type="button" class="secondary" id="undo-field" disabled>Hoàn tác mục này</button>
             <button type="button" class="secondary" id="undo-page">Hoàn tác trang</button>
-            <button type="button" class="secondary" id="save-field" disabled>Cập nhật preview</button>
+            <button type="button" class="secondary" id="save-field" disabled>Lưu nháp</button>
             <button type="button" id="publish-github">Đăng lên website</button>
           </div>
-          <div id="publish-status" class="publish-log">Sẵn sàng đăng khi bạn hoàn tất kiểm tra.</div>
+          <div id="publish-status" class="publish-log">Chưa có thay đổi nào để đăng.</div>
           <div id="toast" class="toast">Done.</div>
         </aside>
       </section>
@@ -405,11 +431,14 @@
       const collapsedGroups = new Set();
       let pageGroupsInitialized = false;
       let hasUnsavedChanges = false;
+      let isPublishing = false;
 
       const pageList = document.getElementById('page-list');
       const pageSummary = document.getElementById('page-summary');
       const pageFilter = document.getElementById('page-filter');
       const pageSearch = document.getElementById('page-search');
+      const pageSearchClear = document.getElementById('page-search-clear');
+      const pageSearchMeta = document.getElementById('page-search-meta');
       const pageFrame = document.getElementById('page-frame');
       const previewTitle = document.getElementById('preview-title');
       const sourceStatus = document.getElementById('source-status');
@@ -423,6 +452,7 @@
       const saveFieldButton = document.getElementById('save-field');
       const undoFieldButton = document.getElementById('undo-field');
       const undoPageButton = document.getElementById('undo-page');
+      const publishButton = document.getElementById('publish-github');
       const toast = document.getElementById('toast');
       const publishDialog = document.getElementById('publish-dialog');
       const publishDialogIntro = document.getElementById('publish-dialog-intro');
@@ -519,6 +549,27 @@
         return new Set(changes.map(change => change.pagePath)).size;
       }
 
+      function hasContentChanges() {
+        return collectChanges(1).length > 0;
+      }
+
+      function fieldHasChanges(field) {
+        if (!field) return false;
+        const original = originalValueForField(currentPage(), selectedField?.section, field);
+        return original !== undefined && String(original) !== String(field.value ?? '');
+      }
+
+      function currentPageHasChanges() {
+        const page = currentPage();
+        if (!page) return false;
+        return collectChanges(10000).some(change => change.pagePath === page.path);
+      }
+
+      function hideDeployBanner() {
+        deployBanner.className = 'deploy-banner';
+        deployBannerLink.style.display = 'none';
+      }
+
       function showDeployBanner(message, type = 'info', link = null) {
         deployBanner.className = `deploy-banner show ${type === 'warning' ? 'warning' : type === 'error' ? 'error' : ''}`;
         deployBannerText.textContent = message;
@@ -537,7 +588,10 @@
           <div>${escapeHtml(message)}</div>
           ${links.filter(link => link.url).map(link => `<div><a href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">${escapeHtml(link.label)}</a></div>`).join('')}
         `;
-        showDeployBanner(message, type, links.find(link => link.url));
+        const primaryLink = links.find(link => link.url);
+        if (type === 'info' && !primaryLink) hideDeployBanner();
+        else showDeployBanner(message, type, primaryLink);
+        updateActionStates();
       }
 
       function deployStatusLinks(result, deployment) {
@@ -634,7 +688,6 @@
 
       function saveDraft() {
         localStorage.setItem(draftKey, JSON.stringify({ content: state, baseSha, savedAt: new Date().toISOString() }));
-        hasUnsavedChanges = false;
         showToast('Đã lưu trên máy này.');
       }
 
@@ -915,6 +968,11 @@
           .filter(({ page }) => query || pageFilterMode === 'all' || pageLanguage(page) === pageFilterMode || pageGroupLabel(page) === pageFilterMode)
           .filter(({ page }) => !query || normalizeSearch(`${page.title} ${page.path} ${languageLabel(pageLanguage(page))} ${pageGroupLabel(page)}`).includes(query)));
 
+        pageSearchClear.style.display = query ? 'inline-flex' : 'none';
+        pageSearchMeta.textContent = query
+          ? `Tìm thấy ${visiblePages.length}/${allPages.length} trang`
+          : '';
+
         const languageCounts = allPages.reduce((counts, page) => {
           const language = pageLanguage(page);
           counts[language] = (counts[language] || 0) + 1;
@@ -972,6 +1030,7 @@
             selectedField = null;
             renderPages();
             loadCurrentPage();
+            updateActionStates();
           });
             groupElement.appendChild(button);
           });
@@ -1203,6 +1262,7 @@
         pageFrame.src = `${page.path}?cms_preview=${Date.now()}`;
         pageFrame.onload = injectPreviewEditor;
         renderFieldEditor();
+        updateActionStates();
       }
 
       function renderFieldEditor() {
@@ -1211,8 +1271,7 @@
           editorHint.textContent = 'Những vùng có thể sửa sẽ được viền xanh trong preview.';
           fieldEditor.className = 'empty';
           fieldEditor.innerHTML = 'Chưa chọn nội dung.';
-          saveFieldButton.disabled = true;
-          undoFieldButton.disabled = true;
+          updateActionStates();
           return;
         }
 
@@ -1229,13 +1288,25 @@
           field.elementType === 'image' && field.value
             ? `<img class="mini-preview" src="${escapeHtml(field.value)}" alt="" />`
             : '';
+        const original = originalValueForField(currentPage(), selectedField.section, field);
+        const changed = fieldHasChanges(field);
+        const changeState = original === undefined
+          ? '<span class="change-pill" id="field-change-state">Không có bản gốc để so sánh</span>'
+          : `<span class="change-pill ${changed ? 'changed' : ''}" id="field-change-state">${changed ? 'Đã thay đổi' : 'Chưa thay đổi'}</span>`;
+        const diff = `
+            <div class="field-diff ${changed ? '' : 'empty'}" id="field-diff">
+              <code class="diff-before">Trước: ${escapeHtml(original || '(trống)')}</code>
+              <code class="diff-after">Sau: ${escapeHtml(field.value || '(trống)')}</code>
+            </div>`;
         fieldEditor.innerHTML = `
           <span class="type-pill">${escapeHtml(fieldTypeLabel(field))}</span>
+          ${changeState}
           <label>
             Nội dung
             ${control}
           </label>
           ${preview}
+          ${diff}
           <div class="field-meta">
             <span>Mục: ${escapeHtml(selectedField.section?.title || 'Nội dung trang')}</span>
           </div>
@@ -1253,9 +1324,32 @@
           }
           hasUnsavedChanges = true;
           updateChangeStatus();
+          renderInlineFieldChangeState();
+          updateActionStates();
         });
-        saveFieldButton.disabled = false;
-        undoFieldButton.disabled = originalValueForField(currentPage(), selectedField.section, field) === undefined;
+        updateActionStates();
+      }
+
+      function renderInlineFieldChangeState() {
+        const field = selectedField?.field;
+        const pill = document.getElementById('field-change-state');
+        const diff = document.getElementById('field-diff');
+        if (!field || !pill || !diff) return;
+        const original = originalValueForField(currentPage(), selectedField.section, field);
+        if (original === undefined) {
+          pill.className = 'change-pill';
+          pill.textContent = 'Không có bản gốc để so sánh';
+          diff.classList.add('empty');
+          return;
+        }
+        const changed = fieldHasChanges(field);
+        pill.className = `change-pill ${changed ? 'changed' : ''}`;
+        pill.textContent = changed ? 'Đã thay đổi' : 'Chưa thay đổi';
+        diff.classList.toggle('empty', !changed);
+        diff.innerHTML = `
+          <code class="diff-before">Trước: ${escapeHtml(original || '(trống)')}</code>
+          <code class="diff-after">Sau: ${escapeHtml(field.value || '(trống)')}</code>
+        `;
       }
 
       function originalValueForField(page, section, field) {
@@ -1267,9 +1361,17 @@
         return allFields(serverPage).find(candidate => normalizeText(candidate.field.match || candidate.field.original || '') === normalizeText(field?.match || field?.original || ''))?.field?.value;
       }
 
+      function updateActionStates() {
+        const field = selectedField?.field;
+        saveFieldButton.disabled = !field;
+        undoFieldButton.disabled = !field || !fieldHasChanges(field);
+        undoPageButton.disabled = !currentPageHasChanges();
+        publishButton.disabled = isPublishing || !baseSha || !hasContentChanges();
+      }
+
       function updateChangeStatus() {
         const count = collectChanges().length;
-        updatePublishStatus(count ? `${count} mục đã thay đổi. Hãy xem lại trước khi đăng.` : 'Sẵn sàng đăng khi bạn hoàn tất kiểm tra.', [], count ? 'warning' : 'info');
+        updatePublishStatus(count ? `${count} mục đã thay đổi. Hãy xem lại trước khi đăng.` : 'Chưa có thay đổi nào để đăng.', [], count ? 'warning' : 'info');
       }
 
       function undoSelectedField() {
@@ -1384,10 +1486,16 @@
           return;
         }
         const summary = buildPublishSummary();
+        if (!summary.changes.length) {
+          updatePublishStatus('Chưa có thay đổi nào để đăng.', [], 'info');
+          showToast('Chưa có thay đổi nào để đăng.');
+          return;
+        }
         if (!(await showPublishDialog(summary))) return;
 
-        const button = document.getElementById('publish-github');
-        button.disabled = true;
+        const button = publishButton;
+        isPublishing = true;
+        updateActionStates();
         button.textContent = 'Đang đăng...';
         updatePublishStatus('Đang gửi nội dung mới. Vui lòng giữ trang này mở để CMS kiểm tra website live...');
 
@@ -1430,8 +1538,9 @@
           updatePublishStatus(`Chưa đăng được nội dung: ${error.message}`, [], 'error');
           showToast(error.message, 'error');
         } finally {
-          button.disabled = false;
+          isPublishing = false;
           button.textContent = 'Đăng lên website';
+          updateActionStates();
         }
       }
 
@@ -1447,7 +1556,7 @@
           if (draft?.content?.pages?.length) {
             applySavedDraft(draft, published.sha);
           } else {
-            setSourceStatus('Đã tải nội dung online', 'Click vào chữ trong preview để sửa.');
+            setSourceStatus('Đã tải nội dung CMS', 'Click vào chữ trong preview để sửa.');
           }
 
           if (
@@ -1460,6 +1569,7 @@
 
           renderPages();
           loadCurrentPage();
+          updateChangeStatus();
         } catch (error) {
           setSourceStatus('Không tải được nội dung', error.message, 'error');
           showToast(error.message, 'error');
@@ -1467,6 +1577,11 @@
       }
 
       pageSearch.addEventListener('input', renderPages);
+      pageSearchClear.addEventListener('click', () => {
+        pageSearch.value = '';
+        pageSearch.focus();
+        renderPages();
+      });
       document.getElementById('scan-site').addEventListener('click', scanSite);
       document.getElementById('reload-live').addEventListener('click', () => {
         if (hasUnsavedChanges && !window.confirm('Bạn có thay đổi chưa đăng. Tải lại sẽ bỏ các thay đổi trên màn hình.')) return;
@@ -1483,7 +1598,7 @@
       undoPageButton.addEventListener('click', undoCurrentPage);
       document.getElementById('save-field').addEventListener('click', () => {
         saveDraft();
-        showToast('Đã cập nhật preview.');
+        showToast('Đã lưu bản nháp trên máy này.');
       });
       document.getElementById('publish-github').addEventListener('click', publishContent);
       document.getElementById('open-page').addEventListener('click', () => {
