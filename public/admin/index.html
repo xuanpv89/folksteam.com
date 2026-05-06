@@ -258,6 +258,45 @@
         background: #fff7f7;
       }
 
+      .todo-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .todo-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 12px 14px;
+      }
+
+      .todo-item strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .todo-item p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .todo-item.urgent {
+        border-color: #fecaca;
+        background: #fff7f7;
+      }
+
+      .todo-item.warn {
+        border-color: #fde68a;
+        background: #fffbeb;
+      }
+
       .dashboard-status {
         border: 1px solid #bde8cb;
         border-radius: 8px;
@@ -441,6 +480,7 @@
         <div class="notification-list" id="notification-list"></div>
         <div class="metric-grid" id="dashboard-metrics"></div>
         <div class="attention-grid" id="dashboard-attention"></div>
+        <div class="todo-list" id="daily-todos"></div>
       </section>
 
       <section class="task-board" aria-label="Quick admin tasks">
@@ -567,6 +607,7 @@
       const dashboardMetrics = document.getElementById('dashboard-metrics');
       const dashboardAttention = document.getElementById('dashboard-attention');
       const notificationList = document.getElementById('notification-list');
+      const dailyTodos = document.getElementById('daily-todos');
       const globalSearch = document.getElementById('global-search');
       const globalSearchResults = document.getElementById('global-search-results');
 
@@ -618,6 +659,18 @@
         `;
       }
 
+      function todoItem(title, note, href, type = '') {
+        return `
+          <article class="todo-item ${type}">
+            <div>
+              <strong>${escapeHtml(title)}</strong>
+              <p>${escapeHtml(note)}</p>
+            </div>
+            <a class="button secondary" href="${escapeHtml(href)}">Mở</a>
+          </article>
+        `;
+      }
+
       function updateModuleStatus(name, text, warning = false) {
         const el = document.querySelector(`[data-module-status="${name}"]`);
         if (!el) return;
@@ -646,10 +699,48 @@
           .join('');
       }
 
+      function renderDailyTodos(data = {}) {
+        const metrics = data.metrics || {};
+        const todos = [
+          metrics.staleNewLeads
+            ? {
+                type: 'urgent',
+                title: `Phản hồi ${metrics.staleNewLeads} lead quá 24h`,
+                note: 'Ưu tiên lead quá hạn trước khi sửa nội dung hoặc đăng bài mới.',
+                url: '/admin/leads.html',
+              }
+            : null,
+          metrics.newLeads
+            ? {
+                type: 'warn',
+                title: `Phân loại ${metrics.newLeads} lead mới`,
+                note: 'Gắn trạng thái, owner hoặc ghi chú để inbox không bị trôi.',
+                url: '/admin/leads.html',
+              }
+            : null,
+          metrics.pendingReviews
+            ? {
+                type: 'warn',
+                title: `Duyệt ${metrics.pendingReviews} mục trong review queue`,
+                note: data.latest?.reviewAt ? `Review mới nhất: ${compactDate(data.latest.reviewAt)}.` : 'Có draft hoặc thay đổi đang chờ duyệt.',
+                url: '/admin/operations.html#review',
+              }
+            : null,
+          {
+            title: 'Kiểm tra health và audit sau lần publish gần nhất',
+            note: data.latest?.auditAt ? `Audit mới nhất: ${compactDate(data.latest.auditAt)}.` : 'Mở Control Center để kiểm tra cấu hình và log vận hành.',
+            url: '/admin/operations.html#health',
+          },
+        ].filter(Boolean);
+
+        dailyTodos.innerHTML = todos.map(item => todoItem(item.title, item.note, item.url, item.type)).join('');
+      }
+
       async function loadDashboard() {
         dashboardStatus.textContent = 'Đang tải số liệu admin...';
         dashboardMetrics.innerHTML = '';
         dashboardAttention.innerHTML = '';
+        dailyTodos.innerHTML = '';
         try {
           const response = await fetch('/api/admin-operations?module=dashboard', {
             credentials: 'same-origin',
@@ -661,6 +752,7 @@
           const metrics = data.metrics || {};
           dashboardStatus.textContent = `Repo ${data.repo || '-'} / ${data.branch || '-'} · cập nhật ${compactDate(data.updatedAt)}`;
           renderNotifications(data);
+          renderDailyTodos(data);
           dashboardMetrics.innerHTML = [
             metricCard('Lead mới', metrics.newLeads || 0),
             metricCard('Đang xử lý', metrics.workingLeads || 0),
@@ -679,6 +771,7 @@
         } catch (error) {
           dashboardStatus.textContent = error instanceof Error ? error.message : 'Không tải được dashboard.';
           notificationList.innerHTML = '<div class="notification urgent">Không tải được notification center.</div>';
+          dailyTodos.innerHTML = todoItem('Mở Control Center để kiểm tra API dashboard', 'Dashboard chưa tải được số liệu. Kiểm tra session, GitHub token hoặc dữ liệu vận hành.', '/admin/operations.html#health', 'urgent');
           dashboardMetrics.innerHTML = [
             metricCard('Lead mới', '-'),
             metricCard('Đang xử lý', '-'),
