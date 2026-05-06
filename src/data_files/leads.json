@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-05-06T11:48:54.535Z",
+  "updatedAt": "2026-05-06T11:48:58.539Z",
   "leads": [
     {
       "id": "lead-1778068075262-c3o7a1",
       "createdAt": "2026-05-06T11:47:55.260Z",
-      "updatedAt": "2026-05-06T11:48:54.535Z",
+      "updatedAt": "2026-05-06T11:48:58.539Z",
       "status": "done",
       "priority": "normal",
       "source": "contact-form",
@@ -25,6 +25,12 @@
         }
       ],
       "events": [
+        {
+          "type": "admin-update",
+          "status": "done",
+          "note": "",
+          "createdAt": "2026-05-06T11:48:58.539Z"
+        },
         {
           "type": "admin-update",
           "status": "done",
