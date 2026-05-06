@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T20:38:23.768Z",
+  "updatedAt": "2026-05-06T03:17:02.198Z",
   "pages": [
     {
       "id": "home",
@@ -74,7 +74,7 @@
               "key": "text-4",
               "label": "A Modern Growth System Built on",
               "type": "text",
-              "value": "test A Modern Growth System Built on",
+              "value": "A Modern Growth System Built on",
               "match": "A Modern Growth System Built on",
               "elementType": "text"
             },
@@ -90,7 +90,7 @@
               "key": "text-6",
               "label": "A strategic framework for building marketing, communit...",
               "type": "textarea",
-              "value": "A strategic framework for building marketing, community, and scalable growth systems. Folks Team is a complete, customizable, and execution-ready system designed for startups, operators, and modern businesses looking to grow with clarity and structure.",
+              "value": "Folks A strategic framework for building marketing, community, and scalable growth systems. Folks Team is a complete, customizable, and execution-ready system designed for startups, operators, and modern businesses looking to grow with clarity and structure.",
               "match": "A strategic framework for building marketing, community, and scalable growth systems. Folks Team is a complete, customizable, and execution-ready system designed for startups, operators, and modern businesses looking to grow with clarity and structure.",
               "elementType": "text"
             },
@@ -98,7 +98,7 @@
               "key": "text-7",
               "label": "Get Started",
               "type": "text",
-              "value": "Get Started!",
+              "value": "Get Started",
               "match": "Get Started",
               "elementType": "text"
             },
