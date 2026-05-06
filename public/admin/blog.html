@@ -1928,7 +1928,7 @@ ${bodyMarkdown || contents.join('\n\n')}
       async function waitForDeployStatus(response, branch, publicUrl) {
         if (!response.commitSha) return;
 
-        updatePublishStatus('Đã lưu bài. CMS đang kiểm tra website cập nhật xong chưa...', deployStatusLinks(response, publicUrl));
+        updatePublishStatus('Đang deploy. CMS đang kiểm tra website cập nhật xong chưa...', deployStatusLinks(response, publicUrl));
 
         for (let attempt = 0; attempt < 30; attempt += 1) {
           await new Promise(resolve => setTimeout(resolve, attempt < 3 ? 3000 : 6000));
@@ -1943,7 +1943,10 @@ ${bodyMarkdown || contents.join('\n\n')}
           }
 
           response.deployment = status.deployment;
-          updatePublishStatus(status.message || `Trạng thái cập nhật website: ${status.status}`, deployStatusLinks(response, publicUrl));
+          const statusMessage = status.status === 'READY'
+            ? 'Đã live. Website đã deploy xong, hãy mở bài viết để kiểm tra lại.'
+            : status.message || `Trạng thái cập nhật website: ${status.status}`;
+          updatePublishStatus(statusMessage, deployStatusLinks(response, publicUrl));
 
           if (['READY', 'ERROR', 'CANCELED', 'unconfigured'].includes(status.status)) {
             return status;

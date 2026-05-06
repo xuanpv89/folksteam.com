@@ -467,6 +467,7 @@
       function setDirty(value) {
         hasUnsavedChanges = value;
         dirtyStatus.textContent = value ? 'Có thay đổi chưa đăng' : 'Chưa có thay đổi mới';
+        updatePublishButtonState();
       }
 
       function getSectionLabel(section) {
@@ -629,6 +630,17 @@
         `;
       }
 
+      function contentHasChanges() {
+        if (!serverContent) return hasUnsavedChanges;
+        return JSON.stringify(state.pages || []) !== JSON.stringify(serverContent.pages || []);
+      }
+
+      function updatePublishButtonState() {
+        const button = document.getElementById('publish-github');
+        if (!button) return;
+        button.disabled = !baseSha || !contentHasChanges();
+      }
+
       function deployStatusLinks(result, deployment) {
         return [
           { label: 'Xem lần cập nhật', url: result.commitUrl },
@@ -657,9 +669,9 @@
         if (!result.updatedAt) return false;
         for (let attempt = 0; attempt < 60; attempt += 1) {
           await new Promise(resolve => setTimeout(resolve, attempt === 0 ? 2000 : 5000));
-          updatePublishStatus(`Đã lưu nội dung. Đang xác nhận website live... (${attempt + 1}/60)`, links);
+          updatePublishStatus(`Đang deploy. CMS đang xác nhận website live... (${attempt + 1}/60)`, links);
           if (await verifyLiveContent(result.updatedAt)) {
-            updatePublishStatus('Website live đã nhận đúng nội dung mới.', links);
+            updatePublishStatus('Đã live. Website đã nhận đúng nội dung mới.', links);
             return true;
           }
         }
@@ -671,7 +683,7 @@
         const links = deployStatusLinks(result);
         if (!result.commitSha) return waitForLiveContent(result, links);
 
-        updatePublishStatus('Đã lưu nội dung. CMS đang kiểm tra trạng thái deploy thật...', links);
+        updatePublishStatus('Đang deploy. CMS đang kiểm tra trạng thái deploy thật...', links);
 
         for (let attempt = 0; attempt < 30; attempt += 1) {
           await new Promise(resolve => setTimeout(resolve, attempt < 3 ? 3000 : 6000));
@@ -1051,6 +1063,7 @@
         syncInputs();
         renderFields();
         updatePreview();
+        updatePublishButtonState();
       }
 
       function saveCurrentFromInputs() {
@@ -1178,7 +1191,7 @@
         const button = document.getElementById('publish-github');
         button.disabled = true;
         button.textContent = 'Đang đăng...';
-        updatePublishStatus('Đang đăng nội dung lên website...');
+        updatePublishStatus('Đang lưu nội dung lên GitHub...');
 
         try {
           const nextContent = {
@@ -1206,6 +1219,7 @@
         } finally {
           button.disabled = false;
           button.textContent = 'Đăng nội dung';
+          updatePublishButtonState();
         }
       }
 
