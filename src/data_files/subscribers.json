@@ -1,4 +1,16 @@
 {
-  "updatedAt": null,
-  "subscribers": []
+  "updatedAt": "2026-05-06T13:00:14.699Z",
+  "subscribers": [
+    {
+      "id": "sub-1778072414700",
+      "email": "xuanpv89@gmail.com",
+      "status": "active",
+      "source": "newsletter-section",
+      "locale": "en",
+      "tags": [],
+      "note": "",
+      "createdAt": "2026-05-06T13:00:14.699Z",
+      "updatedAt": "2026-05-06T13:00:14.699Z"
+    }
+  ]
 }
