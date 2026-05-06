@@ -372,6 +372,8 @@
           <button type="button" class="secondary" data-filter="contacted">Đã liên hệ</button>
           <button type="button" class="secondary" data-filter="working">Đang xử lý</button>
           <button type="button" class="secondary" data-filter="done">Đã xong</button>
+          <button type="button" class="secondary" data-filter="duplicate">Trùng lặp</button>
+          <button type="button" class="secondary" id="export-leads">Export CSV</button>
         </div>
         <label class="search">
           <span class="muted">Tìm tên, email, nội dung</span>
@@ -446,6 +448,29 @@
         return `mailto:${encodeURIComponent(lead.email || '')}?subject=${subject}`;
       }
 
+      function duplicateKey(lead) {
+        return String(lead.email || lead.phone || '').trim().toLowerCase();
+      }
+
+      function duplicateCount(lead) {
+        const key = duplicateKey(lead);
+        if (!key) return 0;
+        return leads.filter(item => duplicateKey(item) === key).length;
+      }
+
+      function replyTemplate(lead) {
+        return [
+          `Hi ${lead.name || 'there'},`,
+          '',
+          'Thanks for reaching out to Folks Team. I received your message and will follow up with the next useful step shortly.',
+          '',
+          lead.message ? `Your note: ${lead.message}` : '',
+          '',
+          'Best,',
+          'Folks Team',
+        ].filter(line => line !== '').join('\n');
+      }
+
       function isStaleLead(lead) {
         if ((lead.status || 'new') !== 'new' || !lead.createdAt) return false;
         return Date.now() - new Date(lead.createdAt).getTime() > 24 * 60 * 60 * 1000;
@@ -457,7 +482,8 @@
           const statusMatch =
             activeFilter === 'all' ||
             lead.status === activeFilter ||
-            (activeFilter === 'urgent' && (lead.priority === 'urgent' || isStaleLead(lead)));
+            (activeFilter === 'urgent' && (lead.priority === 'urgent' || isStaleLead(lead))) ||
+            (activeFilter === 'duplicate' && duplicateCount(lead) > 1);
           const text = [lead.name, lead.email, lead.phone, lead.message, lead.locale, lead.owner, lead.priority, ...(lead.tags || [])]
             .join(' ')
             .toLowerCase();
@@ -499,6 +525,7 @@
                   </span>
                   <span class="tag-row">
                     ${isStaleLead(lead) ? '<span class="badge priority-urgent">Quá 24h</span>' : ''}
+                    ${duplicateCount(lead) > 1 ? '<span class="badge priority-high">Trùng</span>' : ''}
                     <span class="badge priority-${escapeHtml(lead.priority || 'normal')}">${escapeHtml(priorityLabels[lead.priority] || priorityLabels.normal)}</span>
                     <span class="badge ${escapeHtml(lead.status || 'new')}">${escapeHtml(statusLabels[lead.status] || lead.status || 'Mới')}</span>
                   </span>
@@ -542,6 +569,7 @@
             </div>
             <span class="tag-row">
               ${isStaleLead(lead) ? '<span class="badge priority-urgent">Quá 24h</span>' : ''}
+              ${duplicateCount(lead) > 1 ? '<span class="badge priority-high">Trùng lead</span>' : ''}
               <span class="badge priority-${escapeHtml(lead.priority || 'normal')}">${escapeHtml(priorityLabels[lead.priority] || priorityLabels.normal)}</span>
               <span class="badge ${escapeHtml(lead.status || 'new')}">${escapeHtml(statusLabels[lead.status] || lead.status || 'Mới')}</span>
             </span>
@@ -551,6 +579,7 @@
 
           <div class="button-row">
             <a class="button" href="${mailto(lead)}">Trả lời email</a>
+            <button type="button" class="secondary" id="copy-reply-template">Copy mẫu trả lời</button>
             <button type="button" class="secondary" id="copy-email">Copy email</button>
             ${lead.page ? `<a class="button secondary" href="${escapeHtml(lead.page)}" target="_blank" rel="noreferrer">Nguồn gửi</a>` : ''}
           </div>
@@ -562,6 +591,7 @@
             <div class="info-card"><span>Cập nhật</span><strong>${formatDate(lead.updatedAt)}</strong></div>
             <div class="info-card"><span>Tag</span><strong>${tags.length ? tags.map(escapeHtml).join(', ') : '-'}</strong></div>
             <div class="info-card"><span>Ưu tiên</span><strong>${escapeHtml(priorityLabels[lead.priority] || priorityLabels.normal)}</strong></div>
+            <div class="info-card"><span>Trùng lặp</span><strong>${duplicateCount(lead) > 1 ? `${duplicateCount(lead)} lead cùng email/phone` : 'Không'}</strong></div>
           </div>
 
           <div>
@@ -630,6 +660,11 @@
           showToast('Đã copy email.');
         });
 
+        document.getElementById('copy-reply-template')?.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(replyTemplate(lead));
+          showToast('Đã copy mẫu trả lời.');
+        });
+
         document.getElementById('mark-done')?.addEventListener('click', () => {
           document.getElementById('lead-status').value = 'done';
           document.getElementById('lead-form').requestSubmit();
@@ -686,6 +721,24 @@
         }
       }
 
+      function exportLeads() {
+        const rows = [['name', 'email', 'phone', 'status', 'priority', 'owner', 'tags', 'createdAt', 'updatedAt', 'message']];
+        filteredLeads().forEach(lead => rows.push([
+          lead.name,
+          lead.email,
+          lead.phone,
+          lead.status,
+          lead.priority,
+          lead.owner,
+          (lead.tags || []).join('|'),
+          lead.createdAt,
+          lead.updatedAt,
+          lead.message,
+        ]));
+        const csv = rows.map(row => row.map(value => `"${String(value || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+        navigator.clipboard.writeText(csv).then(() => showToast('Đã copy CSV theo bộ lọc hiện tại.'));
+      }
+
       document.querySelectorAll('[data-filter]').forEach(button => {
         button.addEventListener('click', () => {
           activeFilter = button.dataset.filter;
@@ -697,6 +750,7 @@
       });
 
       searchInput.addEventListener('input', renderList);
+      document.getElementById('export-leads').addEventListener('click', exportLeads);
       loadLeads();
     </script>
   </body>

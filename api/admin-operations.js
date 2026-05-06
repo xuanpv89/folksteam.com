@@ -29,6 +29,7 @@ const MEDIA_PREFIXES = ['src/images/', 'public/'];
 const MEDIA_EXTENSIONS = /\.(avif|gif|ico|jpe?g|png|svg|webp)$/i;
 const SUBSCRIBER_STATUSES = new Set(['active', 'unsubscribed', 'bounced', 'spam']);
 const REVIEW_STATUSES = new Set(['draft', 'review', 'approved', 'published', 'archived']);
+const CMS_CONTENT_TARGET_PATH = 'src/data_files/cmsContent.json';
 
 function countByStatus(items, field = 'status') {
   return items.reduce((counts, item) => {
@@ -93,6 +94,14 @@ function normalizeReviews(content) {
     updatedAt: content?.updatedAt || null,
     items: Array.isArray(content?.items) ? content.items : [],
   };
+}
+
+function allCmsFields(page) {
+  return (page?.sections || []).flatMap(section => (section.fields || []).map(field => ({ section, field })));
+}
+
+function seoValue(page, key) {
+  return allCmsFields(page).find(({ field }) => field.key === key || field.elementType === key)?.field?.value || '';
 }
 
 async function handleDashboard(admin, response) {
@@ -422,6 +431,99 @@ async function handleReview(request, response, admin, body) {
   return sendJson(response, 200, { ok: true, item, ...saved });
 }
 
+async function handleSeo(admin, response) {
+  const [cmsStore, tree] = await Promise.all([
+    loadJsonFile(admin.token, CMS_CONTENT_TARGET_PATH, { pages: [] }),
+    listTree(admin.token),
+  ]);
+  const pages = Array.isArray(cmsStore.content.pages) ? cmsStore.content.pages : [];
+  const files = tree.filter(item => item.type === 'blob');
+  const blogFiles = files.filter(item => item.path.startsWith('src/content/blog/') && /\.mdx?$/.test(item.path));
+  const draftBlogFiles = files.filter(item => item.path.startsWith('src/data_files/blogDrafts/') && /\.mdx?$/.test(item.path));
+  const mediaFiles = files.filter(item => item.path.startsWith('src/images/') && MEDIA_EXTENSIONS.test(item.path));
+
+  const issues = [];
+  pages.forEach(page => {
+    const title = String(seoValue(page, 'seo-title')).trim();
+    const description = String(seoValue(page, 'seo-description')).trim();
+    if (!title) {
+      issues.push({
+        priority: 'high',
+        type: 'seo-title',
+        title: `${page.title || page.path}: thiếu SEO title`,
+        target: page.path || '',
+        action: '/admin/content.html',
+      });
+    } else if (title.length > 70 || title.length < 20) {
+      issues.push({
+        priority: 'medium',
+        type: 'seo-title-length',
+        title: `${page.title || page.path}: SEO title nên khoảng 20-70 ký tự`,
+        target: page.path || '',
+        detail: `${title.length} ký tự`,
+        action: '/admin/content.html',
+      });
+    }
+
+    if (!description) {
+      issues.push({
+        priority: 'high',
+        type: 'seo-description',
+        title: `${page.title || page.path}: thiếu SEO description`,
+        target: page.path || '',
+        action: '/admin/content.html',
+      });
+    } else if (description.length > 170 || description.length < 70) {
+      issues.push({
+        priority: 'medium',
+        type: 'seo-description-length',
+        title: `${page.title || page.path}: SEO description nên khoảng 70-170 ký tự`,
+        target: page.path || '',
+        detail: `${description.length} ký tự`,
+        action: '/admin/content.html',
+      });
+    }
+
+    allCmsFields(page)
+      .filter(({ field }) => field.elementType === 'alt')
+      .forEach(({ field }) => {
+        if (!String(field.value || '').trim()) {
+          issues.push({
+            priority: 'medium',
+            type: 'image-alt',
+            title: `${page.title || page.path}: ảnh thiếu mô tả alt`,
+            target: field.label || page.path || '',
+            action: '/admin/content.html',
+          });
+        }
+      });
+  });
+
+  if (draftBlogFiles.length) {
+    issues.push({
+      priority: 'medium',
+      type: 'blog-drafts',
+      title: `${draftBlogFiles.length} draft blog đang chờ xử lý`,
+      target: 'src/data_files/blogDrafts',
+      action: '/admin/operations.html#review',
+    });
+  }
+
+  return sendJson(response, 200, {
+    ok: true,
+    updatedAt: new Date().toISOString(),
+    summary: {
+      pages: pages.length,
+      blogPosts: blogFiles.length,
+      blogDrafts: draftBlogFiles.length,
+      media: mediaFiles.length,
+      issues: issues.length,
+      highPriority: issues.filter(issue => issue.priority === 'high').length,
+    },
+    issues: issues.slice(0, 80),
+  });
+}
+
 export default async function handler(request, response) {
   const requestUrl = new URL(request.url, 'https://folksteam.com');
   const module = String(requestUrl.searchParams.get('module') || '').trim();
@@ -459,6 +561,7 @@ export default async function handler(request, response) {
     if (module === 'subscribers') return await handleSubscribers(request, response, admin, body);
     if (module === 'audit') return await handleAudit(request, response, admin, body);
     if (module === 'review') return await handleReview(request, response, admin, body);
+    if (module === 'seo') return await handleSeo(admin, response);
     return sendJson(response, 404, { ok: false, message: 'Unknown admin operations module.' });
   } catch (error) {
     return sendJson(response, error.status || 502, { ok: false, message: error.message });

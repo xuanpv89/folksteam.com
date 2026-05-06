@@ -161,7 +161,7 @@
           <img class="mark" src="/folks-brand-mark.jpg" alt="Folks Team logo" />
           <div>
             <p class="eyebrow">Folks Team CMS</p>
-            <h1>Text Manager</h1>
+            <h1>Bulk Text Editor</h1>
           </div>
         </div>
         <nav class="nav" aria-label="Admin links">
@@ -180,7 +180,7 @@
       <section class="hero-panel">
         <div>
           <p class="eyebrow">Không gian soạn nội dung</p>
-          <h2>Chọn trang, sửa chữ, rồi đăng lên website.</h2>
+              <h2>Tìm, sửa hàng loạt và đăng nội dung chữ lên website.</h2>
           <p>
             Màn hình này dành cho việc sửa nội dung. Các cài đặt kỹ thuật được đặt trong phần nâng cao.
           </p>
@@ -203,6 +203,22 @@
             Tìm trang
             <input id="page-search" placeholder="Nhập tên hoặc đường dẫn..." />
           </label>
+          <details class="structure-panel" open>
+            <summary>Search & replace có kiểm tra</summary>
+            <label>
+              Tìm trong nội dung
+              <input id="replace-find" placeholder="Từ/cụm từ cần thay..." />
+            </label>
+            <label>
+              Thay bằng
+              <input id="replace-with" placeholder="Nội dung mới..." />
+            </label>
+            <div class="button-row" style="margin-top:12px">
+              <button type="button" class="secondary" id="preview-replace">Xem trước</button>
+              <button type="button" id="apply-replace" disabled>Áp dụng thay thế</button>
+            </div>
+            <div class="status-log" id="replace-preview">Nhập cụm từ cần tìm để xem trước số dòng bị ảnh hưởng.</div>
+          </details>
           <div class="list" id="page-list"></div>
         </aside>
 
@@ -419,6 +435,10 @@
       const githubBranch = document.getElementById('githubBranch');
       const sourceStatus = document.getElementById('source-status');
       const pageSearch = document.getElementById('page-search');
+      const replaceFind = document.getElementById('replace-find');
+      const replaceWith = document.getElementById('replace-with');
+      const replacePreview = document.getElementById('replace-preview');
+      const applyReplaceButton = document.getElementById('apply-replace');
       const currentPageMeta = document.getElementById('current-page-meta');
       const currentSectionMeta = document.getElementById('current-section-meta');
       const dirtyStatus = document.getElementById('dirty-status');
@@ -459,6 +479,49 @@
 
       function normalizeText(value) {
         return String(value || '').replace(/\s+/g, ' ').trim();
+      }
+
+      function findReplaceMatches() {
+        const needle = replaceFind.value;
+        if (!needle) return [];
+        const matches = [];
+        (state.pages || []).forEach((page, pageIdx) => {
+          (page.sections || []).forEach((section, sectionIdx) => {
+            (section.fields || []).forEach((field, fieldIdx) => {
+              const value = String(field.value || '');
+              if (!value.includes(needle)) return;
+              matches.push({ page, pageIdx, section, sectionIdx, field, fieldIdx, count: value.split(needle).length - 1 });
+            });
+          });
+        });
+        return matches;
+      }
+
+      function previewReplace() {
+        const matches = findReplaceMatches();
+        applyReplaceButton.disabled = !matches.length;
+        replacePreview.innerHTML = matches.length
+          ? `
+            <strong>${matches.length} dòng, ${matches.reduce((sum, item) => sum + item.count, 0)} lần xuất hiện.</strong>
+            ${matches.slice(0, 6).map(item => `<div>${escapeHtml(item.page.title || item.page.path)} / ${escapeHtml(item.section.title || 'Mục')} / ${escapeHtml(item.field.label || item.field.key)}</div>`).join('')}
+          `
+          : 'Không tìm thấy cụm từ này trong nội dung.';
+      }
+
+      function applyReplace() {
+        const needle = replaceFind.value;
+        const replacement = replaceWith.value;
+        const matches = findReplaceMatches();
+        if (!matches.length) return;
+        if (!window.confirm(`Thay ${matches.reduce((sum, item) => sum + item.count, 0)} lần xuất hiện trên ${matches.length} dòng nội dung?`)) return;
+        matches.forEach(({ field }) => {
+          field.value = String(field.value || '').replaceAll(needle, replacement);
+        });
+        setDirty(true);
+        renderFields();
+        updatePreview();
+        previewReplace();
+        showToast('Đã áp dụng thay thế. Hãy kiểm tra preview trước khi đăng.');
       }
 
       function isEditableTextNode(node) {
@@ -1191,6 +1254,10 @@
         }
       });
       pageSearch.addEventListener('input', renderPages);
+      replaceFind.addEventListener('input', previewReplace);
+      replaceWith.addEventListener('input', previewReplace);
+      document.getElementById('preview-replace').addEventListener('click', previewReplace);
+      applyReplaceButton.addEventListener('click', applyReplace);
       githubRepo.addEventListener('input', () => localStorage.setItem('folksGithubRepo', githubRepo.value.trim()));
       githubBranch.addEventListener('input', () => localStorage.setItem('folksGithubBranch', githubBranch.value.trim()));
       document.getElementById('add-page').addEventListener('click', () => {

@@ -362,13 +362,13 @@
           </div>
         </div>
         <nav class="nav" aria-label="Admin links">
-          <a href="/">Home</a>
-          <a class="secondary" href="/admin/operations.html">Operations</a>
-          <a class="secondary" href="/admin/console.html">Admin Console</a>
+          <a href="/">Trang live</a>
+          <a class="secondary" href="/admin/operations.html">Control Center</a>
+          <a class="secondary" href="/admin/console.html">Console kỹ thuật</a>
           <a class="secondary" href="/blog">Blog EN</a>
           <a class="secondary" href="/vi/blog">Blog VI</a>
           <a class="secondary" href="/admin/guide.html">Hướng dẫn</a>
-          <button type="button" class="button secondary" data-admin-logout>Log out</button>
+          <button type="button" class="button secondary" data-admin-logout>Đăng xuất</button>
         </nav>
       </header>
 
@@ -419,8 +419,8 @@
           <span>Xem audit, health check và trạng thái vận hành sau publish.</span>
         </a>
         <a class="task-link primary" href="/admin/operations.html">
-          <strong>Quản lý vận hành</strong>
-          <span>Dashboard, health check, products/pages, media, subscribers và audit.</span>
+          <strong>Control Center</strong>
+          <span>Dashboard vận hành, health check, review queue, media, subscribers, SEO và audit.</span>
         </a>
       </section>
 
@@ -428,25 +428,25 @@
         <a class="card" href="/admin/console.html">
           <div>
             <div class="icon">A</div>
-            <h2>Admin Console</h2>
+            <h2>Console kỹ thuật</h2>
             <p>
               Khu vực kỹ thuật cho media upload, deploy checklist, bảo mật và công cụ
               kiểm tra nâng cao.
             </p>
           </div>
-          <span class="status ready">New</span>
+          <span class="status ready" data-module-status="console">Kỹ thuật</span>
         </a>
 
         <a class="card" href="/admin/operations.html">
           <div>
             <div class="icon">O</div>
-            <h2>Operations</h2>
+            <h2>Control Center</h2>
             <p>
               Bảng điều khiển vận hành: dashboard, cấu hình server, collections,
-              media library, newsletter subscribers, audit và SEO checklist.
+              media library, newsletter subscribers, review queue, audit và SEO center.
             </p>
           </div>
-          <span class="status ready">New</span>
+          <span class="status ready" data-module-status="operations">Đang tải</span>
         </a>
 
         <a class="card" href="/admin/leads.html">
@@ -458,7 +458,7 @@
               Đã xong. Thêm ghi chú nội bộ và mở email trả lời trong một bước.
             </p>
           </div>
-          <span class="status ready">New</span>
+          <span class="status ready" data-module-status="leads">Đang tải</span>
         </a>
 
         <a class="card" href="/admin/blog.html">
@@ -470,7 +470,7 @@
               Markdown và publish lên GitHub.
             </p>
           </div>
-          <span class="status ready">Ready</span>
+          <span class="status ready" data-module-status="blog">Draft/Review</span>
         </a>
 
         <a class="card" href="/admin/content.html">
@@ -482,7 +482,7 @@
               kiểm tra preview rồi đăng lên website.
             </p>
           </div>
-          <span class="status ready">Ready</span>
+          <span class="status ready" data-module-status="content">Live check</span>
         </a>
 
         <a class="card" href="/admin/text.html">
@@ -490,11 +490,11 @@
             <div class="icon">T</div>
             <h2>Text Manager</h2>
             <p>
-              Công cụ quét và sửa text hàng loạt theo trang. Phù hợp khi cần rà
+              Bulk Text Editor để quét và sửa text hàng loạt theo trang. Phù hợp khi cần rà
               nhanh nhiều dòng chữ hoặc xuất/copy dữ liệu CMS.
             </p>
           </div>
-          <span class="status ready">Ready</span>
+          <span class="status ready" data-module-status="text">Bulk editor</span>
         </a>
 
         <a class="card" href="/admin/guide.html">
@@ -506,7 +506,7 @@
               quản lý blog, lưu nháp và đăng lên website.
             </p>
           </div>
-          <span class="status ready">Ready</span>
+          <span class="status ready" data-module-status="guide">Quy trình</span>
         </a>
       </section>
 
@@ -555,6 +555,13 @@
         `;
       }
 
+      function updateModuleStatus(name, text, warning = false) {
+        const el = document.querySelector(`[data-module-status="${name}"]`);
+        if (!el) return;
+        el.textContent = text;
+        el.classList.toggle('ready', !warning);
+      }
+
       async function loadDashboard() {
         dashboardStatus.textContent = 'Đang tải số liệu admin...';
         dashboardMetrics.innerHTML = '';
@@ -575,6 +582,10 @@
             metricCard('Chờ review', metrics.pendingReviews || 0),
             metricCard('Audit events', metrics.auditEvents || 0),
           ].join('');
+          updateModuleStatus('operations', metrics.pendingReviews ? `${metrics.pendingReviews} chờ review` : 'Ổn định', Boolean(metrics.pendingReviews));
+          updateModuleStatus('leads', metrics.newLeads ? `${metrics.newLeads} lead mới` : 'Không có lead mới', Boolean(metrics.staleNewLeads));
+          updateModuleStatus('content', 'Live check');
+          updateModuleStatus('blog', metrics.pendingReviews ? 'Có review' : 'Draft/Review');
           dashboardAttention.innerHTML = [
             attentionCard('Lead cần phản hồi', metrics.newLeads || 0, metrics.staleNewLeads ? `${metrics.staleNewLeads} lead đã quá 24h.` : 'Không có lead quá hạn.', '/admin/leads.html', metrics.staleNewLeads ? 'urgent' : ''),
             attentionCard('Review queue', metrics.pendingReviews || 0, data.latest?.reviewAt ? `Mới nhất: ${compactDate(data.latest.reviewAt)}` : 'Chưa có mục review.', '/admin/operations.html#review', metrics.pendingReviews ? 'warn' : ''),

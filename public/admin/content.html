@@ -193,6 +193,12 @@
         border-radius: 10px;
         background: #fff;
       }
+      .preview-panel.mobile-preview .preview-frame {
+        display: block;
+        width: min(390px, 100%);
+        min-height: 720px;
+        margin: 0 auto;
+      }
       @media (max-width: 1119px) {
         .preview-frame { height: 70vh; min-height: 520px; }
       }
@@ -352,7 +358,11 @@
               <p class="eyebrow">Preview thật</p>
               <h2 id="preview-title">Chọn trang để sửa</h2>
             </div>
-            <button type="button" class="secondary" id="open-page">Mở trang</button>
+            <div class="actions">
+              <button type="button" class="secondary active" data-preview-mode="desktop">Desktop</button>
+              <button type="button" class="secondary" data-preview-mode="mobile">Mobile</button>
+              <button type="button" class="secondary" id="open-page">Mở trang</button>
+            </div>
           </div>
           <iframe id="page-frame" class="preview-frame" title="Website preview"></iframe>
         </section>
@@ -432,6 +442,7 @@
       let pageGroupsInitialized = false;
       let hasUnsavedChanges = false;
       let isPublishing = false;
+      let autosaveTimer = null;
 
       const pageList = document.getElementById('page-list');
       const pageSummary = document.getElementById('page-summary');
@@ -440,6 +451,7 @@
       const pageSearchClear = document.getElementById('page-search-clear');
       const pageSearchMeta = document.getElementById('page-search-meta');
       const pageFrame = document.getElementById('page-frame');
+      const previewPanel = document.querySelector('.preview-panel');
       const previewTitle = document.getElementById('preview-title');
       const sourceStatus = document.getElementById('source-status');
       const publishStatus = document.getElementById('publish-status');
@@ -561,6 +573,11 @@
 
       function currentPageHasChanges() {
         const page = currentPage();
+        if (!page) return false;
+        return collectChanges(10000).some(change => change.pagePath === page.path);
+      }
+
+      function pageHasChanges(page) {
         if (!page) return false;
         return collectChanges(10000).some(change => change.pagePath === page.path);
       }
@@ -689,6 +706,18 @@
       function saveDraft() {
         localStorage.setItem(draftKey, JSON.stringify({ content: state, baseSha, savedAt: new Date().toISOString() }));
         showToast('Đã lưu trên máy này.');
+      }
+
+      function autosaveDraft() {
+        localStorage.setItem(draftKey, JSON.stringify({ content: state, baseSha, savedAt: new Date().toISOString(), autosaved: true }));
+      }
+
+      function scheduleAutosave() {
+        window.clearTimeout(autosaveTimer);
+        autosaveTimer = window.setTimeout(() => {
+          autosaveDraft();
+          setSourceStatus('Đã tự lưu nháp', 'Bản nháp được lưu trên máy này trong khi bạn sửa.', 'warning');
+        }, 900);
       }
 
       function applySavedDraft(draft, latestSha) {
@@ -965,7 +994,8 @@
         renderPageFilters(allPages);
         const visiblePages = sortPages(allPages
           .map((page, index) => ({ page, index }))
-          .filter(({ page }) => query || pageFilterMode === 'all' || pageLanguage(page) === pageFilterMode || pageGroupLabel(page) === pageFilterMode)
+          .filter(({ page }) => query || pageFilterMode === 'all' || pageFilterMode === 'changed' || pageLanguage(page) === pageFilterMode || pageGroupLabel(page) === pageFilterMode)
+          .filter(({ page }) => pageFilterMode !== 'changed' || pageHasChanges(page))
           .filter(({ page }) => !query || normalizeSearch(`${page.title} ${page.path} ${languageLabel(pageLanguage(page))} ${pageGroupLabel(page)}`).includes(query)));
 
         pageSearchClear.style.display = query ? 'inline-flex' : 'none';
@@ -1042,6 +1072,7 @@
       function renderPageFilters(pages) {
         const filters = [
           ['all', `Tất cả ${pages.length}`],
+          ['changed', `Đã đổi ${pages.filter(pageHasChanges).length}`],
           ['en', `EN ${pages.filter(page => pageLanguage(page) === 'en').length}`],
           ['vi', `VI ${pages.filter(page => pageLanguage(page) === 'vi').length}`],
           ['zh', `ZH ${pages.filter(page => pageLanguage(page) === 'zh').length}`],
@@ -1053,7 +1084,7 @@
         ];
         pageFilter.innerHTML = '';
         filters
-          .filter(([key]) => key === 'all' || pages.some(page => pageLanguage(page) === key || pageGroupLabel(page) === key))
+          .filter(([key]) => key === 'all' || key === 'changed' || pages.some(page => pageLanguage(page) === key || pageGroupLabel(page) === key))
           .forEach(([key, label]) => {
             const button = document.createElement('button');
             button.type = 'button';
@@ -1323,6 +1354,7 @@
             else target.textContent = field.value;
           }
           hasUnsavedChanges = true;
+          scheduleAutosave();
           updateChangeStatus();
           renderInlineFieldChangeState();
           updateActionStates();
@@ -1390,6 +1422,7 @@
           else target.textContent = field.value;
         }
         hasUnsavedChanges = true;
+        scheduleAutosave();
         renderFieldEditor();
         updateChangeStatus();
         showToast('Đã hoàn tác mục đang chọn.');
@@ -1403,6 +1436,7 @@
         state.pages[pageIndex] = structuredClone(original);
         selectedField = null;
         hasUnsavedChanges = true;
+        scheduleAutosave();
         renderPages();
         loadCurrentPage();
         updateChangeStatus();
@@ -1604,6 +1638,13 @@
       document.getElementById('open-page').addEventListener('click', () => {
         const page = currentPage();
         if (page) window.open(liveUrl(page.path), '_blank');
+      });
+      document.querySelectorAll('[data-preview-mode]').forEach(button => {
+        button.addEventListener('click', () => {
+          const mode = button.dataset.previewMode;
+          previewPanel.classList.toggle('mobile-preview', mode === 'mobile');
+          document.querySelectorAll('[data-preview-mode]').forEach(item => item.classList.toggle('active', item === button));
+        });
       });
 
       initialize();

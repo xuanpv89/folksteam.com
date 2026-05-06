@@ -347,12 +347,12 @@
           </div>
           <form class="editor compact" id="review-form">
             <p class="eyebrow">Review item</p>
-            <h2>Them hoac cap nhat muc review</h2>
+            <h2>Thêm hoặc cập nhật mục review</h2>
             <input type="hidden" id="review-id" />
-            <label>Title <input id="review-title" required /></label>
-            <label>Type <input id="review-type" value="content" /></label>
-            <label>Target <input id="review-target" placeholder="src/content/blog/en/post.md" /></label>
-            <label>Status
+            <label>Tiêu đề <input id="review-title" required /></label>
+            <label>Loại <input id="review-type" value="content" /></label>
+            <label>Đường dẫn <input id="review-target" placeholder="src/content/blog/en/post.md" /></label>
+            <label>Trạng thái
               <select id="review-status">
                 <option value="draft">draft</option>
                 <option value="review">review</option>
@@ -361,37 +361,25 @@
                 <option value="archived">archived</option>
               </select>
             </label>
-            <label>Owner <input id="review-owner" /></label>
-            <label>Note <textarea id="review-note"></textarea></label>
-            <button type="submit">Save review item</button>
+            <label>Người phụ trách <input id="review-owner" /></label>
+            <label>Ghi chú <textarea id="review-note"></textarea></label>
+            <button type="submit">Lưu mục review</button>
           </form>
         </div>
       </section>
 
       <section class="view" id="view-seo">
         <div class="surface">
-          <p class="eyebrow">SEO manager</p>
-          <h2>Checklist SEO can xu ly trong Content Editor</h2>
-          <div class="grid three">
-            <div class="row-card">
-              <span class="pill">Priority 1</span>
-              <strong>Title / description tung trang</strong>
-              <p class="muted">Mo Content Editor, sua section "SEO cua trang" trong cmsContent.json.</p>
-              <a class="button" href="/admin/content.html">Open Content Editor</a>
+          <div class="toolbar">
+            <div>
+              <p class="eyebrow">SEO manager</p>
+              <h2>Kiểm tra SEO từ nội dung thật</h2>
+              <p class="section-note">Rà soát title, description, alt ảnh và draft blog đang chờ xử lý để biết việc cần làm tiếp.</p>
             </div>
-            <div class="row-card">
-              <span class="pill">Priority 2</span>
-              <strong>Social image</strong>
-              <p class="muted">Dung Media Library de lay path anh, sau do gan vao Meta/component hoac frontmatter bai viet.</p>
-              <button type="button" data-view-shortcut="media">Open Media</button>
-            </div>
-            <div class="row-card">
-              <span class="pill">Priority 3</span>
-              <strong>Schema va canonical</strong>
-              <p class="muted">Them field vao cmsContent hoac frontmatter, roi render trong src/components/Meta.astro.</p>
-              <button type="button" data-view-shortcut="collections">Open Collections</button>
-            </div>
+            <button type="button" id="refresh-seo">Chạy kiểm tra SEO</button>
           </div>
+          <div class="metrics" id="seo-summary"></div>
+          <div class="list" id="seo-issues"></div>
         </div>
       </section>
 
@@ -408,6 +396,7 @@
         subscribers: [],
         review: [],
         audit: [],
+        seo: null,
         selectedCollection: 'products',
         selectedCollectionSha: '',
       };
@@ -477,6 +466,7 @@
         if (view === 'subscribers' && !state.subscribers.length) loadSubscribers();
         if (view === 'review' && !state.review.length) loadReview();
         if (view === 'audit' && !state.audit.length) loadAudit();
+        if (view === 'seo' && !state.seo) loadSeo();
       }
 
       function renderMetrics(metrics = {}) {
@@ -799,15 +789,21 @@
       function renderReview() {
         $('#review-list').innerHTML = state.review.length
           ? state.review.map(item => `
-            <button type="button" class="row-card" data-review-id="${escapeHtml(item.id)}">
+            <article class="row-card" data-review-id="${escapeHtml(item.id)}">
               <div class="row-head">
                 <strong>${escapeHtml(item.title)}</strong>
-                <span class="pill">${escapeHtml(item.status || 'draft')}</span>
+                <span class="pill ${item.status === 'review' ? 'warn' : item.status === 'archived' ? 'bad' : ''}">${escapeHtml(item.status || 'draft')}</span>
               </div>
               <code class="path">${escapeHtml(item.target || '-')}</code>
               <span class="muted">${escapeHtml(item.type || 'content')} / ${escapeHtml(item.owner || 'unassigned')}</span>
               ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ''}
-            </button>`).join('')
+              <div class="actions">
+                <button type="button" class="secondary" data-review-edit="${escapeHtml(item.id)}">Sửa</button>
+                <button type="button" class="secondary" data-review-action="approved" data-review-id="${escapeHtml(item.id)}">Duyệt</button>
+                <button type="button" class="secondary" data-review-action="published" data-review-id="${escapeHtml(item.id)}">Đã publish</button>
+                <button type="button" class="secondary" data-review-action="archived" data-review-id="${escapeHtml(item.id)}">Lưu trữ</button>
+              </div>
+            </article>`).join('')
           : '<p class="muted">Chua co muc review.</p>';
       }
 
@@ -850,6 +846,81 @@
         await loadReview();
       }
 
+      async function updateReviewStatus(id, status) {
+        const item = state.review.find(entry => entry.id === id);
+        if (!item) return;
+        await api('/api/admin-operations?module=review', {
+          method: 'POST',
+          body: JSON.stringify({
+            id: item.id,
+            title: item.title,
+            type: item.type,
+            target: item.target,
+            status,
+            owner: item.owner,
+            note: status === 'approved'
+              ? 'Đã duyệt từ Review queue.'
+              : status === 'published'
+                ? 'Đánh dấu đã publish từ Review queue.'
+                : status === 'archived'
+                  ? 'Đã lưu trữ từ Review queue.'
+                  : item.note,
+          }),
+        });
+        toast('Đã cập nhật trạng thái review.');
+        await loadReview();
+        if (state.dashboard) {
+          state.dashboard = null;
+          loadDashboard().catch(error => toast(error.message, true));
+        }
+      }
+
+      function renderSeo(data) {
+        const summary = data.summary || {};
+        const metrics = {
+          'Trang': summary.pages || 0,
+          'Blog live': summary.blogPosts || 0,
+          'Draft blog': summary.blogDrafts || 0,
+          'Media': summary.media || 0,
+          'Vấn đề': summary.issues || 0,
+          'Ưu tiên cao': summary.highPriority || 0,
+        };
+        $('#seo-summary').innerHTML = Object.entries(metrics)
+          .map(([label, value]) => `<div class="metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`)
+          .join('');
+        $('#seo-issues').innerHTML = (data.issues || []).length
+          ? data.issues.map(issue => `
+            <div class="row-card">
+              <div class="row-head">
+                <strong>${escapeHtml(issue.title)}</strong>
+                <span class="pill ${issue.priority === 'high' ? 'bad' : 'warn'}">${escapeHtml(issue.priority || 'medium')}</span>
+              </div>
+              <code class="path">${escapeHtml(issue.target || '-')}</code>
+              ${issue.detail ? `<p class="muted">${escapeHtml(issue.detail)}</p>` : ''}
+              <div class="actions">
+                ${issue.action ? `<a class="button secondary" href="${escapeHtml(issue.action)}">Mở nơi xử lý</a>` : ''}
+                <button type="button" class="secondary" data-view-shortcut="media">Media</button>
+              </div>
+            </div>`).join('')
+          : `
+            <div class="row-card">
+              <div class="row-head">
+                <strong>SEO hiện không có vấn đề lớn</strong>
+                <span class="pill">ready</span>
+              </div>
+              <p class="muted">Đã kiểm tra title, description, alt ảnh và draft blog.</p>
+            </div>`;
+        setTabCount('seo', summary.issues || 0);
+      }
+
+      async function loadSeo() {
+        $('#seo-summary').innerHTML = '<p class="muted">Đang kiểm tra SEO...</p>';
+        $('#seo-issues').innerHTML = '';
+        const data = await api('/api/admin-operations?module=seo');
+        state.seo = data;
+        renderSeo(data);
+      }
+
       async function saveAuditNote(event) {
         event.preventDefault();
         await api('/api/admin-operations?module=audit', {
@@ -878,8 +949,14 @@
         const subscriberButton = event.target.closest('[data-subscriber-id]');
         if (subscriberButton) fillSubscriber(subscriberButton.dataset.subscriberId);
 
-        const reviewButton = event.target.closest('[data-review-id]');
-        if (reviewButton) fillReview(reviewButton.dataset.reviewId);
+        const reviewAction = event.target.closest('[data-review-action]');
+        if (reviewAction) {
+          updateReviewStatus(reviewAction.dataset.reviewId, reviewAction.dataset.reviewAction).catch(error => toast(error.message, true));
+          return;
+        }
+
+        const reviewEdit = event.target.closest('[data-review-edit]');
+        if (reviewEdit) fillReview(reviewEdit.dataset.reviewEdit);
       });
 
       $('#refresh-dashboard').addEventListener('click', () => loadDashboard().catch(error => toast(error.message, true)));
@@ -905,6 +982,7 @@
       $('#audit-note-form').addEventListener('submit', event => saveAuditNote(event).catch(error => toast(error.message, true)));
       $('#reload-review').addEventListener('click', () => loadReview().catch(error => toast(error.message, true)));
       $('#review-form').addEventListener('submit', event => saveReview(event).catch(error => toast(error.message, true)));
+      $('#refresh-seo').addEventListener('click', () => loadSeo().catch(error => toast(error.message, true)));
 
       const initialView = location.hash ? location.hash.slice(1) : 'dashboard';
       setView($(`[data-view-tab="${initialView}"]`) ? initialView : 'dashboard');

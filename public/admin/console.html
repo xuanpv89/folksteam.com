@@ -536,7 +536,6 @@
             <h2>Sửa nội dung đang hiển thị trên website</h2>
           </div>
           <div class="button-row">
-            <button type="button" class="button secondary" data-frame-reload="pages-frame">Tải lại công cụ</button>
             <a class="button secondary" href="/admin/content.html" target="_blank" rel="noreferrer">Mở tab riêng</a>
           </div>
         </div>
@@ -556,8 +555,13 @@
                 <li class="check-row"><input type="checkbox" data-check="mobile" /><div><strong>Đã xem trên mobile</strong><small>Không có chữ bị tràn hoặc ảnh sai.</small></div></li>
               </ul>
             </aside>
-            <div class="frame-shell">
-              <iframe id="pages-frame" class="mode-frame" src="/admin/content.html" title="Công cụ sửa trang"></iframe>
+            <div class="frame-shell surface">
+              <h3>Mở Visual Content Editor ở tab riêng</h3>
+              <p class="muted">Console giữ vai trò kỹ thuật nên không nhúng công cụ sửa nội dung vào iframe. Mở tab riêng giúp preview nhẹ hơn, tránh lẫn session và dễ kiểm tra live.</p>
+              <div class="button-row">
+                <a class="button" href="/admin/content.html" target="_blank" rel="noreferrer">Mở Visual Content Editor</a>
+                <a class="button secondary" href="/admin/operations.html#review" target="_blank" rel="noreferrer">Mở Review queue</a>
+              </div>
             </div>
           </div>
         </div>
@@ -570,7 +574,6 @@
             <h2>Tạo bài, xem trước và đăng</h2>
           </div>
           <div class="button-row">
-            <button type="button" class="button secondary" data-frame-reload="blog-frame">Tải lại công cụ</button>
             <a class="button secondary" href="/admin/blog.html" target="_blank" rel="noreferrer">Mở tab riêng</a>
           </div>
         </div>
@@ -590,8 +593,13 @@
                 <li class="check-row"><input type="checkbox" data-check="image" /><div><strong>Ảnh và alt đã kiểm tra</strong><small>Không dùng ảnh mờ hoặc sai nội dung.</small></div></li>
               </ul>
             </aside>
-            <div class="frame-shell">
-              <iframe id="blog-frame" class="mode-frame" src="/admin/blog.html" title="Công cụ viết blog"></iframe>
+            <div class="frame-shell surface">
+              <h3>Mở Blog Manager ở tab riêng</h3>
+              <p class="muted">Blog Manager có preview, draft và publish flow riêng. Không nhúng trong Console để tránh tải nặng và tránh thao tác đăng bài trong màn hình kỹ thuật.</p>
+              <div class="button-row">
+                <a class="button" href="/admin/blog.html" target="_blank" rel="noreferrer">Mở Blog Manager</a>
+                <a class="button secondary" href="/admin/operations.html#seo" target="_blank" rel="noreferrer">Kiểm tra SEO</a>
+              </div>
             </div>
           </div>
         </div>

@@ -1145,8 +1145,11 @@
             <p>Kiểm tra các mục dưới đây. Khi đủ, bạn có thể đăng bài lên website.</p>
             <ul class="readiness" id="readiness-list">
               <li data-check="title">Có tiêu đề bài viết</li>
+              <li data-check="seoTitle">Tiêu đề SEO khoảng 20-70 ký tự</li>
               <li data-check="description">Có mô tả ngắn</li>
+              <li data-check="seoDescription">Mô tả SEO khoảng 70-170 ký tự</li>
               <li data-check="content">Có ít nhất một đoạn nội dung</li>
+              <li data-check="imageAlt">Ảnh có alt text</li>
               <li data-check="slug">Có đường dẫn hợp lệ</li>
             </ul>
             <div class="safe-note">
@@ -1566,6 +1569,7 @@
       function validatePost(result) {
         const title = getValue('title');
         const description = getValue('description');
+        const imageAlt = getValue('cardImageAlt') || title || description;
         const contents = listFromTextarea(getValue('contents')).length
           ? listFromTextarea(getValue('contents'))
           : summaryFromBlocks();
@@ -1574,6 +1578,9 @@
 
         if (!title) errors.push({ field: 'title', label: 'tiêu đề bài viết' });
         if (!description) errors.push({ field: 'description', label: 'mô tả ngắn' });
+        if (title && (title.length < 20 || title.length > 70)) errors.push({ field: 'title', label: 'tiêu đề SEO 20-70 ký tự' });
+        if (description && (description.length < 70 || description.length > 170)) errors.push({ field: 'description', label: 'mô tả SEO 70-170 ký tự' });
+        if (!imageAlt) errors.push({ field: 'cardImageAlt', label: 'alt text cho ảnh bìa' });
         if (!contents.length && !bodyContent) errors.push({ field: 'content', label: 'nội dung bài viết' });
         if (!result.slug) errors.push({ field: 'slug', label: 'đường dẫn bài viết' });
 
@@ -1605,10 +1612,16 @@
       }
 
       function readinessState(result) {
+        const title = getValue('title');
+        const description = getValue('description');
+        const imageAlt = getValue('cardImageAlt') || title || description;
         return {
-          title: Boolean(getValue('title')),
-          description: Boolean(getValue('description')),
+          title: Boolean(title),
+          seoTitle: title.length >= 20 && title.length <= 70,
+          description: Boolean(description),
+          seoDescription: description.length >= 70 && description.length <= 170,
           content: hasBodyContent(),
+          imageAlt: Boolean(imageAlt),
           slug: Boolean(result.slug),
         };
       }
@@ -1625,6 +1638,10 @@
         }
         if (!state.description) {
           nextStepText.textContent = 'Thêm mô tả ngắn để người đọc biết bài viết nói về gì.';
+          return;
+        }
+        if (!state.seoTitle || !state.seoDescription || !state.imageAlt) {
+          nextStepText.textContent = 'Hoàn tất checklist SEO trước khi đăng: độ dài title/description và alt ảnh.';
           return;
         }
         if (!state.content) {
