@@ -1,4 +1,29 @@
 {
-  "updatedAt": null,
-  "leads": []
+  "updatedAt": "2026-05-06T11:46:00.574Z",
+  "leads": [
+    {
+      "id": "lead-1778067960406-hxdpp3",
+      "createdAt": "2026-05-06T11:46:00.403Z",
+      "updatedAt": "2026-05-06T11:46:00.403Z",
+      "status": "new",
+      "priority": "normal",
+      "source": "contact-form",
+      "locale": "en",
+      "page": "",
+      "name": "Codex Test",
+      "firstName": "Codex",
+      "lastName": "Test",
+      "email": "codex-test@folksteam.com",
+      "phone": "0000000000",
+      "message": "Lead inbox smoke test",
+      "owner": "",
+      "notes": [],
+      "events": [
+        {
+          "type": "submitted",
+          "createdAt": "2026-05-06T11:46:00.403Z"
+        }
+      ]
+    }
+  ]
 }
