@@ -124,7 +124,8 @@ button,
   color: #fff !important;
 }
 
-.nav a:not(.secondary) {
+.nav a:not(.secondary),
+.nav a[aria-current='page'] {
   background: var(--ink) !important;
   color: #fff !important;
 }

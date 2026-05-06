@@ -110,6 +110,64 @@
     });
   }
 
+  function simplifyAdminNav() {
+    document.querySelectorAll('.nav').forEach(function (nav) {
+      if (nav.dataset.standardized === 'true') return;
+      var path = window.location.pathname.replace(/\/$/, '/');
+      var isCurrent = function (href) {
+        if (href === '/admin/') return path === '/admin/' || path === '/admin/index.html';
+        return path.endsWith(href);
+      };
+      var items = [
+        { label: 'Trang chính', href: '/admin/' },
+        { label: 'Sửa trang', href: '/admin/content.html' },
+        { label: 'Viết blog', href: '/admin/blog.html' },
+        { label: 'Lead', href: '/admin/leads.html' },
+        { label: 'Vận hành', href: '/admin/operations.html' },
+        { label: 'Xem website', href: '/' },
+        { label: 'Hướng dẫn', href: '/admin/guide.html' }
+      ];
+      if (path.endsWith('/admin/text.html')) {
+        items.splice(3, 0, { label: 'Sửa chữ hàng loạt', href: '/admin/text.html' });
+      }
+      if (path.endsWith('/admin/console.html')) {
+        items = [
+          { label: 'Trang chính', href: '/admin/' },
+          { label: 'Vận hành', href: '/admin/operations.html' },
+          { label: 'Kỹ thuật', href: '/admin/console.html' },
+          { label: 'Xem website', href: '/' }
+        ];
+      }
+      if (path.endsWith('/admin/leads.html')) {
+        items.push({ label: 'Mở form', href: '/contact', target: '_blank' });
+      }
+
+      nav.innerHTML = '';
+      items.forEach(function (item) {
+        var link = document.createElement('a');
+        link.href = item.href;
+        link.textContent = item.label;
+        if (item.target) {
+          link.target = item.target;
+          link.rel = 'noreferrer';
+        }
+        if (isCurrent(item.href)) {
+          link.setAttribute('aria-current', 'page');
+        } else {
+          link.className = 'secondary';
+        }
+        nav.appendChild(link);
+      });
+      var logout = document.createElement('button');
+      logout.type = 'button';
+      logout.className = 'secondary';
+      logout.setAttribute('data-admin-logout', '');
+      logout.textContent = 'Đăng xuất';
+      nav.appendChild(logout);
+      nav.dataset.standardized = 'true';
+    });
+  }
+
   function normalizeMenuLabels() {
     var labels = {
       'Admin Hub': 'Trang chính',
@@ -260,6 +318,7 @@
   function addLogoutButtons() {
     setOfficialFavicon();
     makeBrandGoHome();
+    simplifyAdminNav();
     normalizeMenuLabels();
     normalizeVisibleCopy(document.body);
     markTechnicalContent();
