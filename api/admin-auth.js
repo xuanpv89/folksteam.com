@@ -1,6 +1,10 @@
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
 const DEFAULT_SESSION_DAYS = 7;
+const MAX_LOGIN_ATTEMPTS = 8;
+const LOGIN_WINDOW_MS = 10 * 60 * 1000;
+const LOCKOUT_MS = 15 * 60 * 1000;
+const loginAttempts = new Map();
 
 function sendJson(response, status, body, headers = {}) {
   response.status(status);
@@ -29,12 +33,19 @@ function sign(value, secret) {
 
 function createSession(secret, username) {
   const maxAge = getSessionMaxAge();
+  const csrf = randomBytes(32).toString('base64url');
   const payload = JSON.stringify({
     username,
+    role: username === 'admin' ? 'admin' : 'editor',
+    csrf,
     exp: Math.floor(Date.now() / 1000) + maxAge,
   });
   const encoded = base64Url(payload);
-  return `${encoded}.${sign(encoded, secret)}`;
+  return {
+    token: `${encoded}.${sign(encoded, secret)}`,
+    csrf,
+    maxAge,
+  };
 }
 
 function getSessionMaxAge() {
@@ -75,6 +86,49 @@ function getAdminUsers(adminSecret) {
   ];
 }
 
+function clientIp(request) {
+  return String(
+    request.headers['x-forwarded-for'] ||
+      request.headers['x-real-ip'] ||
+      request.socket?.remoteAddress ||
+      'unknown'
+  )
+    .split(',')[0]
+    .trim();
+}
+
+function loginKey(request, username) {
+  return `${clientIp(request)}:${String(username || '').toLowerCase()}`;
+}
+
+function loginState(key) {
+  const now = Date.now();
+  const state = loginAttempts.get(key);
+  if (!state || now - state.firstAt > LOGIN_WINDOW_MS) {
+    return { count: 0, firstAt: now, lockedUntil: 0 };
+  }
+  return state;
+}
+
+function isLocked(key) {
+  return loginState(key).lockedUntil > Date.now();
+}
+
+function recordFailedLogin(key) {
+  const now = Date.now();
+  const state = loginState(key);
+  const count = state.count + 1;
+  loginAttempts.set(key, {
+    count,
+    firstAt: state.firstAt,
+    lockedUntil: count >= MAX_LOGIN_ATTEMPTS ? now + LOCKOUT_MS : state.lockedUntil,
+  });
+}
+
+function clearFailedLogin(key) {
+  loginAttempts.delete(key);
+}
+
 export default async function handler(request, response) {
   if (request.method !== 'POST') {
     return sendJson(response, 405, {
@@ -106,20 +160,37 @@ export default async function handler(request, response) {
   const username = String(body.username || '').trim();
   const password = String(body.password || '');
   const user = adminUsers.find(candidate => candidate.username === username);
+  const key = loginKey(request, username);
+
+  if (isLocked(key)) {
+    return sendJson(response, 429, {
+      ok: false,
+      message: 'Tài khoản đang bị tạm khóa vì đăng nhập sai quá nhiều lần. Hãy thử lại sau ít phút.',
+    });
+  }
 
   if (!user || !safeEqual(password, user.password)) {
+    recordFailedLogin(key);
     return sendJson(response, 401, {
       ok: false,
       message: 'Sai tên đăng nhập hoặc mật khẩu.',
     });
   }
 
+  clearFailedLogin(key);
   const session = createSession(adminSecret, username);
-  const cookie = [
-    `folks_admin_session=${session}`,
+  const sessionCookie = [
+    `folks_admin_session=${session.token}`,
     'Path=/',
-    `Max-Age=${getSessionMaxAge()}`,
+    `Max-Age=${session.maxAge}`,
     'HttpOnly',
+    'Secure',
+    'SameSite=Lax',
+  ].join('; ');
+  const csrfCookie = [
+    `folks_admin_csrf=${encodeURIComponent(session.csrf)}`,
+    'Path=/',
+    `Max-Age=${session.maxAge}`,
     'Secure',
     'SameSite=Lax',
   ].join('; ');
@@ -132,7 +203,7 @@ export default async function handler(request, response) {
       message: 'Đã đăng nhập.',
     },
     {
-      'Set-Cookie': cookie,
+      'Set-Cookie': [sessionCookie, csrfCookie],
     }
   );
 }

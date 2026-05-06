@@ -1,4 +1,4 @@
-import { getAdminSession } from './_admin-session.js';
+import { requireAdminSession } from './_admin-session.js';
 
 const GITHUB_API = 'https://api.github.com';
 const TARGET_PATH = 'src/data_files/cmsContent.json';
@@ -24,6 +24,14 @@ function isSafeRepo(value) {
 
 function isSafeBranch(value) {
   return /^[a-zA-Z0-9._/-]+$/.test(String(value || ''));
+}
+
+function targetRepo() {
+  return String(process.env.GITHUB_REPO || 'xuanpv89/folksteam.com').trim();
+}
+
+function targetBranch() {
+  return String(process.env.GITHUB_BRANCH || 'main').trim();
 }
 
 function validateContent(content) {
@@ -122,7 +130,7 @@ export default async function handler(request, response) {
     });
   }
 
-  if (!getAdminSession(request, adminSecret)) {
+  if (!requireAdminSession(request, adminSecret, { csrf: request.method !== 'GET' })) {
     return sendJson(response, 401, {
       ok: false,
       message: 'Phiên đăng nhập admin đã hết hạn. Hãy đăng nhập lại.',
@@ -130,9 +138,8 @@ export default async function handler(request, response) {
   }
 
   if (request.method === 'GET') {
-    const requestUrl = new URL(request.url, 'https://folksteam.com');
-    const repo = String(requestUrl.searchParams.get('repo') || process.env.GITHUB_REPO || 'xuanpv89/folksteam.com').trim();
-    const branch = String(requestUrl.searchParams.get('branch') || process.env.GITHUB_BRANCH || 'main').trim();
+    const repo = targetRepo();
+    const branch = targetBranch();
 
     if (!isSafeRepo(repo) || !isSafeBranch(branch)) {
       return sendJson(response, 400, {
@@ -182,8 +189,8 @@ export default async function handler(request, response) {
     });
   }
 
-  const repo = String(body.repo || process.env.GITHUB_REPO || 'xuanpv89/folksteam.com').trim();
-  const branch = String(body.branch || process.env.GITHUB_BRANCH || 'main').trim();
+  const repo = targetRepo();
+  const branch = targetBranch();
   const content = body.content;
   const baseSha = String(body.baseSha || '').trim();
   const validationErrors = validateContent(content);

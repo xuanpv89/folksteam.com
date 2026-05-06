@@ -24,6 +24,7 @@ export default async function handler(request, response) {
       'Set-Cookie': [
         'folks_admin_session=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax',
         'folks_admin_session=; Path=/admin; Max-Age=0; HttpOnly; Secure; SameSite=Lax',
+        'folks_admin_csrf=; Path=/; Max-Age=0; Secure; SameSite=Lax',
       ],
     }
   );

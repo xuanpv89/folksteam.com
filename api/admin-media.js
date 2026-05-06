@@ -1,4 +1,4 @@
-import { getAdminSession } from './_admin-session.js';
+import { requireAdminSession } from './_admin-session.js';
 
 const GITHUB_API = 'https://api.github.com';
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
@@ -42,6 +42,14 @@ function isSafeBranch(value) {
   return /^[a-zA-Z0-9._/-]+$/.test(String(value || ''));
 }
 
+function targetRepo() {
+  return String(process.env.GITHUB_REPO || 'xuanpv89/folksteam.com').trim();
+}
+
+function targetBranch() {
+  return String(process.env.GITHUB_BRANCH || 'main').trim();
+}
+
 async function githubRequest(path, token, options = {}) {
   const response = await fetch(`${GITHUB_API}${path}`, {
     ...options,
@@ -79,7 +87,22 @@ function bufferFromDataUrl(value) {
 }
 
 async function getRemoteImage(url) {
-  const response = await fetch(url);
+  const parsed = new URL(url);
+  const allowedHosts = String(
+    process.env.ADMIN_MEDIA_REMOTE_HOSTS || 'images.unsplash.com,i.ytimg.com,raw.githubusercontent.com'
+  )
+    .split(',')
+    .map(host => host.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (parsed.protocol !== 'https:' || !allowedHosts.includes(parsed.hostname.toLowerCase())) {
+    throw new Error('Remote image URL is not allowed. Upload the image file directly or use an approved image host.');
+  }
+
+  const response = await fetch(parsed, {
+    redirect: 'error',
+    signal: AbortSignal.timeout(10000),
+  });
   if (!response.ok) {
     throw new Error(`Could not fetch image URL. HTTP ${response.status}`);
   }
@@ -120,15 +143,15 @@ export default async function handler(request, response) {
     });
   }
 
-  if (!getAdminSession(request, adminSecret)) {
+  if (!requireAdminSession(request, adminSecret, { csrf: true })) {
     return sendJson(response, 401, {
       ok: false,
       message: 'Admin session is missing or expired. Please sign in again.',
     });
   }
 
-  const repo = String(body.repo || process.env.GITHUB_REPO || 'xuanpv89/folksteam.com').trim();
-  const branch = String(body.branch || process.env.GITHUB_BRANCH || 'main').trim();
+  const repo = targetRepo();
+  const branch = targetBranch();
   if (!isSafeRepo(repo) || !isSafeBranch(branch)) {
     return sendJson(response, 400, {
       ok: false,

@@ -1,4 +1,4 @@
-import { getAdminSession } from './_admin-session.js';
+import { requireAdminSession } from './_admin-session.js';
 
 const GITHUB_API = 'https://api.github.com';
 
@@ -32,6 +32,14 @@ function isSafeRepo(value) {
 
 function isSafeBranch(value) {
   return /^[a-zA-Z0-9._/-]+$/.test(String(value || ''));
+}
+
+function targetRepo() {
+  return String(process.env.GITHUB_REPO || 'xuanpv89/folksteam.com').trim();
+}
+
+function targetBranch() {
+  return String(process.env.GITHUB_BRANCH || 'main').trim();
 }
 
 function getTargetPath(action, locale, slug) {
@@ -117,7 +125,7 @@ export default async function handler(request, response) {
     });
   }
 
-  if (!getAdminSession(request, adminSecret)) {
+  if (!requireAdminSession(request, adminSecret, { csrf: true })) {
     return sendJson(response, 401, {
       ok: false,
       message: 'Admin session is missing or expired. Please sign in again.',
@@ -125,8 +133,8 @@ export default async function handler(request, response) {
   }
 
   const action = body.action === 'draft' ? 'draft' : 'publish';
-  const repo = String(body.repo || process.env.GITHUB_REPO || 'xuanpv89/folksteam.com').trim();
-  const branch = String(body.branch || process.env.GITHUB_BRANCH || 'main').trim();
+  const repo = targetRepo();
+  const branch = targetBranch();
   const slug = slugify(body.slug);
   const locale = String(body.locale || 'en').trim();
   const markdown = String(body.markdown || '');

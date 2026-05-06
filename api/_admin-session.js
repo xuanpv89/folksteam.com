@@ -44,3 +44,26 @@ export function getAdminSession(request, secret) {
     return null;
   }
 }
+
+function getHeader(request, name) {
+  const headers = request.headers;
+  if (!headers) return '';
+  if (typeof headers.get === 'function') return headers.get(name) || '';
+  return headers[name.toLowerCase()] || headers[name] || '';
+}
+
+export function requireAdminSession(request, secret, options = {}) {
+  const session = getAdminSession(request, secret);
+  if (!session) return null;
+
+  const method = String(request.method || 'GET').toUpperCase();
+  const needsCsrf = options.csrf && !['GET', 'HEAD', 'OPTIONS'].includes(method);
+  if (!needsCsrf) return session;
+
+  const csrfHeader = getHeader(request, 'x-csrf-token');
+  if (!session.csrf || !safeEqual(csrfHeader, session.csrf)) {
+    return null;
+  }
+
+  return session;
+}
