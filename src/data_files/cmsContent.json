@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-06T03:17:02.198Z",
+  "updatedAt": "2026-05-06T03:25:22.701Z",
   "pages": [
     {
       "id": "home",
@@ -74,7 +74,7 @@
               "key": "text-4",
               "label": "A Modern Growth System Built on",
               "type": "text",
-              "value": "A Modern Growth System Built on",
+              "value": "test 2 A Modern Growth System Built on",
               "match": "A Modern Growth System Built on",
               "elementType": "text"
             },
@@ -5432,7 +5432,7 @@
               "key": "text-10",
               "label": "Brand & Culture",
               "type": "text",
-              "value": "Brand & Culture",
+              "value": "Clarity Comes Before Growth",
               "match": "Brand & Culture",
               "elementType": "text"
             },
@@ -5440,7 +5440,7 @@
               "key": "text-11",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "C.H.E.S.S",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5448,7 +5448,7 @@
               "key": "text-12",
               "label": "Growth Systems",
               "type": "text",
-              "value": "Growth Systems",
+              "value": "Operations",
               "match": "Growth Systems",
               "elementType": "text"
             },
@@ -5456,7 +5456,7 @@
               "key": "text-13",
               "label": "Marketing Models",
               "type": "text",
-              "value": "Marketing Models",
+              "value": "C.H.E.S.S",
               "match": "Marketing Models",
               "elementType": "text"
             },
@@ -5464,7 +5464,7 @@
               "key": "text-14",
               "label": "Operations",
               "type": "text",
-              "value": "Operations",
+              "value": "Brand & Culture",
               "match": "Operations",
               "elementType": "text"
             },
@@ -5472,7 +5472,7 @@
               "key": "text-15",
               "label": "Strategy",
               "type": "text",
-              "value": "Strategy",
+              "value": "C.H.E.S.S",
               "match": "Strategy",
               "elementType": "text"
             },
@@ -5542,7 +5542,7 @@
               "key": "text-16",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "C.H.E.S.S",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5550,7 +5550,7 @@
               "key": "text-17",
               "label": "Frugality",
               "type": "text",
-              "value": "Float-er & Flow-er: Two Types of Talent in Organizations",
+              "value": "",
               "match": "Frugality",
               "elementType": "text"
             },
@@ -5566,7 +5566,7 @@
               "key": "text-19",
               "label": "Folks Team",
               "type": "text",
-              "value": "Editorial Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5606,7 +5606,7 @@
               "key": "image-1",
               "label": "Ảnh: Frugality",
               "type": "image",
-              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -5622,7 +5622,7 @@
               "key": "image-2",
               "label": "Ảnh: Folks Team",
               "type": "image",
-              "value": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
+              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "match": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
               "elementType": "image"
             },
@@ -5630,7 +5630,7 @@
               "key": "alt-2",
               "label": "Mô tả ảnh: Folks Team",
               "type": "text",
-              "value": "Folks Team author",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "alt"
             }
@@ -5644,7 +5644,7 @@
               "key": "text-22",
               "label": "Folks Team",
               "type": "text",
-              "value": "May 4, 2026",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5660,7 +5660,7 @@
               "key": "text-24",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "Float-er & Flow-er: Two Types of Talent in Organizations 2",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5668,7 +5668,7 @@
               "key": "text-25",
               "label": "Float-er & Flow-er: Two Types of Talent in Organizatio...",
               "type": "text",
-              "value": "Float-er & Flow-er: Two Types of Talent in Organizations",
+              "value": "Draft blog post created from the Folks Team CMS.",
               "match": "Float-er & Flow-er: Two Types of Talent in Organizations",
               "elementType": "text"
             },
@@ -5676,7 +5676,7 @@
               "key": "text-26",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5684,7 +5684,7 @@
               "key": "text-27",
               "label": "May 4, 2026",
               "type": "text",
-              "value": "May 4, 2026",
+              "value": "C.H.E.S.S",
               "match": "May 4, 2026",
               "elementType": "text"
             },
@@ -5692,7 +5692,7 @@
               "key": "text-28",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "C.H.E.S.S",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5700,7 +5700,7 @@
               "key": "text-29",
               "label": "Float-er & Flow-er: Two Types of Talent in Organizatio...",
               "type": "text",
-              "value": "New Blog Post",
+              "value": "Team planning a structured growth strategy",
               "match": "Float-er & Flow-er: Two Types of Talent in Organizations 2",
               "elementType": "text"
             },
@@ -5716,7 +5716,7 @@
               "key": "text-31",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5724,7 +5724,7 @@
               "key": "text-32",
               "label": "May 4, 2026",
               "type": "text",
-              "value": "May 4, 2026",
+              "value": "C.H.E.S.S",
               "match": "May 4, 2026",
               "elementType": "text"
             },
@@ -5732,7 +5732,7 @@
               "key": "text-33",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "Strategy",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5756,7 +5756,7 @@
               "key": "text-36",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5764,7 +5764,7 @@
               "key": "text-37",
               "label": "May 4, 2026",
               "type": "text",
-              "value": "May 4, 2026",
+              "value": "C.H.E.S.S",
               "match": "May 4, 2026",
               "elementType": "text"
             },
@@ -5780,7 +5780,7 @@
               "key": "text-39",
               "label": "test 22",
               "type": "text",
-              "value": "test1",
+              "value": "Folks Team",
               "match": "test 22",
               "elementType": "text"
             },
@@ -5796,7 +5796,7 @@
               "key": "text-41",
               "label": "Folks Team",
               "type": "text",
-              "value": "May 4, 2026",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5812,7 +5812,7 @@
               "key": "text-43",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "The C.H.E.S.S Model: A Complete Framework for Modern Marketing and Community Building",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5828,7 +5828,7 @@
               "key": "text-45",
               "label": "Folks Team",
               "type": "text",
-              "value": "May 3, 2026",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5844,7 +5844,7 @@
               "key": "text-47",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "ok 1",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5860,7 +5860,7 @@
               "key": "text-49",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5868,7 +5868,7 @@
               "key": "text-50",
               "label": "May 3, 2026",
               "type": "text",
-              "value": "May 3, 2026",
+              "value": "May 2, 2026",
               "match": "May 3, 2026",
               "elementType": "text"
             },
@@ -5876,7 +5876,7 @@
               "key": "text-51",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "C.H.E.S.S",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5884,7 +5884,7 @@
               "key": "text-52",
               "label": "ok 1",
               "type": "text",
-              "value": "ok 3",
+              "value": "test 3",
               "match": "ok 1",
               "elementType": "text"
             },
@@ -5900,7 +5900,7 @@
               "key": "text-54",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5908,7 +5908,7 @@
               "key": "text-55",
               "label": "May 3, 2026",
               "type": "text",
-              "value": "May 3, 2026",
+              "value": "May 2, 2026",
               "match": "May 3, 2026",
               "elementType": "text"
             },
@@ -5916,7 +5916,7 @@
               "key": "text-56",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "C.H.E.S.S",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -5932,7 +5932,7 @@
               "key": "text-58",
               "label": "test 3",
               "type": "text",
-              "value": "A practical breakdown of Content, Hub, Event, Store, and Session as the core components of a modern growth ecosystem.",
+              "value": "Team mapping a community growth system",
               "match": "test 3",
               "elementType": "text"
             },
@@ -5940,7 +5940,7 @@
               "key": "text-59",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5980,7 +5980,7 @@
               "key": "text-64",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -5996,7 +5996,7 @@
               "key": "text-66",
               "label": "Growth Systems",
               "type": "text",
-              "value": "Marketing Models",
+              "value": "Operations",
               "match": "Growth Systems",
               "elementType": "text"
             },
@@ -6020,7 +6020,7 @@
               "key": "text-69",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -6060,7 +6060,7 @@
               "key": "text-74",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -6076,7 +6076,7 @@
               "key": "text-76",
               "label": "C.H.E.S.S",
               "type": "text",
-              "value": "Operations",
+              "value": "Growth Systems",
               "match": "C.H.E.S.S",
               "elementType": "text"
             },
@@ -6100,7 +6100,7 @@
               "key": "text-79",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -6116,7 +6116,7 @@
               "key": "text-81",
               "label": "Operations",
               "type": "text",
-              "value": "Strategy",
+              "value": "Brand & Culture",
               "match": "Operations",
               "elementType": "text"
             },
@@ -6140,7 +6140,7 @@
               "key": "text-84",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -6156,7 +6156,7 @@
               "key": "text-86",
               "label": "Strategy",
               "type": "text",
-              "value": "Strategy",
+              "value": "C.H.E.S.S",
               "match": "Strategy",
               "elementType": "text"
             },
@@ -6180,7 +6180,7 @@
               "key": "text-89",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -6220,7 +6220,7 @@
               "key": "text-94",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -6260,7 +6260,7 @@
               "key": "text-99",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -6300,7 +6300,7 @@
               "key": "text-104",
               "label": "Folks Team",
               "type": "text",
-              "value": "Folks Team",
+              "value": "Insights",
               "match": "Folks Team",
               "elementType": "text"
             },
@@ -6532,7 +6532,7 @@
               "key": "image-3",
               "label": "Ảnh: /_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "type": "image",
-              "value": "/_astro/cardimage-float-er-flow-er-two-types-of-talent-in-organizations-2-1777924749221.DO5fWGQC_Za21UC.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6540,7 +6540,7 @@
               "key": "alt-3",
               "label": "Mô tả ảnh: /_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "type": "text",
-              "value": "Float-er & Flow-er: Two Types of Talent in Organizations 2",
+              "value": "",
               "match": "",
               "elementType": "alt"
             },
@@ -6556,7 +6556,7 @@
               "key": "alt-4",
               "label": "Mô tả ảnh: Folks Team author",
               "type": "text",
-              "value": "Folks Team author",
+              "value": "Folks logo",
               "match": "Folks Team author",
               "elementType": "alt"
             },
@@ -6580,7 +6580,7 @@
               "key": "image-6",
               "label": "Ảnh: Folks Team author",
               "type": "image",
-              "value": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -6588,7 +6588,7 @@
               "key": "alt-6",
               "label": "Mô tả ảnh: Folks Team author",
               "type": "text",
-              "value": "Folks Team author",
+              "value": "Folks logo",
               "match": "Folks Team author",
               "elementType": "alt"
             },
@@ -6596,7 +6596,7 @@
               "key": "image-7",
               "label": "Ảnh: Team planning a structured growth strategy",
               "type": "image",
-              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6604,7 +6604,7 @@
               "key": "alt-7",
               "label": "Mô tả ảnh: Team planning a structured growth strategy",
               "type": "text",
-              "value": "",
+              "value": "Workshop for building a structured growth system",
               "match": "Team planning a structured growth strategy",
               "elementType": "alt"
             },
@@ -6612,7 +6612,7 @@
               "key": "image-8",
               "label": "Ảnh: Folks Team author",
               "type": "image",
-              "value": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
+              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "match": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
               "elementType": "image"
             },
@@ -6620,7 +6620,7 @@
               "key": "alt-8",
               "label": "Mô tả ảnh: Folks Team author",
               "type": "text",
-              "value": "Folks Team author",
+              "value": "Folks logo",
               "match": "Folks Team author",
               "elementType": "alt"
             },
@@ -6628,7 +6628,7 @@
               "key": "image-9",
               "label": "Ảnh: /_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "type": "image",
-              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6644,7 +6644,7 @@
               "key": "image-10",
               "label": "Ảnh: Folks Team author",
               "type": "image",
-              "value": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
+              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "match": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
               "elementType": "image"
             },
@@ -6652,7 +6652,7 @@
               "key": "alt-10",
               "label": "Mô tả ảnh: Folks Team author",
               "type": "text",
-              "value": "Folks Team author",
+              "value": "Folks logo",
               "match": "Folks Team author",
               "elementType": "alt"
             },
@@ -6660,7 +6660,7 @@
               "key": "image-11",
               "label": "Ảnh: /_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "type": "image",
-              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6676,7 +6676,7 @@
               "key": "image-12",
               "label": "Ảnh: Folks Team author",
               "type": "image",
-              "value": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
+              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "match": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
               "elementType": "image"
             },
@@ -6684,7 +6684,7 @@
               "key": "alt-12",
               "label": "Mô tả ảnh: Folks Team author",
               "type": "text",
-              "value": "Folks Team author",
+              "value": "Folks logo",
               "match": "Folks Team author",
               "elementType": "alt"
             },
@@ -6692,7 +6692,7 @@
               "key": "image-13",
               "label": "Ảnh: /_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "type": "image",
-              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6700,7 +6700,7 @@
               "key": "alt-13",
               "label": "Mô tả ảnh: /_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "type": "text",
-              "value": "ok 1",
+              "value": "",
               "match": "",
               "elementType": "alt"
             },
@@ -6708,7 +6708,7 @@
               "key": "image-14",
               "label": "Ảnh: Folks Team author",
               "type": "image",
-              "value": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
+              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "match": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
               "elementType": "image"
             },
@@ -6716,7 +6716,7 @@
               "key": "alt-14",
               "label": "Mô tả ảnh: Folks Team author",
               "type": "text",
-              "value": "Folks Team author",
+              "value": "Folks logo",
               "match": "Folks Team author",
               "elementType": "alt"
             },
@@ -6724,7 +6724,7 @@
               "key": "image-15",
               "label": "Ảnh: ok 1",
               "type": "image",
-              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6740,7 +6740,7 @@
               "key": "image-16",
               "label": "Ảnh: Folks Team author",
               "type": "image",
-              "value": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
+              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "match": "/_astro/anna.DKqT6LjU_1lW4T5.avif",
               "elementType": "image"
             },
@@ -6748,7 +6748,7 @@
               "key": "alt-16",
               "label": "Mô tả ảnh: Folks Team author",
               "type": "text",
-              "value": "Folks Team author",
+              "value": "Folks logo",
               "match": "Folks Team author",
               "elementType": "alt"
             },
@@ -6756,7 +6756,7 @@
               "key": "image-17",
               "label": "Ảnh: test 3",
               "type": "image",
-              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6788,7 +6788,7 @@
               "key": "image-19",
               "label": "Ảnh: Team mapping a community growth system",
               "type": "image",
-              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6804,7 +6804,7 @@
               "key": "image-20",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -6812,7 +6812,7 @@
               "key": "alt-20",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -6820,7 +6820,7 @@
               "key": "image-21",
               "label": "Ảnh: Workshop session for community engagement",
               "type": "image",
-              "value": "/_astro/growth-analytics.DU9tE3VQ_ZWe42g.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "elementType": "image"
             },
@@ -6836,7 +6836,7 @@
               "key": "image-22",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -6844,7 +6844,7 @@
               "key": "alt-22",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -6868,7 +6868,7 @@
               "key": "image-24",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -6876,7 +6876,7 @@
               "key": "alt-24",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -6884,7 +6884,7 @@
               "key": "image-25",
               "label": "Ảnh: Folks Team brand logo",
               "type": "image",
-              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
+              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "match": "/_astro/folks-brand-logo.Ch4fm1hU_ZDgURu.avif",
               "elementType": "image"
             },
@@ -6900,7 +6900,7 @@
               "key": "image-26",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -6908,7 +6908,7 @@
               "key": "alt-26",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -6916,7 +6916,7 @@
               "key": "image-27",
               "label": "Ảnh: Planning board for a complex growth system",
               "type": "image",
-              "value": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "elementType": "image"
             },
@@ -6932,7 +6932,7 @@
               "key": "image-28",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -6940,7 +6940,7 @@
               "key": "alt-28",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -6948,7 +6948,7 @@
               "key": "image-29",
               "label": "Ảnh: Strategic planning session",
               "type": "image",
-              "value": "/_astro/folks-brand-logo.Ch4fm1hU_ZDgURu.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -6964,7 +6964,7 @@
               "key": "image-30",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -6972,7 +6972,7 @@
               "key": "alt-30",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -6996,7 +6996,7 @@
               "key": "image-32",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -7004,7 +7004,7 @@
               "key": "alt-32",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -7012,7 +7012,7 @@
               "key": "image-33",
               "label": "Ảnh: Team planning a structured growth strategy",
               "type": "image",
-              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
+              "value": "/_astro/emotion-compass.DjOGUhWV_Z2jrO2R.avif",
               "match": "/_astro/growth-brainstorm.UTWwIPAh_2aGpCy.avif",
               "elementType": "image"
             },
@@ -7028,7 +7028,7 @@
               "key": "image-34",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -7036,7 +7036,7 @@
               "key": "alt-34",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -7044,7 +7044,7 @@
               "key": "image-35",
               "label": "Ảnh: Workshop for building a structured growth system",
               "type": "image",
-              "value": "/_astro/growth-analytics.DU9tE3VQ_ZWe42g.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "elementType": "image"
             },
@@ -7060,7 +7060,7 @@
               "key": "image-36",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -7068,7 +7068,7 @@
               "key": "alt-36",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -7092,7 +7092,7 @@
               "key": "image-38",
               "label": "Ảnh: Folks logo",
               "type": "image",
-              "value": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
+              "value": "/_astro/growth-workshop.9kNpVNcd_15D6im.avif",
               "match": "/_astro/folks-brand-mark.sAIZA2gl_sm8p6.avif",
               "elementType": "image"
             },
@@ -7100,7 +7100,7 @@
               "key": "alt-38",
               "label": "Mô tả ảnh: Folks logo",
               "type": "text",
-              "value": "Folks logo",
+              "value": "Community workshop and group discussion",
               "match": "Folks logo",
               "elementType": "alt"
             },
@@ -7178,7 +7178,7 @@
               "key": "text-118",
               "label": "Read more",
               "type": "text",
-              "value": "A small reflective tool can help groups name emotions, slow down reactions, and choose better next steps.",
+              "value": "Read more",
               "match": "Read more",
               "elementType": "text"
             },
