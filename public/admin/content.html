@@ -230,6 +230,33 @@
       .summary-row { display: flex; justify-content: space-between; gap: 14px; font-size: 13px; }
       .summary-row strong { text-align: right; }
       .modal-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+      .deploy-banner {
+        display: none;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        margin-bottom: 12px;
+        border: 1px solid #bde8cb;
+        border-radius: 8px;
+        background: #edf8f1;
+        padding: 10px 12px;
+        color: #20472f;
+        font-size: 13px;
+        font-weight: 850;
+      }
+      .deploy-banner.show { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .deploy-banner.warning { border-color: #fde68a; background: #fffbeb; color: #854d0e; }
+      .deploy-banner.error { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+      .page-filter { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+      .page-filter button { min-height: 32px; padding: 6px 10px !important; font-size: 12px !important; }
+      .page-filter button.active { border-color: #bde8cb !important; background: var(--brand-soft) !important; color: #20472f !important; }
+      .diff-list { display: grid; gap: 8px; max-height: 320px; overflow: auto; }
+      .diff-item { border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 10px; }
+      .diff-item strong { display: block; margin-bottom: 6px; font-size: 13px; }
+      .diff-item code { display: block; white-space: pre-wrap; word-break: break-word; border-radius: 6px; padding: 8px; font-family: inherit; font-size: 12px; line-height: 1.45; }
+      .diff-before { background: #fef2f2; color: #991b1b; }
+      .diff-after { margin-top: 6px; background: #ecfdf5; color: #065f46; }
+      .sticky-actions { position: sticky; bottom: 0; z-index: 5; border-top: 1px solid var(--line); background: rgb(255 255 255 / 92%); padding-top: 12px; backdrop-filter: blur(12px); }
     </style>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=folks-official-1" />
     <link rel="icon" type="image/png" href="/favicon.png?v=folks-official-1" />
@@ -240,6 +267,10 @@
   </head>
   <body>
     <main class="shell">
+      <div id="deploy-banner" class="deploy-banner" aria-live="polite">
+        <span id="deploy-banner-text">Ready.</span>
+        <a id="deploy-banner-link" href="/" target="_blank" rel="noreferrer" style="display:none">Open</a>
+      </div>
       <header class="topbar">
         <div class="brand">
           <img src="/folks-brand-mark.jpg" alt="Folks Team logo" />
@@ -270,6 +301,7 @@
             <input id="page-search" placeholder="Home, About, Services..." />
           </label>
           <div id="page-summary" class="page-summary"></div>
+          <div id="page-filter" class="page-filter" aria-label="Page filters"></div>
           <div class="list" id="page-list" style="margin-top:12px"></div>
           <details class="tools">
             <summary>Công cụ nâng cao</summary>
@@ -277,6 +309,7 @@
               <button type="button" class="secondary" id="scan-site">Quét lại website</button>
               <button type="button" class="secondary" id="reload-live">Tải lại online</button>
               <button type="button" class="secondary" id="save-local">Lưu trên máy này</button>
+              <button type="button" class="secondary" id="clear-draft">Bỏ bản lưu</button>
             </div>
           </details>
         </aside>
@@ -299,7 +332,9 @@
             Những vùng có thể sửa sẽ được viền xanh trong preview. Click trực tiếp vào chữ để sửa.
           </p>
           <div id="field-editor" class="empty">Chưa chọn nội dung.</div>
-          <div class="actions" style="margin-top:14px">
+          <div class="actions sticky-actions" style="margin-top:14px">
+            <button type="button" class="secondary" id="undo-field" disabled>Hoàn tác mục này</button>
+            <button type="button" class="secondary" id="undo-page">Hoàn tác trang</button>
             <button type="button" class="secondary" id="save-field" disabled>Cập nhật preview</button>
             <button type="button" id="publish-github">Đăng lên website</button>
           </div>
@@ -317,6 +352,7 @@
         </div>
         <p class="hint" id="publish-dialog-intro"></p>
         <div class="summary-list" id="publish-dialog-summary"></div>
+        <div class="diff-list" id="publish-dialog-diff"></div>
         <p class="hint">Sau khi đăng, website cần hoàn tất cập nhật trước khi khách truy cập nhìn thấy nội dung mới.</p>
         <div class="modal-actions">
           <button type="button" class="secondary" id="publish-cancel">Kiểm tra lại</button>
@@ -359,23 +395,31 @@
       let baseSha = '';
       let pageIndex = 0;
       let selectedField = null;
+      let pageFilterMode = 'all';
       let hasUnsavedChanges = false;
 
       const pageList = document.getElementById('page-list');
       const pageSummary = document.getElementById('page-summary');
+      const pageFilter = document.getElementById('page-filter');
       const pageSearch = document.getElementById('page-search');
       const pageFrame = document.getElementById('page-frame');
       const previewTitle = document.getElementById('preview-title');
       const sourceStatus = document.getElementById('source-status');
       const publishStatus = document.getElementById('publish-status');
+      const deployBanner = document.getElementById('deploy-banner');
+      const deployBannerText = document.getElementById('deploy-banner-text');
+      const deployBannerLink = document.getElementById('deploy-banner-link');
       const fieldEditor = document.getElementById('field-editor');
       const editorTitle = document.getElementById('editor-title');
       const editorHint = document.getElementById('editor-hint');
       const saveFieldButton = document.getElementById('save-field');
+      const undoFieldButton = document.getElementById('undo-field');
+      const undoPageButton = document.getElementById('undo-page');
       const toast = document.getElementById('toast');
       const publishDialog = document.getElementById('publish-dialog');
       const publishDialogIntro = document.getElementById('publish-dialog-intro');
       const publishDialogSummary = document.getElementById('publish-dialog-summary');
+      const publishDialogDiff = document.getElementById('publish-dialog-diff');
       const publishCancelButton = document.getElementById('publish-cancel');
       const publishConfirmButton = document.getElementById('publish-confirm');
 
@@ -416,12 +460,64 @@
         return (page?.sections || []).flatMap(section => (section.fields || []).map(field => ({ section, field })));
       }
 
+      function fieldIdentity(page, section, field) {
+        return `${page?.path || ''}::${section?.id || ''}::${field?.key || ''}`;
+      }
+
+      function serverFieldMap() {
+        const map = new Map();
+        (serverContent?.pages || []).forEach(page => {
+          (page.sections || []).forEach(section => {
+            (section.fields || []).forEach(field => {
+              map.set(fieldIdentity(page, section, field), { page, section, field });
+            });
+          });
+        });
+        return map;
+      }
+
+      function collectChanges(limit = 80) {
+        const original = serverFieldMap();
+        const changes = [];
+        (state.pages || []).forEach(page => {
+          (page.sections || []).forEach(section => {
+            (section.fields || []).forEach(field => {
+              const before = original.get(fieldIdentity(page, section, field))?.field?.value ?? '';
+              const after = field.value ?? '';
+              if (String(before) === String(after)) return;
+              changes.push({
+                pageTitle: page.title || page.path,
+                pagePath: page.path || '',
+                sectionTitle: section.title || 'Content',
+                fieldLabel: field.label || field.key || 'Field',
+                before: String(before),
+                after: String(after),
+              });
+            });
+          });
+        });
+        return changes.slice(0, limit);
+      }
+
+      function showDeployBanner(message, type = 'info', link = null) {
+        deployBanner.className = `deploy-banner show ${type === 'warning' ? 'warning' : type === 'error' ? 'error' : ''}`;
+        deployBannerText.textContent = message;
+        if (link?.url) {
+          deployBannerLink.href = link.url;
+          deployBannerLink.textContent = link.label || 'Open';
+          deployBannerLink.style.display = '';
+        } else {
+          deployBannerLink.style.display = 'none';
+        }
+      }
+
       function updatePublishStatus(message, links = [], type = 'info') {
         publishStatus.className = `publish-log ${type === 'error' ? 'error' : type === 'warning' ? 'warning' : ''}`;
         publishStatus.innerHTML = `
           <div>${escapeHtml(message)}</div>
           ${links.filter(link => link.url).map(link => `<div><a href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">${escapeHtml(link.label)}</a></div>`).join('')}
         `;
+        showDeployBanner(message, type, links.find(link => link.url));
       }
 
       function deployStatusLinks(result, deployment) {
@@ -784,6 +880,7 @@
           setSourceStatus('Đã quét website', `Tìm thấy ${pages.length} trang có thể sửa.`, 'warning');
           renderPages();
           loadCurrentPage();
+          updateChangeStatus();
         } catch (error) {
           setSourceStatus('Quét bị lỗi', error.message, 'error');
           showToast(error.message, 'error');
@@ -796,8 +893,10 @@
       function renderPages() {
         const query = pageSearch.value.trim().toLowerCase();
         const allPages = state.pages || [];
+        renderPageFilters(allPages);
         const visiblePages = sortPages(allPages
           .map((page, index) => ({ page, index }))
+          .filter(({ page }) => pageFilterMode === 'all' || pageLanguage(page) === pageFilterMode || pageGroupLabel(page) === pageFilterMode)
           .filter(({ page }) => !query || `${page.title} ${page.path} ${languageLabel(pageLanguage(page))} ${pageGroupLabel(page)}`.toLowerCase().includes(query)));
 
         const languageCounts = allPages.reduce((counts, page) => {
@@ -847,6 +946,34 @@
 
           pageList.appendChild(groupElement);
         });
+      }
+
+      function renderPageFilters(pages) {
+        const filters = [
+          ['all', `Tất cả ${pages.length}`],
+          ['en', `EN ${pages.filter(page => pageLanguage(page) === 'en').length}`],
+          ['vi', `VI ${pages.filter(page => pageLanguage(page) === 'vi').length}`],
+          ['zh', `ZH ${pages.filter(page => pageLanguage(page) === 'zh').length}`],
+          ['Trang chính', 'Trang chính'],
+          ['Trang giới thiệu', 'Giới thiệu'],
+          ['Blog', 'Blog'],
+          ['Products', 'Products'],
+          ['Projects', 'Projects'],
+        ];
+        pageFilter.innerHTML = '';
+        filters
+          .filter(([key]) => key === 'all' || pages.some(page => pageLanguage(page) === key || pageGroupLabel(page) === key))
+          .forEach(([key, label]) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = `secondary ${pageFilterMode === key ? 'active' : ''}`;
+            button.textContent = label;
+            button.addEventListener('click', () => {
+              pageFilterMode = key;
+              renderPages();
+            });
+            pageFilter.appendChild(button);
+          });
       }
 
       function findField(page, key) {
@@ -1053,6 +1180,7 @@
           fieldEditor.className = 'empty';
           fieldEditor.innerHTML = 'Chưa chọn nội dung.';
           saveFieldButton.disabled = true;
+          undoFieldButton.disabled = true;
           return;
         }
 
@@ -1092,8 +1220,54 @@
             else target.textContent = field.value;
           }
           hasUnsavedChanges = true;
+          updateChangeStatus();
         });
         saveFieldButton.disabled = false;
+        undoFieldButton.disabled = originalValueForField(currentPage(), selectedField.section, field) === undefined;
+      }
+
+      function originalValueForField(page, section, field) {
+        return serverFieldMap().get(fieldIdentity(page, section, field))?.field?.value;
+      }
+
+      function updateChangeStatus() {
+        const count = collectChanges().length;
+        updatePublishStatus(count ? `${count} mục đã thay đổi. Hãy xem lại trước khi đăng.` : 'Sẵn sàng đăng khi bạn hoàn tất kiểm tra.', [], count ? 'warning' : 'info');
+      }
+
+      function undoSelectedField() {
+        const field = selectedField?.field;
+        if (!field) return;
+        const original = originalValueForField(currentPage(), selectedField.section, field);
+        if (original === undefined) return;
+        field.value = original;
+        const target = selectedField.target;
+        if (target) {
+          if (field.elementType === 'link') target.setAttribute('href', field.value || '#');
+          else if (field.elementType === 'image') {
+            target.setAttribute('src', field.value || '');
+            target.removeAttribute('srcset');
+          } else if (field.elementType === 'alt') target.setAttribute('alt', field.value || '');
+          else target.textContent = field.value;
+        }
+        hasUnsavedChanges = true;
+        renderFieldEditor();
+        updateChangeStatus();
+        showToast('Đã hoàn tác mục đang chọn.');
+      }
+
+      function undoCurrentPage() {
+        const page = currentPage();
+        const original = (serverContent?.pages || []).find(candidate => candidate.path === page?.path);
+        if (!page || !original) return;
+        if (!window.confirm(`Hoàn tác tất cả thay đổi trên trang "${page.title || page.path}"?`)) return;
+        state.pages[pageIndex] = structuredClone(original);
+        selectedField = null;
+        hasUnsavedChanges = true;
+        renderPages();
+        loadCurrentPage();
+        updateChangeStatus();
+        showToast('Đã hoàn tác trang đang chọn.');
       }
 
       function buildPublishSummary() {
@@ -1112,6 +1286,7 @@
           textCount,
           linkCount,
           imageCount,
+          changes: collectChanges(),
           currentTitle: currentPage()?.title || currentPage()?.path || 'Chưa chọn trang',
           currentPath: currentPage()?.path || '',
           languageSummary: Object.entries(languageCounts)
@@ -1127,10 +1302,23 @@
           ['Ngôn ngữ', summary.languageSummary || 'Chưa có dữ liệu'],
           ['Nội dung chữ', `${summary.textCount} mục`],
           ['Link', `${summary.linkCount} link`],
+          ['Thay đổi sẽ đăng', `${summary.changes.length} mục`],
           ['Ảnh và mô tả ảnh', `${summary.imageCount} mục`],
         ]
           .map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`)
           .join('');
+
+        publishDialogDiff.innerHTML = summary.changes.length
+          ? summary.changes
+              .map(change => `
+                <article class="diff-item">
+                  <strong>${escapeHtml(change.pageTitle)} ${change.pagePath ? `(${escapeHtml(change.pagePath)})` : ''}<br>${escapeHtml(change.sectionTitle)} / ${escapeHtml(change.fieldLabel)}</strong>
+                  <code class="diff-before">Trước: ${escapeHtml(change.before || '(trống)')}</code>
+                  <code class="diff-after">Sau: ${escapeHtml(change.after || '(trống)')}</code>
+                </article>
+              `)
+              .join('')
+          : '<div class="empty">Không có thay đổi nội dung so với bản online.</div>';
 
         return new Promise(resolve => {
           const cleanup = value => {
@@ -1246,6 +1434,13 @@
         initialize();
       });
       document.getElementById('save-local').addEventListener('click', saveDraft);
+      document.getElementById('clear-draft').addEventListener('click', () => {
+        localStorage.removeItem(draftKey);
+        showToast('Đã bỏ bản lưu trên máy này.');
+        setSourceStatus('Đã bỏ bản lưu', 'Nội dung trên màn hình vẫn giữ nguyên. Tải lại online nếu muốn lấy bản live.');
+      });
+      undoFieldButton.addEventListener('click', undoSelectedField);
+      undoPageButton.addEventListener('click', undoCurrentPage);
       document.getElementById('save-field').addEventListener('click', () => {
         saveDraft();
         showToast('Đã cập nhật preview.');

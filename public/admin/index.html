@@ -152,6 +152,43 @@
         gap: 16px;
       }
 
+      .task-board {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      @media (min-width: 820px) {
+        .task-board {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+
+      .task-link {
+        display: grid;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 16px;
+        box-shadow: 0 14px 34px rgb(38 38 38 / 7%);
+      }
+
+      .task-link strong {
+        font-size: 16px;
+      }
+
+      .task-link span {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .task-link.primary {
+        border-color: #bde8cb;
+        background: var(--brand-soft);
+      }
+
       @media (min-width: 820px) {
         .grid {
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -266,6 +303,25 @@
           page builder, case study manager hoặc quản lý newsletter mà không làm
           rối một màn hình.
         </p>
+      </section>
+
+      <section class="task-board" aria-label="Quick admin tasks">
+        <a class="task-link primary" href="/admin/content.html">
+          <strong>Sửa trang đang live</strong>
+          <span>Click vào chữ trên preview, xem diff, rồi đăng lên website.</span>
+        </a>
+        <a class="task-link" href="/admin/blog.html">
+          <strong>Viết hoặc cập nhật blog</strong>
+          <span>Soạn bài, lưu nháp, kiểm tra preview và publish.</span>
+        </a>
+        <a class="task-link" href="/admin/console.html#media">
+          <strong>Upload ảnh</strong>
+          <span>Đưa ảnh vào repo và lấy đường dẫn dùng cho bài/trang.</span>
+        </a>
+        <a class="task-link" href="/admin/console.html#deployments">
+          <strong>Kiểm tra sau khi đăng</strong>
+          <span>Theo dõi deploy, checklist live và lịch sử thao tác.</span>
+        </a>
       </section>
 
       <section class="grid" aria-label="CMS modules">
