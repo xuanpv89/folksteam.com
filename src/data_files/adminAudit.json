@@ -1,4 +1,12 @@
 {
-  "updatedAt": null,
-  "events": []
+  "updatedAt": "2026-05-06T13:09:00.065Z",
+  "events": [
+    {
+      "id": "audit-1778072940065-ja7bry",
+      "createdAt": "2026-05-06T13:09:00.065Z",
+      "type": "subscriber-create",
+      "actor": "admin",
+      "target": "xuan@dancentervn.com"
+    }
+  ]
 }
