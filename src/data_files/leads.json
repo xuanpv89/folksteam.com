@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T05:39:42.203Z",
+  "updatedAt": "2026-05-07T05:39:59.100Z",
   "leads": [
     {
       "id": "lead-1778086047898-1morpw",
@@ -58,7 +58,7 @@
     {
       "id": "lead-1778071075913-up5z9n",
       "createdAt": "2026-05-06T12:37:55.913Z",
-      "updatedAt": "2026-05-07T05:39:42.203Z",
+      "updatedAt": "2026-05-07T05:39:59.100Z",
       "status": "done",
       "priority": "normal",
       "source": "contact-form",
@@ -84,6 +84,13 @@
         }
       ],
       "events": [
+        {
+          "type": "admin-update",
+          "status": "done",
+          "priority": "normal",
+          "note": "",
+          "createdAt": "2026-05-07T05:39:59.100Z"
+        },
         {
           "type": "admin-update",
           "status": "done",
