@@ -874,15 +874,19 @@
       }
 
       .next-step {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        align-items: center;
-        justify-content: space-between;
+        display: grid;
+        gap: 10px;
         border: 1px solid #d9f0df;
         border-radius: 8px;
         background: #f7fcf8;
         padding: 12px;
+      }
+
+      @media (min-width: 760px) {
+        .next-step {
+          grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+          align-items: center;
+        }
       }
 
       .next-step p {
@@ -890,6 +894,33 @@
         color: #244f34;
         font-size: 13px;
         font-weight: 700;
+      }
+
+      .readiness-meter {
+        display: grid;
+        gap: 6px;
+      }
+
+      .readiness-meter span {
+        color: #244f34;
+        font-size: 12px;
+        font-weight: 900;
+        text-align: right;
+      }
+
+      .readiness-track {
+        height: 9px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #d7eadc;
+      }
+
+      .readiness-fill {
+        width: 0%;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--brand);
+        transition: width 180ms ease;
       }
 
       [data-tab-panel][hidden] {
@@ -1037,11 +1068,19 @@
           </div>
 
           <div class="next-step">
-            <p id="next-step-text">
-              Bắt đầu bằng tiêu đề và mô tả ngắn. CMS sẽ tự lưu nháp trên máy
-              này.
-            </p>
-            <span class="autosave" id="autosave-status">Chưa có thay đổi</span>
+            <div>
+              <p id="next-step-text">
+                Bắt đầu bằng tiêu đề và mô tả ngắn. CMS sẽ tự lưu nháp trên máy
+                này.
+              </p>
+              <span class="autosave" id="autosave-status">Chưa có thay đổi</span>
+            </div>
+            <div class="readiness-meter" aria-label="Mức sẵn sàng đăng bài">
+              <span id="readiness-summary">0/7 mục sẵn sàng</span>
+              <div class="readiness-track">
+                <div class="readiness-fill" id="readiness-fill"></div>
+              </div>
+            </div>
           </div>
 
           <div class="form-section" data-tab-panel="write">
@@ -1442,6 +1481,8 @@
       const autosaveStatus = document.getElementById('autosave-status');
       const nextStepText = document.getElementById('next-step-text');
       const readinessList = document.getElementById('readiness-list');
+      const readinessSummary = document.getElementById('readiness-summary');
+      const readinessFill = document.getElementById('readiness-fill');
       const editorialCalendar = document.getElementById('editorial-calendar');
       let autosaveTimer;
       let lastAutosaveAt = null;
@@ -1897,9 +1938,20 @@
 
       function updateReadiness(result) {
         const state = readinessState(result);
+        const checks = Object.values(state);
+        const doneCount = checks.filter(Boolean).length;
+        const totalCount = checks.length;
+        const percent = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
         readinessList?.querySelectorAll('[data-check]').forEach(item => {
           item.classList.toggle('done', Boolean(state[item.dataset.check]));
         });
+        if (readinessSummary) {
+          readinessSummary.textContent =
+            doneCount === totalCount
+              ? 'Đã sẵn sàng đăng'
+              : `${doneCount}/${totalCount} mục sẵn sàng`;
+        }
+        if (readinessFill) readinessFill.style.width = `${percent}%`;
 
         if (!state.title) {
           nextStepText.textContent = 'Bắt đầu bằng tiêu đề bài viết.';
@@ -2091,6 +2143,7 @@ ${bodyMarkdown || contents.join('\n\n')}
               minute: '2-digit',
             }
           )}`;
+          renderDrafts();
         } catch {
           autosaveStatus.textContent = 'Không thể tự lưu trên trình duyệt này';
         }
@@ -2142,7 +2195,40 @@ ${bodyMarkdown || contents.join('\n\n')}
         );
       }
 
+      function publishStatusTone(message) {
+        const value = String(message || '').toLowerCase();
+        if (
+          value.includes('lỗi') ||
+          value.includes('chưa kiểm tra') ||
+          value.includes('không') ||
+          value.includes('failed') ||
+          value.includes('error')
+        ) {
+          return 'error';
+        }
+        if (
+          value.includes('cảnh báo') ||
+          value.includes('đã có bài') ||
+          value.includes('chưa có thay đổi') ||
+          value.includes('vẫn đang')
+        ) {
+          return 'warning';
+        }
+        if (
+          value.includes('đã live') ||
+          value.includes('đã lưu') ||
+          value.includes('đã gửi') ||
+          value.includes('có thể')
+        ) {
+          return 'ready';
+        }
+        return '';
+      }
+
       function updatePublishStatus(message, links = []) {
+        publishStatus.classList.remove('ready', 'warning', 'error');
+        const tone = publishStatusTone(message);
+        if (tone) publishStatus.classList.add(tone);
         publishStatus.innerHTML = `
           <div>${escapeHtml(message)}</div>
           ${links
@@ -2642,9 +2728,33 @@ ${bodyMarkdown || contents.join('\n\n')}
       function renderDrafts() {
         const drafts = readDrafts();
         draftsEl.innerHTML = '';
+        const autosave = readAutosaveDraft();
+        if (autosave) {
+          const item = document.createElement('div');
+          item.className = 'draft-item';
+          item.innerHTML = `
+            <div>
+              <div class="draft-title">
+                <strong>${escapeHtml(autosave.title || autosave.slug || 'Bản tự lưu gần nhất')}</strong>
+                <span class="pill">Tự lưu</span>
+              </div>
+              <div class="draft-meta">
+                ${escapeHtml(autosave.slug || 'new-blog-post')} ·
+                lưu lúc ${escapeHtml(formatSavedAt(autosave.savedAt))}
+              </div>
+            </div>
+            <div class="draft-actions">
+              <button type="button" data-load-autosave>Khôi phục</button>
+              <button type="button" class="secondary" data-clear-autosave>Xóa</button>
+            </div>
+          `;
+          draftsEl.appendChild(item);
+        }
         if (!drafts.length) {
-          draftsEl.innerHTML =
-            '<p class="hint">Chưa có nháp đã lưu. Khi viết, CMS vẫn tự lưu tạm trên máy này.</p>';
+          if (!autosave) {
+            draftsEl.innerHTML =
+              '<p class="hint">Chưa có nháp đã lưu. Khi viết, CMS vẫn tự lưu tạm trên máy này.</p>';
+          }
           return;
         }
 
@@ -2690,9 +2800,22 @@ ${bodyMarkdown || contents.join('\n\n')}
         showToast('Đã lưu draft trên trình duyệt.');
       }
 
+      function readAutosaveDraft() {
+        try {
+          return JSON.parse(localStorage.getItem('folksBlogAutosave') || 'null');
+        } catch {
+          return null;
+        }
+      }
+
       function loadDraft(index) {
         const draft = readDrafts()[index];
         if (!draft) return;
+        applyDraft(draft);
+        showToast('Đã load draft.');
+      }
+
+      function applyDraft(draft) {
         fields.forEach(id => {
           const element = document.getElementById(id);
           if (element && draft[id] !== undefined) element.value = draft[id];
@@ -2704,7 +2827,6 @@ ${bodyMarkdown || contents.join('\n\n')}
         renderBlocks();
         updatePreview();
         schedulePublishedPostCheck();
-        showToast('Đã load draft.');
       }
 
       function deleteDraft(index) {
@@ -2713,6 +2835,19 @@ ${bodyMarkdown || contents.join('\n\n')}
         writeDrafts(drafts);
         renderDrafts();
         showToast('Đã xóa draft.');
+      }
+
+      function loadAutosaveDraft() {
+        const draft = readAutosaveDraft();
+        if (!draft) return;
+        applyDraft(draft);
+        showToast('Đã khôi phục bản tự lưu.');
+      }
+
+      function clearAutosaveDraft() {
+        localStorage.removeItem('folksBlogAutosave');
+        renderDrafts();
+        showToast('Đã xóa bản tự lưu.');
       }
 
       document.getElementById('pubDate').value = today();
@@ -2825,6 +2960,8 @@ ${bodyMarkdown || contents.join('\n\n')}
       draftsEl.addEventListener('click', event => {
         const loadIndex = event.target.dataset.load;
         const deleteIndex = event.target.dataset.delete;
+        if (event.target.matches('[data-load-autosave]')) loadAutosaveDraft();
+        if (event.target.matches('[data-clear-autosave]')) clearAutosaveDraft();
         if (loadIndex !== undefined) loadDraft(Number(loadIndex));
         if (deleteIndex !== undefined) deleteDraft(Number(deleteIndex));
       });
