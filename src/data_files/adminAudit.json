@@ -1,6 +1,13 @@
 {
-  "updatedAt": "2026-05-07T05:25:56.949Z",
+  "updatedAt": "2026-05-07T05:26:01.892Z",
   "events": [
+    {
+      "id": "audit-1778131561892-ksmigt",
+      "createdAt": "2026-05-07T05:26:01.892Z",
+      "type": "media-delete",
+      "actor": "admin",
+      "target": "src/images/starlight/screwfast_logo_dark.svg"
+    },
     {
       "id": "audit-1778131556948-fov113",
       "createdAt": "2026-05-07T05:25:56.948Z",
