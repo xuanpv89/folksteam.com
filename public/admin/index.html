@@ -158,6 +158,20 @@
         color: #ffffff !important;
       }
 
+      .priority-surface .surface-head h3,
+      .priority-surface .surface-head p,
+      .priority-surface .surface-head .button {
+        animation: adminSlideIn 0.48s ease both;
+      }
+
+      .priority-surface .surface-head p {
+        animation-delay: 0.05s;
+      }
+
+      .priority-surface .surface-head .button {
+        animation-delay: 0.1s;
+      }
+
       .priority-board {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(260px, 0.78fr);
@@ -168,14 +182,16 @@
       .focus-panel {
         min-width: 0;
         border-radius: 8px;
-        background: linear-gradient(180deg, #fff7f7, #ffffff);
-        border: 1px solid #ffd6d1;
+        background: var(--admin-subtle);
+        border: 1px solid #cfead6;
         padding: 13px;
-        animation: adminSlideIn 0.5s ease both;
+        animation:
+          adminSlideIn 0.5s ease both,
+          adminSoftGlow 3.8s ease-in-out infinite;
       }
 
       .focus-panel.clean {
-        background: linear-gradient(180deg, #f3fbf5, #ffffff);
+        background: var(--admin-subtle);
         border-color: #cfead6;
       }
 
@@ -192,10 +208,20 @@
       }
 
       .focus-number {
-        font-size: 46px;
+        display: inline-grid;
+        place-items: center;
+        min-width: 62px;
+        height: 62px;
+        border: 1px solid #bde8cb;
+        border-radius: 18px;
+        background: #ffffff;
+        color: var(--admin-green);
+        box-shadow: inset 0 0 0 6px rgb(79 177 111 / 8%);
+        font-size: 30px;
         font-weight: 950;
-        line-height: 0.95;
+        line-height: 1;
         font-variant-numeric: tabular-nums;
+        animation: adminCountPulse 2.4s ease-in-out infinite;
       }
 
       .focus-note {
@@ -267,13 +293,20 @@
       }
 
       .kpi-value {
-        display: block;
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
         margin-top: 5px;
+        border: 1px solid #bde8cb;
+        border-radius: 10px;
+        background: #ffffff;
         color: var(--admin-ink);
-        font-size: 26px;
+        padding: 5px 8px;
+        font-size: 20px;
         font-weight: 950;
         line-height: 1;
         overflow-wrap: anywhere;
+        animation: adminCountPulse 2.8s ease-in-out infinite;
       }
 
       .kpi-note {
@@ -324,6 +357,12 @@
         text-decoration: none;
       }
 
+      .metric-stat {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
       .metric-title {
         display: flex;
         align-items: flex-start;
@@ -341,11 +380,21 @@
       }
 
       .metric-value {
+        display: inline-grid;
+        place-items: center;
+        min-width: 58px;
+        height: 58px;
+        border: 1px solid rgba(255, 255, 255, 0.36);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.14);
         color: #ffffff;
-        font-size: 31px;
+        padding: 0 10px;
+        font-size: 26px;
         font-weight: 950;
         line-height: 1;
         font-variant-numeric: tabular-nums;
+        box-shadow: inset 0 0 0 6px rgb(255 255 255 / 6%);
+        animation: adminMetricPulse 2.8s ease-in-out infinite;
       }
 
       .metric-caption {
@@ -520,6 +569,7 @@
         padding: 13px 14px;
         font-size: 13px;
         font-weight: 850;
+        animation: adminSlideIn 0.48s ease both;
       }
 
       .heading-icon {
@@ -582,6 +632,47 @@
         }
       }
 
+      @keyframes adminCountPulse {
+        0%,
+        100% {
+          box-shadow:
+            inset 0 0 0 6px rgb(79 177 111 / 8%),
+            0 0 0 0 rgb(79 177 111 / 0%);
+        }
+
+        50% {
+          box-shadow:
+            inset 0 0 0 6px rgb(79 177 111 / 14%),
+            0 0 0 5px rgb(79 177 111 / 10%);
+        }
+      }
+
+      @keyframes adminSoftGlow {
+        0%,
+        100% {
+          border-color: #cfead6;
+        }
+
+        50% {
+          border-color: #9fdcb2;
+        }
+      }
+
+      @keyframes adminMetricPulse {
+        0%,
+        100% {
+          box-shadow:
+            inset 0 0 0 6px rgb(255 255 255 / 6%),
+            0 0 0 0 rgb(255 255 255 / 0%);
+        }
+
+        50% {
+          box-shadow:
+            inset 0 0 0 6px rgb(255 255 255 / 12%),
+            0 0 0 5px rgb(255 255 255 / 10%);
+        }
+      }
+
       .sidebar-footer {
         border: 1px solid var(--admin-line);
         border-radius: 8px;
@@ -621,6 +712,14 @@
       }
 
       body[data-theme='dark'] {
+        --paper: #111611;
+        --panel: #1f2521;
+        --brand-soft: #26352a;
+        --line: #39513f;
+        --ink: #f5f7f2;
+        --muted: #c4ccbf;
+        --soft: #aeb8ad;
+        --shadow: 0 18px 44px rgb(0 0 0 / 28%);
         --admin-surface: #1f2521;
         --admin-subtle: #26352a;
         --admin-subtle-2: #2f5239;
@@ -636,7 +735,75 @@
       body[data-theme='dark'] .tool-group,
       body[data-theme='dark'] .sidebar-chip,
       body[data-theme='dark'] .metric-panel {
-        background: var(--admin-surface);
+        background: var(--admin-surface) !important;
+      }
+
+      body[data-theme='dark'] .topbar {
+        background: rgb(31 37 33 / 94%) !important;
+        border-color: var(--admin-line) !important;
+        color: var(--admin-ink);
+      }
+
+      body[data-theme='dark'] .nav a,
+      body[data-theme='dark'] .nav button,
+      body[data-theme='dark'] .button.secondary,
+      body[data-theme='dark'] .mini-action,
+      body[data-theme='dark'] .sidebar-chip {
+        background: #172018 !important;
+        border-color: var(--admin-line) !important;
+        color: var(--admin-ink) !important;
+      }
+
+      body[data-theme='dark'] .nav a[aria-current='page'],
+      body[data-theme='dark'] .button:not(.secondary),
+      body[data-theme='dark'] .utility-action {
+        background: #4fb16f !important;
+        border-color: #5bc982 !important;
+        color: #ffffff !important;
+      }
+
+      body[data-theme='dark'] .surface:not(.priority-surface) .surface-head {
+        background: var(--admin-surface) !important;
+        border-color: var(--admin-line) !important;
+      }
+
+      body[data-theme='dark'] .priority-board {
+        background: var(--admin-surface) !important;
+      }
+
+      body[data-theme='dark'] .focus-panel,
+      body[data-theme='dark'] .focus-panel.clean,
+      body[data-theme='dark'] .kpi,
+      body[data-theme='dark'] .empty-state {
+        background: var(--admin-subtle) !important;
+        border-color: var(--admin-line) !important;
+        color: var(--admin-ink) !important;
+      }
+
+      body[data-theme='dark'] .kpi.warn,
+      body[data-theme='dark'] .kpi.danger {
+        background: #253427 !important;
+        border-color: #5d7b4f !important;
+      }
+
+      body[data-theme='dark'] .focus-number,
+      body[data-theme='dark'] .kpi-value {
+        background: #111611 !important;
+        border-color: #5d7b4f !important;
+        color: #f5f7f2 !important;
+      }
+
+      body[data-theme='dark'] .pill,
+      body[data-theme='dark'] .pill.warn,
+      body[data-theme='dark'] .pill.danger {
+        background: #172018 !important;
+        border-color: var(--admin-line) !important;
+        color: var(--admin-ink) !important;
+      }
+
+      body[data-theme='dark'] .detail-row,
+      body[data-theme='dark'] .tool-link {
+        border-color: var(--admin-line) !important;
       }
 
       body[data-theme='dark'] .detail-row:hover,
@@ -695,7 +862,10 @@
         }
 
         .focus-number {
-          font-size: 42px;
+          min-width: 54px;
+          height: 54px;
+          border-radius: 15px;
+          font-size: 26px;
         }
 
         .tool-head {
@@ -896,7 +1066,7 @@
                 <h4><span class="heading-icon" aria-hidden="true">${iconSvg(item.icon)}</span>${escapeHtml(item.title)}</h4>
                 <span class="pill ${levelClass(item.level)}">${escapeHtml(item.status)}</span>
               </div>
-              <div>
+              <div class="metric-stat">
                 <div class="metric-value">${escapeHtml(item.value)}</div>
                 <div class="metric-caption">${escapeHtml(item.caption)}</div>
               </div>
@@ -961,7 +1131,7 @@
                 href: '/admin/operations.html#review',
               },
               {
-                label: 'Người nhận tin',
+                label: 'Email đăng ký',
                 value: numberText(metrics.subscribers),
                 note: 'tổng email đăng ký.',
                 level: '',
@@ -1033,7 +1203,7 @@
             icon: 'users',
             href: '/admin/operations.html#subscribers',
             value: numberText(metrics.subscribers),
-            caption: 'người đăng ký nhận tin',
+            caption: 'email đăng ký nhận tin',
             status: 'Theo dõi',
             level: '',
             details: [
