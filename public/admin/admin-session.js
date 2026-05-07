@@ -361,13 +361,12 @@
 
     var heroTitle = document.querySelector('.hero h2');
     if (heroTitle)
-      heroTitle.textContent =
-        'Việc quan trọng, trạng thái rõ, thao tác trong một nhịp.';
+      heroTitle.textContent = 'Ưu tiên rõ, luồng việc gọn, thao tác đúng chỗ.';
 
     var heroCopy = document.querySelector('.hero p:not(.eyebrow)');
     if (heroCopy) {
       heroCopy.textContent =
-        'Màn hình này ưu tiên lead cần phản hồi, nội dung đang chờ duyệt và tình trạng website sau khi đăng. Thông tin cấu hình, kết nối dịch vụ và mã kỹ thuật được đưa về khu Kỹ thuật.';
+        'Trang chính được sắp lại theo cách admin làm việc mỗi ngày: xem việc cần xử lý, chọn đúng luồng, rồi mở công cụ phù hợp. Các phần kỹ thuật, cấu hình và phục hồi vẫn có chỗ riêng để màn hình đầu tiên không bị rối.';
     }
 
     var searchTitle = document.querySelector('.global-search h2');

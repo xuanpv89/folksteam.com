@@ -62,6 +62,22 @@
         gap: 8px;
         align-items: center;
       }
+      .filters label {
+        flex: 1 1 210px;
+      }
+      .list-summary {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .list-summary strong {
+        color: var(--ink);
+      }
       .hero {
         display: grid;
         gap: 12px;
@@ -362,6 +378,22 @@
         color: #854d0e;
         padding: 10px 12px;
       }
+      .editor-helper.ready {
+        border-color: #bde8cb;
+        background: var(--brand-soft);
+        color: var(--brand-dark);
+      }
+      .danger-inline {
+        border-color: #fecaca !important;
+        background: #fff !important;
+        color: #991b1b !important;
+      }
+      .empty-state {
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 16px;
+      }
       .hidden {
         display: none !important;
       }
@@ -590,6 +622,7 @@
                 />
               </label>
             </div>
+            <p class="list-summary" id="collection-summary"></p>
             <div class="list" id="collection-list"></div>
           </div>
           <div class="editor">
@@ -626,6 +659,9 @@
               Giữ đúng frontmatter hiện có để tránh lỗi build. Nếu chưa chắc,
               tạo review item trước khi sửa file production.
             </p>
+            <p class="editor-helper ready hidden" id="collection-dirty-note">
+              File đang có thay đổi chưa lưu.
+            </p>
           </div>
         </div>
       </section>
@@ -654,6 +690,15 @@
               placeholder="Nhập tên ảnh, folder, path..."
             />
           </label>
+          <div class="filters" style="margin-top: 10px">
+            <label>
+              Folder
+              <select id="media-folder-filter">
+                <option value="">Tất cả folder</option>
+              </select>
+            </label>
+          </div>
+          <p class="list-summary" id="media-summary"></p>
           <div
             class="media-grid"
             id="media-grid"
@@ -684,6 +729,19 @@
                 placeholder="Email, nguồn, tag..."
               />
             </label>
+            <div class="filters" style="margin-top: 10px">
+              <label>
+                Trạng thái
+                <select id="subscriber-status-filter">
+                  <option value="">Tất cả trạng thái</option>
+                  <option value="active">active</option>
+                  <option value="unsubscribed">unsubscribed</option>
+                  <option value="bounced">bounced</option>
+                  <option value="spam">spam</option>
+                </select>
+              </label>
+            </div>
+            <p class="list-summary" id="subscriber-summary"></p>
             <div
               class="list"
               id="subscriber-list"
@@ -712,7 +770,24 @@
               >Tags <input id="subscriber-tags" placeholder="growth, chess"
             /></label>
             <label>Ghi chú <textarea id="subscriber-note"></textarea></label>
-            <button type="submit">Lưu subscriber</button>
+            <div class="actions">
+              <button type="submit">Lưu subscriber</button>
+              <button
+                type="button"
+                class="secondary"
+                id="clear-subscriber-form"
+              >
+                Làm trống
+              </button>
+              <button
+                type="button"
+                class="danger-inline"
+                id="delete-subscriber"
+                disabled
+              >
+                Xóa
+              </button>
+            </div>
           </form>
         </div>
       </section>
@@ -726,6 +801,19 @@
             </div>
             <button type="button" id="reload-audit">Tải lại</button>
           </div>
+          <div class="filters">
+            <label>
+              Tìm lịch sử
+              <input id="audit-search" placeholder="Loại, file, ghi chú..." />
+            </label>
+            <label>
+              Loại thao tác
+              <select id="audit-type-filter">
+                <option value="">Tất cả loại</option>
+              </select>
+            </label>
+          </div>
+          <p class="list-summary" id="audit-summary"></p>
           <div class="two grid">
             <div>
               <h3>Sự kiện</h3>
@@ -761,6 +849,27 @@
               </div>
               <button type="button" id="reload-review">Tải lại</button>
             </div>
+            <div class="filters">
+              <label>
+                Tìm review
+                <input
+                  id="review-search"
+                  placeholder="Tiêu đề, path, owner..."
+                />
+              </label>
+              <label>
+                Trạng thái
+                <select id="review-status-filter">
+                  <option value="">Tất cả trạng thái</option>
+                  <option value="draft">draft</option>
+                  <option value="review">review</option>
+                  <option value="approved">approved</option>
+                  <option value="published">published</option>
+                  <option value="archived">archived</option>
+                </select>
+              </label>
+            </div>
+            <p class="list-summary" id="review-summary"></p>
             <div class="list" id="review-list"></div>
           </div>
           <form class="editor compact" id="review-form">
@@ -787,7 +896,20 @@
             </label>
             <label>Người phụ trách <input id="review-owner" /></label>
             <label>Ghi chú <textarea id="review-note"></textarea></label>
-            <button type="submit">Lưu mục review</button>
+            <div class="actions">
+              <button type="submit">Lưu mục review</button>
+              <button type="button" class="secondary" id="clear-review-form">
+                Làm trống
+              </button>
+              <button
+                type="button"
+                class="danger-inline"
+                id="delete-review"
+                disabled
+              >
+                Xóa
+              </button>
+            </div>
           </form>
         </div>
       </section>
@@ -828,6 +950,9 @@
         seo: null,
         selectedCollection: 'products',
         selectedCollectionSha: '',
+        collectionOriginalContent: '',
+        collectionOriginalTarget: '',
+        collectionDirty: false,
       };
 
       const $ = selector => document.querySelector(selector);
@@ -867,6 +992,25 @@
         });
       }
 
+      function emptyState(message, action = '') {
+        return `<div class="empty-state"><p class="muted">${escapeHtml(message)}</p>${action}</div>`;
+      }
+
+      function setSummary(selector, visible, total, label) {
+        const el = $(selector);
+        if (!el) return;
+        el.innerHTML = `<span>Đang hiển thị <strong>${visible}</strong> / ${total} ${escapeHtml(label)}</span>`;
+      }
+
+      function resetForm(formSelector) {
+        const form = $(formSelector);
+        if (!form) return;
+        form.reset();
+        form.querySelectorAll('input[type="hidden"]').forEach(input => {
+          input.value = '';
+        });
+      }
+
       async function api(url, options = {}) {
         const response = await fetch(url, {
           credentials: 'same-origin',
@@ -889,6 +1033,10 @@
         return data;
       }
 
+      function runLoad(loader) {
+        loader().catch(error => toast(error.message, true));
+      }
+
       function setView(view) {
         $$('.tab').forEach(tab =>
           tab.classList.toggle('active', tab.dataset.viewTab === view)
@@ -898,16 +1046,16 @@
         );
         if (location.hash !== `#${view}`)
           history.replaceState(null, '', `#${view}`);
-        if (view === 'dashboard' && !state.dashboard) loadDashboard();
-        if (view === 'health' && !state.health) loadHealth();
+        if (view === 'dashboard' && !state.dashboard) runLoad(loadDashboard);
+        if (view === 'health' && !state.health) runLoad(loadHealth);
         if (view === 'collections' && !state.collectionItems.length)
-          loadCollection();
-        if (view === 'media' && !state.mediaItems.length) loadMedia();
+          runLoad(loadCollection);
+        if (view === 'media' && !state.mediaItems.length) runLoad(loadMedia);
         if (view === 'subscribers' && !state.subscribers.length)
-          loadSubscribers();
-        if (view === 'review' && !state.review.length) loadReview();
-        if (view === 'audit' && !state.audit.length) loadAudit();
-        if (view === 'seo' && !state.seo) loadSeo();
+          runLoad(loadSubscribers);
+        if (view === 'review' && !state.review.length) runLoad(loadReview);
+        if (view === 'audit' && !state.audit.length) runLoad(loadAudit);
+        if (view === 'seo' && !state.seo) runLoad(loadSeo);
       }
 
       function renderMetrics(metrics = {}) {
@@ -1032,8 +1180,25 @@
       }
 
       function renderEvents(events = [], target = '#recent-events') {
-        $(target).innerHTML = events.length
+        let visibleEvents = events;
+        if (target === '#audit-list') {
+          const query = $('#audit-search').value.trim().toLowerCase();
+          const type = $('#audit-type-filter').value;
+          visibleEvents = events.filter(
+            event =>
+              (!type || event.type === type) &&
+              JSON.stringify(event).toLowerCase().includes(query)
+          );
+          setSummary(
+            '#audit-summary',
+            visibleEvents.length,
+            events.length,
+            'sự kiện'
+          );
+        }
+        $(target).innerHTML = visibleEvents.length
           ? events
+              .filter(event => visibleEvents.includes(event))
               .map(
                 event => `
             <div class="row-card">
@@ -1049,7 +1214,7 @@
             </div>`
               )
               .join('')
-          : '<p class="muted">Chưa có audit event.</p>';
+          : emptyState('Không có sự kiện phù hợp với bộ lọc hiện tại.');
       }
 
       async function loadDashboard() {
@@ -1127,6 +1292,12 @@
             item.name.toLowerCase().includes(query) ||
             item.path.toLowerCase().includes(query)
         );
+        setSummary(
+          '#collection-summary',
+          items.length,
+          state.collectionItems.length,
+          'file'
+        );
         $('#collection-list').innerHTML = items.length
           ? items
               .map(
@@ -1140,7 +1311,7 @@
             </button>`
               )
               .join('')
-          : '<p class="muted">Không có file phù hợp.</p>';
+          : emptyState('Không có file phù hợp với bộ lọc hiện tại.');
       }
 
       async function loadCollection() {
@@ -1161,12 +1332,21 @@
         $('#collection-target').value = data.target;
         $('#collection-content').value = data.content;
         state.selectedCollectionSha = data.sha || '';
+        state.collectionOriginalContent = data.content || '';
+        state.collectionOriginalTarget = data.target || '';
+        state.collectionDirty = false;
+        updateCollectionDirty();
         $('#save-collection-file').disabled = false;
       }
 
       async function saveCollectionFile() {
         const target = $('#collection-target').value.trim();
         const content = $('#collection-content').value;
+        if (
+          state.collectionDirty &&
+          !window.confirm(`Lưu thay đổi vào "${target}"?`)
+        )
+          return;
         const result = await api('/api/admin-operations?module=collections', {
           method: 'POST',
           body: JSON.stringify({
@@ -1177,14 +1357,35 @@
           }),
         });
         state.selectedCollectionSha = result.result?.sha || '';
+        state.collectionOriginalContent = content;
+        state.collectionOriginalTarget = target;
+        state.collectionDirty = false;
+        updateCollectionDirty();
         toast('Đã lưu file nội dung.');
         await loadCollection();
       }
 
+      function updateCollectionDirty() {
+        const dirty =
+          $('#collection-content').value !== state.collectionOriginalContent ||
+          $('#collection-target').value !== state.collectionOriginalTarget;
+        state.collectionDirty = dirty;
+        $('#collection-dirty-note').classList.toggle('hidden', !dirty);
+      }
+
       function renderMedia() {
         const query = $('#media-search').value.trim().toLowerCase();
-        const items = state.mediaItems.filter(item =>
-          item.path.toLowerCase().includes(query)
+        const folder = $('#media-folder-filter').value;
+        const items = state.mediaItems.filter(
+          item =>
+            (!folder || item.folder === folder) &&
+            item.path.toLowerCase().includes(query)
+        );
+        setSummary(
+          '#media-summary',
+          items.length,
+          state.mediaItems.length,
+          'media'
         );
         $('#media-grid').innerHTML = items.length
           ? items
@@ -1198,24 +1399,63 @@
               <div class="actions">
                 <button type="button" class="secondary" data-copy-media="${escapeHtml(item.displayPath)}">Copy URL</button>
                 <a class="button secondary" href="${escapeHtml(item.rawUrl)}" target="_blank" rel="noreferrer">Mở ảnh</a>
+                <button type="button" class="danger-inline" data-delete-media="${escapeHtml(item.path)}" data-media-sha="${escapeHtml(item.sha)}">Xóa</button>
               </div>
             </div>`
               )
               .join('')
-          : '<p class="muted">Không tìm thấy media.</p>';
+          : emptyState('Không tìm thấy media phù hợp với bộ lọc hiện tại.');
       }
 
       async function loadMedia() {
         $('#media-grid').innerHTML = '<p class="muted">Đang tải media...</p>';
         const data = await api('/api/admin-operations?module=library');
         state.mediaItems = data.items || [];
+        renderMediaFolders();
         renderMedia();
+      }
+
+      function renderMediaFolders() {
+        const selected = $('#media-folder-filter').value;
+        const folders = [...new Set(state.mediaItems.map(item => item.folder))]
+          .filter(Boolean)
+          .sort((left, right) => left.localeCompare(right));
+        $('#media-folder-filter').innerHTML = [
+          '<option value="">Tất cả folder</option>',
+          ...folders.map(
+            folder =>
+              `<option value="${escapeHtml(folder)}">${escapeHtml(folder)}</option>`
+          ),
+        ].join('');
+        if (folders.includes(selected))
+          $('#media-folder-filter').value = selected;
+      }
+
+      async function deleteMedia(path, sha) {
+        if (!window.confirm(`Xóa media "${path}" khỏi repo?`)) return;
+        await api('/api/admin-operations?module=library', {
+          method: 'POST',
+          body: JSON.stringify({ action: 'delete', target: path, sha }),
+        });
+        toast('Đã xóa media.');
+        await loadMedia();
+        state.dashboard = null;
+        loadDashboard().catch(error => toast(error.message, true));
       }
 
       function renderSubscribers() {
         const query = $('#subscriber-search').value.trim().toLowerCase();
-        const items = state.subscribers.filter(subscriber =>
-          JSON.stringify(subscriber).toLowerCase().includes(query)
+        const status = $('#subscriber-status-filter').value;
+        const items = state.subscribers.filter(
+          subscriber =>
+            (!status || (subscriber.status || 'active') === status) &&
+            JSON.stringify(subscriber).toLowerCase().includes(query)
+        );
+        setSummary(
+          '#subscriber-summary',
+          items.length,
+          state.subscribers.length,
+          'subscriber'
         );
         $('#subscriber-list').innerHTML = items.length
           ? items
@@ -1231,7 +1471,7 @@
             </button>`
               )
               .join('')
-          : '<p class="muted">Chưa có subscriber.</p>';
+          : emptyState('Không có subscriber phù hợp với bộ lọc hiện tại.');
       }
 
       async function loadSubscribers() {
@@ -1251,6 +1491,7 @@
         $('#subscriber-source').value = subscriber.source || 'admin';
         $('#subscriber-tags').value = (subscriber.tags || []).join(', ');
         $('#subscriber-note').value = subscriber.note || '';
+        $('#delete-subscriber').disabled = false;
       }
 
       async function saveSubscriber(event) {
@@ -1271,7 +1512,26 @@
         event.target.reset();
         $('#subscriber-locale').value = 'en';
         $('#subscriber-source').value = 'admin';
+        $('#delete-subscriber').disabled = true;
         await loadSubscribers();
+      }
+
+      async function deleteSubscriber() {
+        const id = $('#subscriber-id').value;
+        const email = $('#subscriber-email').value || id;
+        if (!id || !window.confirm(`Xóa subscriber "${email}"?`)) return;
+        await api('/api/admin-operations?module=subscribers', {
+          method: 'POST',
+          body: JSON.stringify({ action: 'delete', id }),
+        });
+        toast('Đã xóa subscriber.');
+        resetForm('#subscriber-form');
+        $('#subscriber-locale').value = 'en';
+        $('#subscriber-source').value = 'admin';
+        $('#delete-subscriber').disabled = true;
+        await loadSubscribers();
+        state.dashboard = null;
+        loadDashboard().catch(error => toast(error.message, true));
       }
 
       function exportSubscribers() {
@@ -1313,12 +1573,41 @@
         $('#audit-list').innerHTML = '<p class="muted">Đang tải audit...</p>';
         const data = await api('/api/admin-operations?module=audit');
         state.audit = data.events || [];
+        renderAuditTypes();
         renderEvents(state.audit, '#audit-list');
       }
 
+      function renderAuditTypes() {
+        const selected = $('#audit-type-filter').value;
+        const types = [...new Set(state.audit.map(event => event.type))]
+          .filter(Boolean)
+          .sort((left, right) => left.localeCompare(right));
+        $('#audit-type-filter').innerHTML = [
+          '<option value="">Tất cả loại</option>',
+          ...types.map(
+            type =>
+              `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`
+          ),
+        ].join('');
+        if (types.includes(selected)) $('#audit-type-filter').value = selected;
+      }
+
       function renderReview() {
-        $('#review-list').innerHTML = state.review.length
-          ? state.review
+        const query = $('#review-search').value.trim().toLowerCase();
+        const status = $('#review-status-filter').value;
+        const items = state.review.filter(
+          item =>
+            (!status || (item.status || 'draft') === status) &&
+            JSON.stringify(item).toLowerCase().includes(query)
+        );
+        setSummary(
+          '#review-summary',
+          items.length,
+          state.review.length,
+          'mục review'
+        );
+        $('#review-list').innerHTML = items.length
+          ? items
               .map(
                 item => `
             <article class="row-card" data-review-id="${escapeHtml(item.id)}">
@@ -1334,11 +1623,12 @@
                 <button type="button" class="secondary" data-review-action="approved" data-review-id="${escapeHtml(item.id)}">Duyệt</button>
                 <button type="button" class="secondary" data-review-action="published" data-review-id="${escapeHtml(item.id)}">Đã publish</button>
                 <button type="button" class="secondary" data-review-action="archived" data-review-id="${escapeHtml(item.id)}">Lưu trữ</button>
+                <button type="button" class="danger-inline" data-review-delete="${escapeHtml(item.id)}">Xóa</button>
               </div>
             </article>`
               )
               .join('')
-          : '<p class="muted">Chưa có mục review.</p>';
+          : emptyState('Không có mục review phù hợp với bộ lọc hiện tại.');
       }
 
       async function loadReview() {
@@ -1359,6 +1649,7 @@
         $('#review-status').value = item.status || 'draft';
         $('#review-owner').value = item.owner || '';
         $('#review-note').value = item.note || '';
+        $('#delete-review').disabled = false;
       }
 
       async function saveReview(event) {
@@ -1378,7 +1669,24 @@
         toast('Đã lưu mục review.');
         event.target.reset();
         $('#review-type').value = 'content';
+        $('#delete-review').disabled = true;
         await loadReview();
+      }
+
+      async function deleteReview(id = $('#review-id').value) {
+        const item = state.review.find(entry => entry.id === id);
+        if (!item || !window.confirm(`Xóa mục review "${item.title}"?`)) return;
+        await api('/api/admin-operations?module=review', {
+          method: 'POST',
+          body: JSON.stringify({ action: 'delete', id }),
+        });
+        toast('Đã xóa mục review.');
+        resetForm('#review-form');
+        $('#review-type').value = 'content';
+        $('#delete-review').disabled = true;
+        await loadReview();
+        state.dashboard = null;
+        loadDashboard().catch(error => toast(error.message, true));
       }
 
       async function updateReviewStatus(id, status) {
@@ -1524,6 +1832,15 @@
           return;
         }
 
+        const deleteMediaButton = event.target.closest('[data-delete-media]');
+        if (deleteMediaButton) {
+          deleteMedia(
+            deleteMediaButton.dataset.deleteMedia,
+            deleteMediaButton.dataset.mediaSha
+          ).catch(error => toast(error.message, true));
+          return;
+        }
+
         const subscriberButton = event.target.closest('[data-subscriber-id]');
         if (subscriberButton)
           fillSubscriber(subscriberButton.dataset.subscriberId);
@@ -1546,6 +1863,14 @@
           return;
         }
 
+        const reviewDelete = event.target.closest('[data-review-delete]');
+        if (reviewDelete) {
+          deleteReview(reviewDelete.dataset.reviewDelete).catch(error =>
+            toast(error.message, true)
+          );
+          return;
+        }
+
         const reviewEdit = event.target.closest('[data-review-edit]');
         if (reviewEdit) fillReview(reviewEdit.dataset.reviewEdit);
       });
@@ -1563,6 +1888,8 @@
         loadCollection().catch(error => toast(error.message, true))
       );
       $('#collection-search').addEventListener('input', renderCollectionList);
+      $('#collection-content').addEventListener('input', updateCollectionDirty);
+      $('#collection-target').addEventListener('input', updateCollectionDirty);
       $('#save-collection-file').addEventListener('click', () =>
         saveCollectionFile().catch(error => toast(error.message, true))
       );
@@ -1572,22 +1899,45 @@
         $('#collection-target').value = '';
         $('#collection-content').value =
           '---\ntitle: New item\ndescription: Short description\n---\n\nBody content...';
+        state.collectionOriginalContent = '';
+        state.collectionOriginalTarget = '';
+        updateCollectionDirty();
         $('#save-collection-file').disabled = false;
       });
       $('#reload-media').addEventListener('click', () =>
         loadMedia().catch(error => toast(error.message, true))
       );
       $('#media-search').addEventListener('input', renderMedia);
+      $('#media-folder-filter').addEventListener('change', renderMedia);
       $('#reload-subscribers').addEventListener('click', () =>
         loadSubscribers().catch(error => toast(error.message, true))
       );
       $('#subscriber-search').addEventListener('input', renderSubscribers);
+      $('#subscriber-status-filter').addEventListener(
+        'change',
+        renderSubscribers
+      );
       $('#subscriber-form').addEventListener('submit', event =>
         saveSubscriber(event).catch(error => toast(error.message, true))
+      );
+      $('#clear-subscriber-form').addEventListener('click', () => {
+        resetForm('#subscriber-form');
+        $('#subscriber-locale').value = 'en';
+        $('#subscriber-source').value = 'admin';
+        $('#delete-subscriber').disabled = true;
+      });
+      $('#delete-subscriber').addEventListener('click', () =>
+        deleteSubscriber().catch(error => toast(error.message, true))
       );
       $('#export-subscribers').addEventListener('click', exportSubscribers);
       $('#reload-audit').addEventListener('click', () =>
         loadAudit().catch(error => toast(error.message, true))
+      );
+      $('#audit-search').addEventListener('input', () =>
+        renderEvents(state.audit, '#audit-list')
+      );
+      $('#audit-type-filter').addEventListener('change', () =>
+        renderEvents(state.audit, '#audit-list')
       );
       $('#audit-note-form').addEventListener('submit', event =>
         saveAuditNote(event).catch(error => toast(error.message, true))
@@ -1595,8 +1945,18 @@
       $('#reload-review').addEventListener('click', () =>
         loadReview().catch(error => toast(error.message, true))
       );
+      $('#review-search').addEventListener('input', renderReview);
+      $('#review-status-filter').addEventListener('change', renderReview);
       $('#review-form').addEventListener('submit', event =>
         saveReview(event).catch(error => toast(error.message, true))
+      );
+      $('#clear-review-form').addEventListener('click', () => {
+        resetForm('#review-form');
+        $('#review-type').value = 'content';
+        $('#delete-review').disabled = true;
+      });
+      $('#delete-review').addEventListener('click', () =>
+        deleteReview().catch(error => toast(error.message, true))
       );
       $('#refresh-seo').addEventListener('click', () =>
         loadSeo().catch(error => toast(error.message, true))
@@ -1606,6 +1966,12 @@
       setView(
         $(`[data-view-tab="${initialView}"]`) ? initialView : 'dashboard'
       );
+
+      window.addEventListener('beforeunload', event => {
+        if (!state.collectionDirty) return;
+        event.preventDefault();
+        event.returnValue = '';
+      });
     </script>
   </body>
 </html>
