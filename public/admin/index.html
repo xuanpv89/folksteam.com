@@ -24,10 +24,14 @@
         --admin-green: #327849;
       }
 
+      body.admin-page {
+        margin: 0;
+      }
+
       .shell {
-        max-width: 1160px;
+        max-width: 100%;
         margin: 0 auto;
-        padding: 10px 12px 34px;
+        padding: 8px 8px 28px;
       }
 
       .topbar {
@@ -80,15 +84,15 @@
       .layout {
         display: block;
         min-width: 0;
-        padding-left: 302px;
+        padding-left: 296px;
         position: relative;
       }
 
       .layout > aside.stack {
         position: fixed;
         top: 88px;
-        left: max(12px, calc((100vw - 1160px) / 2 + 12px));
-        width: 292px;
+        left: 8px;
+        width: 286px;
         max-height: calc(100vh - 102px);
         overflow-y: auto;
         scrollbar-width: thin;
@@ -133,6 +137,27 @@
         line-height: 1.32;
       }
 
+      .priority-surface .surface-head {
+        background: linear-gradient(135deg, #4fb16f, #327849);
+        color: #ffffff;
+        border-bottom: 0;
+      }
+
+      .priority-surface .surface-head h3,
+      .priority-surface .surface-head p {
+        color: #ffffff;
+      }
+
+      .priority-surface .surface-head p {
+        opacity: 0.84;
+      }
+
+      .priority-surface .surface-head .button {
+        border-color: rgba(255, 255, 255, 0.34) !important;
+        background: rgba(255, 255, 255, 0.14) !important;
+        color: #ffffff !important;
+      }
+
       .priority-board {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(260px, 0.78fr);
@@ -146,6 +171,7 @@
         background: linear-gradient(180deg, #fff7f7, #ffffff);
         border: 1px solid #ffd6d1;
         padding: 13px;
+        animation: adminSlideIn 0.5s ease both;
       }
 
       .focus-panel.clean {
@@ -198,6 +224,29 @@
         border-radius: 8px;
         background: var(--admin-subtle);
         padding: 10px;
+        animation: adminSlideIn 0.5s ease both;
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease,
+          border-color 0.18s ease;
+      }
+
+      .kpi:nth-child(2) {
+        animation-delay: 0.04s;
+      }
+
+      .kpi:nth-child(3) {
+        animation-delay: 0.08s;
+      }
+
+      .kpi:nth-child(4) {
+        animation-delay: 0.12s;
+      }
+
+      .kpi:hover {
+        transform: translateY(-2px);
+        border-color: #bde8cb;
+        box-shadow: 0 12px 28px rgb(38 38 38 / 10%);
       }
 
       .kpi.warn {
@@ -272,6 +321,7 @@
         background: linear-gradient(135deg, #4fb16f, #327849);
         padding: 12px;
         color: #ffffff;
+        text-decoration: none;
       }
 
       .metric-title {
@@ -346,10 +396,19 @@
         gap: 10px;
         border-bottom: 1px solid #edf0ea;
         padding: 9px 12px;
+        text-decoration: none;
+        transition:
+          background 0.18s ease,
+          transform 0.18s ease;
       }
 
       .detail-row:last-child {
         border-bottom: 0;
+      }
+
+      .detail-row:hover {
+        background: #f8faf7;
+        transform: translateX(2px);
       }
 
       .detail-row strong {
@@ -466,16 +525,31 @@
       .heading-icon {
         display: inline-grid;
         place-items: center;
-        width: 22px;
-        height: 22px;
-        border-radius: 999px;
-        background: rgb(255 255 255 / 18%);
-        font-size: 14px;
+        width: 20px;
+        height: 20px;
+        color: currentColor;
         line-height: 1;
       }
 
+      .heading-icon svg {
+        width: 19px;
+        height: 19px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        display: block;
+      }
+
       .surface-head .heading-icon {
-        background: var(--admin-subtle-2);
+        color: var(--admin-green);
+      }
+
+      .priority-surface .surface-head .heading-icon,
+      .metric-main .heading-icon,
+      .tool-head .heading-icon {
+        color: currentColor;
       }
 
       .mini-action {
@@ -496,6 +570,80 @@
         }
       }
 
+      @keyframes adminSlideIn {
+        from {
+          opacity: 0;
+          transform: translateX(12px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .sidebar-footer {
+        border: 1px solid var(--admin-line);
+        border-radius: 8px;
+        background: rgb(255 255 255 / 90%);
+        box-shadow: var(--shadow);
+        padding: 10px;
+        display: grid;
+        gap: 8px;
+        animation: adminFadeUp 0.44s ease both;
+      }
+
+      .sidebar-footer p {
+        margin: 0;
+        color: var(--admin-muted);
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .sidebar-tools {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .sidebar-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 34px;
+        border: 1px solid var(--admin-line);
+        border-radius: 8px;
+        background: #ffffff;
+        color: var(--admin-ink);
+        padding: 7px 9px;
+        font-size: 12px;
+        font-weight: 850;
+      }
+
+      body[data-theme='dark'] {
+        --admin-surface: #1f2521;
+        --admin-subtle: #26352a;
+        --admin-subtle-2: #2f5239;
+        --admin-line: #39513f;
+        --admin-ink: #f5f7f2;
+        --admin-muted: #c4ccbf;
+        background: #111611 !important;
+        color: var(--admin-ink);
+      }
+
+      body[data-theme='dark'] .surface,
+      body[data-theme='dark'] .sidebar-footer,
+      body[data-theme='dark'] .tool-group,
+      body[data-theme='dark'] .sidebar-chip,
+      body[data-theme='dark'] .metric-panel {
+        background: var(--admin-surface);
+      }
+
+      body[data-theme='dark'] .detail-row:hover,
+      body[data-theme='dark'] .tool-link:hover {
+        background: #26352a;
+      }
+
       @media (max-width: 980px) {
         .layout,
         .priority-board {
@@ -513,6 +661,12 @@
           max-height: none;
           overflow: visible;
         }
+
+        .sidebar-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
       }
 
       @media (max-width: 720px) {
@@ -523,6 +677,11 @@
 
         .nav {
           width: 100%;
+        }
+
+        .shell {
+          padding-right: 4px;
+          padding-left: 4px;
         }
 
         .kpi-grid,
@@ -581,13 +740,24 @@
           <section class="surface">
             <div id="tool-map" class="tool-map"></div>
           </section>
+          <footer class="sidebar-footer" aria-label="Thông tin Admin">
+            <p>© Folks Team 2026</p>
+            <div class="sidebar-tools">
+              <span class="sidebar-chip" aria-label="Ngôn ngữ hiện tại">
+                <span class="heading-icon" aria-hidden="true" data-icon="language"></span>VI
+              </span>
+              <button type="button" class="sidebar-chip" id="theme-toggle" aria-pressed="false">
+                <span class="heading-icon" aria-hidden="true" data-icon="moon"></span>Theme
+              </button>
+            </div>
+          </footer>
         </aside>
 
         <div class="stack">
-          <section class="surface" aria-labelledby="priority-title">
+          <section class="surface priority-surface" aria-labelledby="priority-title">
             <div class="surface-head">
               <div>
-                <h3 id="priority-title"><span class="heading-icon" aria-hidden="true">✨</span>Cập nhật đáng chú ý</h3>
+                <h3 id="priority-title"><span class="heading-icon" aria-hidden="true" data-icon="spark"></span>Cập nhật đáng chú ý</h3>
                 <p id="dashboard-status">Đang tải dữ liệu mới nhất...</p>
               </div>
               <button type="button" class="button secondary mini-action" id="refresh-dashboard">
@@ -602,7 +772,7 @@
           <section class="surface" aria-labelledby="dashboard-title">
             <div class="surface-head">
               <div>
-                <h3 id="dashboard-title"><span class="heading-icon" aria-hidden="true">📊</span>Dashboard vận hành</h3>
+                <h3 id="dashboard-title"><span class="heading-icon" aria-hidden="true" data-icon="bar-chart"></span>Dashboard vận hành</h3>
               </div>
             </div>
             <div id="dashboard-grid" class="dashboard-grid">
@@ -623,7 +793,7 @@
       const toolGroups = [
         {
           group: 'Khách hàng',
-          icon: '👥',
+          icon: 'users',
           primaryHref: '/admin/leads.html',
           items: [
             ['Lead', 'Xử lý khách liên hệ qua form.', '/admin/leads.html'],
@@ -632,7 +802,7 @@
         },
         {
           group: 'Nội dung website',
-          icon: '📝',
+          icon: 'file-edit',
           primaryHref: '/admin/content.html',
           items: [
             ['Sửa trang', 'Cập nhật chữ, ảnh, khối nội dung.', '/admin/content.html'],
@@ -642,7 +812,7 @@
         },
         {
           group: 'Vận hành & Quản Trị',
-          icon: '🛠️',
+          icon: 'shield-check',
           primaryHref: '/admin/operations.html',
           items: [
             ['Duyệt nội dung', 'Các mục đang chờ kiểm tra.', '/admin/operations.html#review'],
@@ -653,7 +823,7 @@
         },
         {
           group: 'Kỹ thuật & hỗ trợ',
-          icon: '⚙️',
+          icon: 'settings',
           primaryHref: '/admin/console.html',
           items: [
             ['Kỹ thuật', 'Kiểm tra cấu hình và deploy.', '/admin/console.html'],
@@ -692,31 +862,45 @@
         return '';
       }
 
+      function iconSvg(name) {
+        const icons = {
+          users: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+          'file-edit': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M14 2v6h6"/><path d="M16 13l5-5 2 2-5 5-3 1 1-3z"/></svg>',
+          'shield-check': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
+          settings: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-.4-1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1-.4H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 .4 1 1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.2.34.4.65.6 1h1a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1 .4 1.7 1.7 0 0 0-.6 1z"/></svg>',
+          spark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 9 10l-7 3 7 3 4 8 4-8 7-3-7-3-4-8z"/><path d="M5 3v4"/><path d="M3 5h4"/></svg>',
+          'bar-chart': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-6"/></svg>',
+          language: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h10"/><path d="M9 3v2"/><path d="M5 9c1.2 3 3.5 5 7 6"/><path d="M12 9c-.8 2.2-2.5 4.1-5 6"/><path d="M14 21l5-10 3 10"/><path d="M16 17h5"/></svg>',
+          moon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+        };
+        return icons[name] || icons.settings;
+      }
+
       function detailRow(item) {
         return `
-          <div class="detail-row">
+          <a class="detail-row" href="${escapeHtml(item.href)}">
             <div>
               <strong>${escapeHtml(item.label)}</strong>
               <p>${escapeHtml(item.note)}</p>
             </div>
             <span class="detail-value">${escapeHtml(item.value)}</span>
-          </div>
+          </a>
         `;
       }
 
       function metricPanel(item) {
         return `
           <article class="metric-panel ${escapeHtml(item.wide ? 'wide' : '')}">
-            <div class="metric-main">
+            <a class="metric-main" href="${escapeHtml(item.href)}">
               <div class="metric-title">
-                <h4><span class="heading-icon" aria-hidden="true">${escapeHtml(item.icon)}</span>${escapeHtml(item.title)}</h4>
+                <h4><span class="heading-icon" aria-hidden="true">${iconSvg(item.icon)}</span>${escapeHtml(item.title)}</h4>
                 <span class="pill ${levelClass(item.level)}">${escapeHtml(item.status)}</span>
               </div>
               <div>
                 <div class="metric-value">${escapeHtml(item.value)}</div>
                 <div class="metric-caption">${escapeHtml(item.caption)}</div>
               </div>
-            </div>
+            </a>
             <div class="detail-list">
               ${item.details.map(detailRow).join('')}
             </div>
@@ -757,7 +941,7 @@
             </p>
             <div class="focus-actions">
               <a class="button" href="/admin/leads.html">Mở Lead</a>
-              <a class="button secondary" href="/admin/operations.html#review">Mở hàng chờ duyệt</a>
+              <a class="button secondary" href="/admin/operations.html#review">Mở mục cần review</a>
             </div>
           </article>
           <div class="kpi-grid">
@@ -806,15 +990,16 @@
         return [
           {
             title: 'Khách hàng',
-            icon: '👥',
+            icon: 'users',
+            href: '/admin/leads.html',
             value: numberText(metrics.newLeads),
             caption: 'lead mới cần nhìn trước',
             status: metrics.staleNewLeads ? 'Ưu tiên' : metrics.newLeads ? 'Cần xem' : 'Ổn',
             level: metrics.staleNewLeads ? 'danger' : metrics.newLeads ? 'warn' : '',
             details: [
-              { label: 'Quá 24 giờ', value: numberText(metrics.staleNewLeads), note: 'Nên trả lời trước.' },
-              { label: 'Đang xử lý', value: numberText(metrics.workingLeads), note: 'Lead đã có người theo dõi.' },
-              { label: 'Tổng lead', value: numberText(metrics.leads), note: `Mới nhất: ${compactDate(latest.leadAt)}.` },
+              { label: 'Quá 24 giờ', value: numberText(metrics.staleNewLeads), note: 'Nên trả lời trước.', href: '/admin/leads.html?status=new' },
+              { label: 'Đang xử lý', value: numberText(metrics.workingLeads), note: 'Lead đã có người theo dõi.', href: '/admin/leads.html?status=working' },
+              { label: 'Tổng lead', value: numberText(metrics.leads), note: `Mới nhất: ${compactDate(latest.leadAt)}.`, href: '/admin/leads.html' },
               {
                 label: 'Trạng thái khác',
                 value: numberText(
@@ -823,33 +1008,36 @@
                     Number(metrics.workingLeads || 0)
                 ),
                 note: 'Đã đóng, đã phân loại hoặc trạng thái riêng.',
+                href: '/admin/leads.html',
               },
             ],
           },
           {
             title: 'Nội dung & Quản Trị',
-            icon: '📝',
+            icon: 'file-edit',
+            href: '/admin/content.html',
             value: numberText(metrics.contentItems),
             caption: 'mục nội dung chính trên website',
             status: metrics.pendingReviews ? 'Có review' : 'Theo dõi',
             level: metrics.pendingReviews ? 'warn' : '',
             details: [
-              { label: 'Blog', value: numberText(contentCounts.blog), note: 'Bài viết đang có.' },
-              { label: 'Sản phẩm', value: numberText(contentCounts.products), note: 'Sản phẩm hoặc chương trình.' },
-              { label: 'Insight', value: numberText(contentCounts.insights), note: 'Nội dung phân tích.' },
-              { label: 'Chờ duyệt', value: numberText(metrics.pendingReviews), note: 'Cần kiểm tra trước khi public.' },
-              { label: 'Ảnh website', value: numberText(metrics.mediaItems), note: 'Tài nguyên trong thư viện.' },
+              { label: 'Blog', value: numberText(contentCounts.blog), note: 'Bài viết đang có.', href: '/admin/blog.html' },
+              { label: 'Sản phẩm', value: numberText(contentCounts.products), note: 'Sản phẩm hoặc chương trình.', href: '/admin/content.html#products' },
+              { label: 'Insight', value: numberText(contentCounts.insights), note: 'Nội dung phân tích.', href: '/admin/content.html#insights' },
+              { label: 'Chờ duyệt', value: numberText(metrics.pendingReviews), note: 'Cần kiểm tra trước khi public.', href: '/admin/operations.html#review' },
+              { label: 'Ảnh website', value: numberText(metrics.mediaItems), note: 'Tài nguyên trong thư viện.', href: '/admin/operations.html#media' },
             ],
           },
           {
             title: 'Cộng đồng',
-            icon: '💬',
+            icon: 'users',
+            href: '/admin/operations.html#subscribers',
             value: numberText(metrics.subscribers),
             caption: 'người đăng ký nhận tin',
             status: 'Theo dõi',
             level: '',
             details: [
-              { label: 'Đang hoạt động', value: numberText(subscriberStatus.active || metrics.subscribers), note: 'Active hoặc chưa phân loại.' },
+              { label: 'Đang hoạt động', value: numberText(subscriberStatus.active || metrics.subscribers), note: 'Active hoặc chưa phân loại.', href: '/admin/operations.html#subscribers' },
               {
                 label: 'Trạng thái khác',
                 value: numberText(
@@ -858,21 +1046,23 @@
                     .reduce((sum, [, value]) => sum + Number(value || 0), 0)
                 ),
                 note: 'Các trạng thái phụ nếu có.',
+                href: '/admin/operations.html#subscribers',
               },
             ],
           },
           {
             title: 'Dashboard Hệ Thống',
-            icon: '🧭',
+            icon: 'shield-check',
+            href: '/admin/operations.html#audit',
             value: numberText(metrics.auditEvents),
             caption: 'số lần cập nhật website đã được ghi nhận',
             status: 'Có lịch sử',
             level: '',
             details: [
-              { label: 'Lịch sử mới nhất', value: compactDate(latest.auditAt), note: 'Lần chỉnh sửa website gần nhất' },
-              { label: 'Trang admin', value: numberText(contentCounts.adminPages), note: 'Số file công cụ trong khu Admin.' },
-              { label: 'Nơi lưu dữ liệu', value: data.repo || 'Chưa rõ', note: 'Repository đang dùng.' },
-              { label: 'Nhánh', value: data.branch || 'Chưa rõ', note: 'Nhánh đang đọc và ghi dữ liệu.' },
+              { label: 'Lịch sử mới nhất', value: compactDate(latest.auditAt), note: 'Lần chỉnh sửa website gần nhất', href: '/admin/operations.html#audit' },
+              { label: 'Trang admin', value: numberText(contentCounts.adminPages), note: 'Số file công cụ trong khu Admin.', href: '/admin/' },
+              { label: 'Nơi lưu dữ liệu', value: data.repo || 'Chưa rõ', note: 'Repository đang dùng.', href: '/admin/console.html' },
+              { label: 'Nhánh', value: data.branch || 'Chưa rõ', note: 'Nhánh đang đọc và ghi dữ liệu.', href: '/admin/console.html' },
             ],
           },
         ];
@@ -882,7 +1072,7 @@
         return `
           <article class="tool-group">
             <a class="tool-head" href="${escapeHtml(group.primaryHref)}">
-              <h4><span class="heading-icon" aria-hidden="true">${escapeHtml(group.icon)}</span>${escapeHtml(group.group)}</h4>
+              <h4><span class="heading-icon" aria-hidden="true">${iconSvg(group.icon)}</span>${escapeHtml(group.group)}</h4>
             </a>
             <div class="tool-list">
               ${group.items
@@ -929,6 +1119,23 @@
           dashboardGrid.innerHTML = '';
         }
       }
+
+      document.querySelectorAll('[data-icon]').forEach(icon => {
+        icon.innerHTML = iconSvg(icon.dataset.icon);
+      });
+
+      const themeToggle = document.getElementById('theme-toggle');
+      const storedTheme = localStorage.getItem('folks-admin-theme') || '';
+      if (storedTheme === 'dark') {
+        document.body.dataset.theme = 'dark';
+        themeToggle?.setAttribute('aria-pressed', 'true');
+      }
+      themeToggle?.addEventListener('click', () => {
+        const dark = document.body.dataset.theme !== 'dark';
+        document.body.dataset.theme = dark ? 'dark' : '';
+        localStorage.setItem('folks-admin-theme', dark ? 'dark' : 'light');
+        themeToggle.setAttribute('aria-pressed', String(dark));
+      });
 
       toolMap.innerHTML = toolGroups.map(toolGroupMarkup).join('');
       document.getElementById('refresh-dashboard')?.addEventListener('click', loadDashboard);
