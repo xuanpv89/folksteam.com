@@ -14,20 +14,20 @@
     <style>
       :root {
         --admin-surface: #ffffff;
-        --admin-subtle: #f8faf7;
-        --admin-subtle-2: #eef5f0;
-        --admin-line: #e1e5dc;
-        --admin-ink: #1f2933;
-        --admin-muted: #667085;
+        --admin-subtle: #f0faf3;
+        --admin-subtle-2: #dcf4e4;
+        --admin-line: #d7e6dc;
+        --admin-ink: #272727;
+        --admin-muted: #585858;
         --admin-danger: #b42318;
         --admin-warn: #a15c07;
-        --admin-green: #1f7a45;
+        --admin-green: #327849;
       }
 
       .shell {
         max-width: 1220px;
         margin: 0 auto;
-        padding: 18px 16px 46px;
+        padding: 16px 16px 38px;
       }
 
       .topbar {
@@ -35,8 +35,8 @@
         align-items: center;
         justify-content: space-between;
         gap: 14px;
-        padding: 12px;
-        margin-bottom: 14px;
+        padding: 10px;
+        margin-bottom: 12px;
       }
 
       .brand {
@@ -63,13 +63,13 @@
       .layout {
         display: grid;
         grid-template-columns: minmax(320px, 0.86fr) minmax(0, 1.5fr);
-        gap: 14px;
+        gap: 12px;
         align-items: start;
       }
 
       .stack {
         display: grid;
-        gap: 14px;
+        gap: 12px;
       }
 
       .surface {
@@ -86,7 +86,7 @@
         justify-content: space-between;
         gap: 12px;
         border-bottom: 1px solid var(--admin-line);
-        padding: 13px 15px;
+        padding: 11px 14px;
       }
 
       .surface-head h3 {
@@ -98,14 +98,14 @@
         margin: 4px 0 0;
         color: var(--admin-muted);
         font-size: 12px;
-        line-height: 1.45;
+        line-height: 1.32;
       }
 
       .priority-board {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(260px, 0.78fr);
-        gap: 14px;
-        padding: 14px;
+        gap: 10px;
+        padding: 12px;
       }
 
       .focus-panel {
@@ -113,7 +113,7 @@
         border-radius: 8px;
         background: linear-gradient(180deg, #fff7f7, #ffffff);
         border: 1px solid #ffd6d1;
-        padding: 15px;
+        padding: 13px;
       }
 
       .focus-panel.clean {
@@ -134,30 +134,30 @@
       }
 
       .focus-number {
-        font-size: 52px;
+        font-size: 46px;
         font-weight: 950;
         line-height: 0.95;
         font-variant-numeric: tabular-nums;
       }
 
       .focus-note {
-        margin: 10px 0 0;
+        margin: 8px 0 0;
         color: var(--admin-muted);
         font-size: 13px;
-        line-height: 1.55;
+        line-height: 1.38;
       }
 
       .focus-actions {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-        margin-top: 14px;
+        margin-top: 10px;
       }
 
       .kpi-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+        gap: 8px;
       }
 
       .kpi {
@@ -165,7 +165,7 @@
         border: 1px solid var(--admin-line);
         border-radius: 8px;
         background: var(--admin-subtle);
-        padding: 12px;
+        padding: 10px;
       }
 
       .kpi.warn {
@@ -187,7 +187,7 @@
 
       .kpi-value {
         display: block;
-        margin-top: 7px;
+        margin-top: 5px;
         color: var(--admin-ink);
         font-size: 26px;
         font-weight: 950;
@@ -196,17 +196,17 @@
       }
 
       .kpi-note {
-        margin: 7px 0 0;
+        margin: 5px 0 0;
         color: var(--admin-muted);
         font-size: 12px;
-        line-height: 1.45;
+        line-height: 1.32;
       }
 
       .dashboard-grid {
         display: grid;
         grid-template-columns: repeat(6, minmax(0, 1fr));
-        gap: 12px;
-        padding: 14px;
+        gap: 10px;
+        padding: 12px;
       }
 
       .metric-panel {
@@ -225,9 +225,9 @@
 
       .metric-main {
         display: grid;
-        gap: 10px;
+        gap: 8px;
         border-bottom: 1px solid #edf0ea;
-        padding: 14px;
+        padding: 12px;
       }
 
       .metric-title {
@@ -245,7 +245,7 @@
 
       .metric-value {
         color: var(--admin-ink);
-        font-size: 34px;
+        font-size: 31px;
         font-weight: 950;
         line-height: 1;
         font-variant-numeric: tabular-nums;
@@ -254,7 +254,7 @@
       .metric-caption {
         color: var(--admin-muted);
         font-size: 12px;
-        line-height: 1.45;
+        line-height: 1.32;
       }
 
       .pill {
@@ -265,7 +265,7 @@
         border-radius: 999px;
         background: #edf8f1;
         color: var(--admin-green);
-        padding: 5px 9px;
+        padding: 4px 8px;
         font-size: 12px;
         font-weight: 900;
         white-space: nowrap;
@@ -292,7 +292,7 @@
         grid-template-columns: minmax(0, 1fr) auto;
         gap: 10px;
         border-bottom: 1px solid #edf0ea;
-        padding: 11px 14px;
+        padding: 9px 12px;
       }
 
       .detail-row:last-child {
@@ -305,10 +305,10 @@
       }
 
       .detail-row p {
-        margin: 4px 0 0;
+        margin: 3px 0 0;
         color: var(--admin-muted);
         font-size: 12px;
-        line-height: 1.45;
+        line-height: 1.3;
       }
 
       .detail-value {
@@ -327,8 +327,8 @@
 
       .tool-map {
         display: grid;
-        gap: 10px;
-        padding: 14px;
+        gap: 9px;
+        padding: 12px;
       }
 
       .tool-group {
@@ -340,15 +340,15 @@
 
       .tool-head {
         display: grid;
-        gap: 6px;
-        background: linear-gradient(135deg, #16834a, #1f7a45);
+        gap: 4px;
+        background: linear-gradient(135deg, #4fb16f, #327849);
         color: #ffffff;
-        padding: 14px;
+        padding: 12px;
         text-decoration: none;
       }
 
       .tool-head:hover {
-        background: linear-gradient(135deg, #126d3e, #1b6a3d);
+        background: linear-gradient(135deg, #3f965c, #2a603d);
       }
 
       .tool-head h4 {
@@ -361,7 +361,7 @@
         margin: 0;
         color: rgba(255, 255, 255, 0.86);
         font-size: 12px;
-        line-height: 1.45;
+        line-height: 1.28;
       }
 
       .tool-list {
@@ -370,9 +370,9 @@
 
       .tool-link {
         display: grid;
-        gap: 4px;
+        gap: 3px;
         border-bottom: 1px solid #edf0ea;
-        padding: 11px 12px;
+        padding: 9px 11px;
         text-decoration: none;
       }
 
@@ -391,10 +391,9 @@
 
       .tool-link span {
         display: block;
-        margin-top: 3px;
         color: var(--admin-muted);
         font-size: 12px;
-        line-height: 1.4;
+        line-height: 1.28;
       }
 
       .empty-state {
@@ -456,12 +455,11 @@
           </div>
         </div>
         <nav class="nav" aria-label="Admin">
-          <a aria-current="page" href="/admin/">Trang chính</a>
+          <a href="/">Xem website</a>
           <a class="secondary" href="/admin/content.html">Sửa trang</a>
           <a class="secondary" href="/admin/blog.html">Viết blog</a>
           <a class="secondary" href="/admin/leads.html">Lead</a>
           <a class="secondary" href="/admin/operations.html">Vận hành</a>
-          <a class="secondary" href="/">Xem website</a>
           <button type="button" class="button secondary" data-admin-logout>
             Đăng xuất
           </button>

@@ -150,12 +150,11 @@
         return path.endsWith(href);
       };
       var items = [
-        { label: 'Trang chính', href: '/admin/' },
+        { label: 'Xem website', href: '/' },
         { label: 'Sửa trang', href: '/admin/content.html' },
         { label: 'Viết blog', href: '/admin/blog.html' },
         { label: 'Lead', href: '/admin/leads.html' },
         { label: 'Vận hành', href: '/admin/operations.html' },
-        { label: 'Xem website', href: '/' },
         { label: 'Hướng dẫn', href: '/admin/guide.html' },
       ];
       if (path.endsWith('/admin/text.html')) {
@@ -166,10 +165,9 @@
       }
       if (path.endsWith('/admin/console.html')) {
         items = [
-          { label: 'Trang chính', href: '/admin/' },
+          { label: 'Xem website', href: '/' },
           { label: 'Vận hành', href: '/admin/operations.html' },
           { label: 'Kỹ thuật', href: '/admin/console.html' },
-          { label: 'Xem website', href: '/' },
         ];
       }
       if (path.endsWith('/admin/leads.html')) {
@@ -187,7 +185,7 @@
         }
         if (isCurrent(item.href)) {
           link.setAttribute('aria-current', 'page');
-        } else {
+        } else if (item.href !== '/') {
           link.className = 'secondary';
         }
         nav.appendChild(link);
