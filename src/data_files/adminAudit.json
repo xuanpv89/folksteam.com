@@ -1,6 +1,13 @@
 {
-  "updatedAt": "2026-05-07T05:28:27.836Z",
+  "updatedAt": "2026-05-07T05:28:33.580Z",
   "events": [
+    {
+      "id": "audit-1778131713580-kztn52",
+      "createdAt": "2026-05-07T05:28:33.580Z",
+      "type": "media-delete",
+      "actor": "admin",
+      "target": "src/images/blueprint-2.avif"
+    },
     {
       "id": "audit-1778131707836-qqkpaz",
       "createdAt": "2026-05-07T05:28:27.836Z",
