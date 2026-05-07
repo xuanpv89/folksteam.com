@@ -110,6 +110,12 @@
     });
   }
 
+  function tagAdminPage() {
+    var path = window.location.pathname;
+    document.body.classList.toggle('admin-home', path === '/admin/' || path === '/admin/index.html');
+    document.body.classList.toggle('admin-console', path.endsWith('/admin/console.html'));
+  }
+
   function simplifyAdminNav() {
     document.querySelectorAll('.nav').forEach(function (nav) {
       if (nav.dataset.standardized === 'true') return;
@@ -293,6 +299,134 @@
     });
   }
 
+  function simplifyAdminHome() {
+    if (!document.body.classList.contains('admin-home')) return;
+
+    var heroTitle = document.querySelector('.hero h2');
+    if (heroTitle) heroTitle.textContent = 'Bảng điều khiển hằng ngày';
+
+    var heroCopy = document.querySelector('.hero p:not(.eyebrow)');
+    if (heroCopy) {
+      heroCopy.textContent =
+        'Tập trung vào 3 việc chính: xử lý lead, sửa nội dung đang live và kiểm tra vận hành trước khi đăng. Các công cụ kỹ thuật được đưa xuống dưới hoặc tách riêng để màn hình chính dễ quét hơn.';
+    }
+
+    var searchTitle = document.querySelector('.global-search h2');
+    if (searchTitle) searchTitle.textContent = 'Tìm nhanh công cụ';
+
+    var moduleGrid = document.querySelector('.grid[aria-label="CMS modules"]');
+    if (moduleGrid) {
+      moduleGrid.setAttribute('aria-hidden', 'true');
+    }
+
+    document.querySelectorAll('.task-board .task-link').forEach(function (link) {
+      var href = link.getAttribute('href') || '';
+      if (href.includes('/admin/console.html')) {
+        link.setAttribute('href', '/admin/operations.html#media');
+      }
+    });
+  }
+
+  function simplifyConsolePage() {
+    if (!document.body.classList.contains('admin-console')) return;
+
+    var heroEyebrow = document.querySelector('.hero .eyebrow');
+    var heroTitle = document.querySelector('.hero h2');
+    var heroCopy = document.querySelector('.hero p:not(.eyebrow)');
+    if (heroEyebrow) heroEyebrow.textContent = 'Khu kỹ thuật';
+    if (heroTitle) heroTitle.textContent = 'Công cụ kiểm tra, ảnh và an toàn trước khi đăng';
+    if (heroCopy) {
+      heroCopy.textContent =
+        'Console chỉ giữ các thao tác kỹ thuật thật sự cần đứng riêng: tải ảnh, checklist trước khi public, nhật ký cục bộ và các cài đặt đã khóa. Việc sửa trang, viết blog và xử lý lead mở trực tiếp từ Admin Hub.';
+    }
+
+    document.querySelectorAll('[data-open-task="pages"], [data-open-task="leads"], [data-open-task="blog"]').forEach(function (item) {
+      item.remove();
+    });
+
+    document.querySelectorAll('[data-view-target="leads"], [data-view-target="pages"], [data-view-target="blog"], [data-view-target="guide"]').forEach(function (item) {
+      item.remove();
+    });
+
+    ['leads', 'pages', 'blog', 'guide'].forEach(function (id) {
+      var section = document.getElementById(id);
+      if (section) section.remove();
+    });
+
+    var homeGrid = document.querySelector('#home .task-grid');
+    if (homeGrid) {
+      homeGrid.innerHTML = [
+        {
+          icon: '1',
+          title: 'Tải ảnh lên thư viện',
+          copy: 'Thêm ảnh từ máy, kiểm tra định dạng và lấy đường dẫn để dùng trong trang hoặc bài viết.',
+          target: 'media',
+          action: 'Mở thư viện ảnh'
+        },
+        {
+          icon: '2',
+          title: 'Kiểm tra trước khi public',
+          copy: 'Đi qua checklist cuối: preview, SEO, ảnh, duyệt nội dung và hướng khôi phục.',
+          target: 'deployments',
+          action: 'Mở checklist'
+        },
+        {
+          icon: '3',
+          title: 'Ghi nhận lần kiểm tra live',
+          copy: 'Lưu lại mốc kiểm tra trong trình duyệt để admin biết lần rà gần nhất.',
+          target: 'history',
+          action: 'Xem nhật ký'
+        },
+        {
+          icon: '4',
+          title: 'Xem cấu hình đã khóa',
+          copy: 'Kiểm tra các phần server kiểm soát như session, nơi lưu dữ liệu, bảo vệ form và phục hồi.',
+          target: 'settings',
+          action: 'Mở cài đặt'
+        }
+      ]
+        .map(function (item) {
+          return (
+            '<article class="task-card">' +
+            '<div><div class="task-icon">' +
+            item.icon +
+            '</div><h3>' +
+            item.title +
+            '</h3><p>' +
+            item.copy +
+            '</p></div>' +
+            '<button type="button" class="button" data-open-task="' +
+            item.target +
+            '">' +
+            item.action +
+            '</button></article>'
+          );
+        })
+        .join('');
+
+      homeGrid.querySelectorAll('[data-open-task]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          var target = button.dataset.openTask;
+          if (typeof setView === 'function') setView(target);
+          else window.location.hash = target;
+        });
+      });
+    }
+
+    if (['#leads', '#pages', '#blog', '#guide'].includes(window.location.hash)) {
+      history.replaceState(null, '', '#home');
+      var home = document.getElementById('home');
+      if (home) {
+        document.querySelectorAll('[data-view]').forEach(function (view) {
+          view.classList.toggle('active', view.id === 'home');
+        });
+        document.querySelectorAll('[data-view-target]').forEach(function (tab) {
+          tab.classList.toggle('active', tab.dataset.viewTarget === 'home');
+        });
+      }
+    }
+  }
+
   window.FolksAdminSession = {
     showSessionExpired: showSessionExpired,
     loginUrl: loginUrl
@@ -316,9 +450,12 @@
   }
 
   function addLogoutButtons() {
+    tagAdminPage();
     setOfficialFavicon();
     makeBrandGoHome();
     simplifyAdminNav();
+    simplifyAdminHome();
+    simplifyConsolePage();
     normalizeMenuLabels();
     normalizeVisibleCopy(document.body);
     markTechnicalContent();

@@ -90,6 +90,16 @@ p,
   gap: 8px !important;
 }
 
+.nav {
+  max-width: min(100%, 760px);
+  justify-content: flex-end;
+}
+
+.nav a,
+.nav button {
+  white-space: nowrap;
+}
+
 button,
 .button,
 .nav a,
@@ -289,4 +299,50 @@ textarea:focus {
   .quick-actions button {
     flex: 1 1 150px;
   }
+}
+
+body.admin-home .hero h2 {
+  font-size: clamp(30px, 4.6vw, 52px) !important;
+}
+
+body.admin-home .global-search,
+body.admin-home .dashboard,
+body.admin-home .task-board {
+  margin-bottom: 16px !important;
+}
+
+body.admin-home .grid[aria-label='CMS modules'] {
+  display: none !important;
+}
+
+body.admin-home .task-board {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
+}
+
+body.admin-home .task-link {
+  min-height: 138px;
+}
+
+body.admin-console .mode-tabs {
+  position: sticky;
+  top: 10px;
+  z-index: 4;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 92%);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+body.admin-console .hero h2 {
+  font-size: clamp(30px, 4.8vw, 56px) !important;
+}
+
+body.admin-console .task-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+}
+
+body.admin-console .task-card {
+  min-height: 210px !important;
 }
