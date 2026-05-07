@@ -6,10 +6,17 @@
     <meta name="robots" content="noindex" />
     <title>Folks Team CMS</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=admin-2" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=folks-official-1" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg?v=folks-official-1"
+    />
     <link rel="icon" type="image/png" href="/favicon.png?v=folks-official-1" />
     <link rel="shortcut icon" href="/favicon.png?v=folks-official-1" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=folks-official-1" />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon.png?v=folks-official-1"
+    />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=admin-2" />
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
@@ -24,8 +31,14 @@
         --brand-dark: #3f965c;
         --brand-soft: #f0faf3;
         --yellow: #f7b500;
-        font-family: 'Be Vietnam Pro', ui-sans-serif, system-ui, -apple-system,
-          BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family:
+          'Be Vietnam Pro',
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
       }
 
       * {
@@ -35,8 +48,16 @@
       body {
         margin: 0;
         background:
-          radial-gradient(circle at 12% 8%, rgb(79 177 111 / 16%), transparent 28%),
-          radial-gradient(circle at 86% 18%, rgb(247 181 0 / 14%), transparent 26%),
+          radial-gradient(
+            circle at 12% 8%,
+            rgb(79 177 111 / 16%),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 86% 18%,
+            rgb(247 181 0 / 14%),
+            transparent 26%
+          ),
           var(--paper);
         color: var(--ink);
       }
@@ -86,7 +107,7 @@
         color: var(--brand-dark);
         font-size: 12px;
         font-weight: 900;
-        letter-spacing: .14em;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
       }
 
@@ -100,8 +121,8 @@
       h1 {
         margin-bottom: 0;
         font-size: clamp(34px, 6vw, 64px);
-        line-height: .95;
-        letter-spacing: -.035em;
+        line-height: 0.95;
+        letter-spacing: -0.035em;
       }
 
       .nav {
@@ -342,8 +363,14 @@
         padding: 10px 12px;
       }
 
-      .notification.warn { border-color: #fde68a; background: #fffbeb; }
-      .notification.urgent { border-color: #fecaca; background: #fff7f7; }
+      .notification.warn {
+        border-color: #fde68a;
+        background: #fffbeb;
+      }
+      .notification.urgent {
+        border-color: #fecaca;
+        background: #fff7f7;
+      }
 
       @media (min-width: 820px) {
         .grid {
@@ -361,9 +388,9 @@
         padding: 22px;
         box-shadow: 0 18px 45px rgb(38 38 38 / 8%);
         transition:
-          transform .18s ease,
-          box-shadow .18s ease,
-          border-color .18s ease;
+          transform 0.18s ease,
+          box-shadow 0.18s ease,
+          border-color 0.18s ease;
       }
 
       .card:hover {
@@ -387,7 +414,7 @@
       .card h2 {
         margin: 18px 0 10px;
         font-size: 26px;
-        letter-spacing: -.02em;
+        letter-spacing: -0.02em;
       }
 
       .card p {
@@ -396,7 +423,7 @@
       }
 
       .card.disabled {
-        opacity: .68;
+        opacity: 0.68;
       }
 
       .status {
@@ -420,11 +447,174 @@
         color: var(--muted);
         font-size: 13px;
       }
+
+      .home-hero {
+        grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+        align-items: stretch;
+      }
+
+      .home-hero h2 {
+        max-width: 780px;
+        font-size: clamp(38px, 6vw, 68px);
+        line-height: 0.98;
+        letter-spacing: -0.03em;
+      }
+
+      .hero-actions,
+      .insight-stack {
+        display: grid;
+        gap: 10px;
+      }
+
+      .hero-actions {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        margin-top: 22px;
+      }
+
+      .hero-action,
+      .insight-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 13px;
+      }
+
+      .hero-action strong,
+      .insight-card strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .hero-action span,
+      .insight-card span {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .insight-card.primary {
+        border-color: #bde8cb;
+        background: var(--brand-soft);
+      }
+
+      .workspace {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      @media (min-width: 980px) {
+        .workspace {
+          grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+          align-items: start;
+        }
+
+        .home-hero {
+          display: grid;
+        }
+      }
+
+      .priority-panel,
+      .side-stack {
+        display: grid;
+        gap: 16px;
+      }
+
+      .priority-panel,
+      .home-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 18px;
+        box-shadow: 0 18px 45px rgb(38 38 38 / 8%);
+      }
+
+      .section-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .priority-panel .notification-list {
+        margin-bottom: 12px;
+      }
+
+      .dashboard {
+        margin-bottom: 0;
+      }
+
+      .metric-grid.compact {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .action-grid {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      @media (min-width: 760px) {
+        .action-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .action-card {
+        display: grid;
+        gap: 12px;
+        min-height: 168px;
+        align-content: space-between;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 18px;
+        box-shadow: 0 16px 38px rgb(38 38 38 / 7%);
+      }
+
+      .action-card.primary {
+        border-color: #bde8cb;
+        background: var(--brand-soft);
+      }
+
+      .action-card strong {
+        font-size: 18px;
+      }
+
+      .action-card p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .action-card .button {
+        width: fit-content;
+      }
+
+      @media (max-width: 860px) {
+        .home-hero {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=folks-official-1" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg?v=folks-official-1"
+    />
     <link rel="icon" type="image/png" href="/favicon.png?v=folks-official-1" />
     <link rel="shortcut icon" href="/favicon.png?v=folks-official-1" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=folks-official-1" />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon.png?v=folks-official-1"
+    />
     <meta name="theme-color" content="#4fb16f" />
     <link rel="stylesheet" href="/admin/admin-ui.css?v=folks-admin-1" />
   </head>
@@ -445,70 +635,168 @@
           <a class="secondary" href="/blog">Blog EN</a>
           <a class="secondary" href="/vi/blog">Blog VI</a>
           <a class="secondary" href="/admin/guide.html">Hướng dẫn</a>
-          <button type="button" class="button secondary" data-admin-logout>Đăng xuất</button>
+          <button type="button" class="button secondary" data-admin-logout>
+            Đăng xuất
+          </button>
         </nav>
       </header>
 
-      <section class="hero">
+      <section class="hero home-hero">
         <div>
-          <p class="eyebrow">CMS dashboard</p>
-          <h2>Việc cần xử lý hôm nay</h2>
-        </div>
-        <p>
-          Đây là màn hình chính cho admin hằng ngày: xem lead mới, review đang chờ,
-          tình trạng hệ thống và mở đúng công cụ cần dùng. Các trang kỹ thuật như
-          Console được giữ riêng để tránh làm rối workflow biên tập.
-        </p>
-      </section>
-
-      <section class="global-search" aria-label="Global admin search">
-        <div>
-          <p class="eyebrow">Global search</p>
-          <h2>Tìm nhanh việc cần làm</h2>
-        </div>
-        <input id="global-search" placeholder="Ví dụ: lead mới, sửa trang, viết blog, ảnh, kiểm tra..." />
-        <div class="search-results" id="global-search-results"></div>
-      </section>
-
-      <section class="dashboard" aria-label="Admin dashboard">
-        <div class="dashboard-head">
-          <div>
-            <p class="eyebrow">Live overview</p>
-            <h2>Trạng thái website</h2>
+          <p class="eyebrow">Bảng điều hành</p>
+          <h2>Việc quan trọng, trạng thái rõ, thao tác trong một nhịp.</h2>
+          <p>
+            Màn hình này ưu tiên lead cần phản hồi, nội dung đang chờ duyệt và
+            tình trạng website sau khi đăng. Các thông tin như nơi lưu dữ liệu,
+            kết nối dịch vụ, mã kỹ thuật và lịch sử sâu được đưa về khu Kỹ
+            thuật.
+          </p>
+          <div class="hero-actions">
+            <a class="hero-action" href="/admin/leads.html">
+              <strong>Xử lý lead</strong>
+              <span>Phản hồi, gán người phụ trách, ghi chú.</span>
+            </a>
+            <a class="hero-action" href="/admin/content.html">
+              <strong>Sửa website</strong>
+              <span>Click vào nội dung thật, xem lại, đăng.</span>
+            </a>
+            <a class="hero-action" href="/admin/operations.html#review">
+              <strong>Duyệt nội dung</strong>
+              <span>Kiểm tra trước khi công khai.</span>
+            </a>
           </div>
-          <button type="button" class="button secondary" id="refresh-dashboard">Làm mới</button>
         </div>
-        <div class="dashboard-status" id="dashboard-status">Đang tải số liệu admin...</div>
-        <div class="notification-list" id="notification-list"></div>
-        <div class="metric-grid" id="dashboard-metrics"></div>
-        <div class="attention-grid" id="dashboard-attention"></div>
-        <div class="todo-list" id="daily-todos"></div>
+        <div class="insight-stack" aria-label="Tóm tắt nhanh">
+          <article class="insight-card primary">
+            <strong id="hero-priority">Đang tải ưu tiên...</strong>
+            <span id="hero-priority-note">CMS đang lấy số liệu mới nhất.</span>
+          </article>
+          <article class="insight-card">
+            <strong id="hero-readiness">Sẵn sàng vận hành</strong>
+            <span id="hero-readiness-note"
+              >Kiểm tra lead, duyệt nội dung và trạng thái website.</span
+            >
+          </article>
+          <article class="insight-card">
+            <strong>Thao tác thường dùng</strong>
+            <span>Sửa trang, viết blog, xử lý lead, xem website live.</span>
+          </article>
+        </div>
       </section>
 
-      <section class="task-board" aria-label="Quick admin tasks">
-        <a class="task-link primary" href="/admin/content.html">
-          <strong>Sửa trang đang live</strong>
-          <span>Click vào chữ trên preview, xem diff, rồi đăng lên website.</span>
+      <section class="workspace" aria-label="Không gian làm việc admin">
+        <section class="priority-panel" aria-label="Việc cần chú ý">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Hôm nay</p>
+              <h2>Cần chú ý</h2>
+            </div>
+            <a class="button secondary" href="/admin/operations.html"
+              >Mở vận hành</a
+            >
+          </div>
+          <div class="notification-list" id="notification-list"></div>
+          <div class="todo-list" id="daily-todos"></div>
+        </section>
+
+        <div class="side-stack">
+          <section class="dashboard" aria-label="Trạng thái website">
+            <div class="dashboard-head">
+              <div>
+                <p class="eyebrow">Website</p>
+                <h2>Trạng thái nhanh</h2>
+              </div>
+              <button
+                type="button"
+                class="button secondary"
+                id="refresh-dashboard"
+              >
+                Làm mới
+              </button>
+            </div>
+            <div class="dashboard-status" id="dashboard-status">
+              Đang tải số liệu...
+            </div>
+            <div class="metric-grid compact" id="dashboard-metrics"></div>
+            <div class="attention-grid" id="dashboard-attention"></div>
+          </section>
+
+          <section
+            class="global-search home-card"
+            aria-label="Tìm nhanh công cụ"
+          >
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Tìm nhanh</p>
+                <h2>Mở đúng công cụ</h2>
+              </div>
+            </div>
+            <input
+              id="global-search"
+              placeholder="Ví dụ: lead mới, sửa trang, ảnh, kiểm tra..."
+            />
+            <div class="search-results" id="global-search-results"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="action-grid" aria-label="Lối vào thao tác chính">
+        <a class="action-card primary" href="/admin/content.html">
+          <div>
+            <strong>Sửa website</strong>
+            <p>
+              Chỉnh chữ hoặc ảnh đang hiển thị, xem trước trên máy tính/điện
+              thoại, rồi đăng.
+            </p>
+          </div>
+          <span class="button">Bắt đầu sửa</span>
         </a>
-        <a class="task-link" href="/admin/leads.html">
-          <strong>Xử lý lead mới</strong>
-          <span>Xem liên hệ từ form, đổi trạng thái xử lý, ghi chú và trả lời email.</span>
+        <a class="action-card primary" href="/admin/leads.html">
+          <div>
+            <strong>Xử lý lead</strong>
+            <p>
+              Xem người liên hệ mới, gán người phụ trách, copy mẫu trả lời và
+              cập nhật trạng thái.
+            </p>
+          </div>
+          <span class="button">Mở Lead</span>
         </a>
-        <a class="task-link" href="/admin/blog.html">
-          <strong>Viết bài blog</strong>
-          <span>Soạn bài, lưu nháp, kiểm tra preview và publish.</span>
+        <a class="action-card" href="/admin/blog.html">
+          <div>
+            <strong>Viết blog</strong>
+            <p>
+              Soạn bài, lưu nháp, gửi duyệt hoặc đăng lên website với checklist
+              rõ ràng.
+            </p>
+          </div>
+          <span class="button secondary">Viết bài</span>
         </a>
-        <a class="task-link" href="/admin/console.html#media">
-          <strong>Tải ảnh lên</strong>
-          <span>Đưa ảnh vào repo và lấy đường dẫn dùng cho bài/trang.</span>
+        <a class="action-card" href="/admin/operations.html#review">
+          <div>
+            <strong>Duyệt nội dung</strong>
+            <p>Xem những mục đang chờ đọc lại trước khi công khai.</p>
+          </div>
+          <span class="button secondary">Mở duyệt</span>
         </a>
-        <a class="task-link" href="/admin/operations.html#audit">
-          <strong>Kiểm tra sau khi đăng</strong>
-          <span>Xem audit, health check và trạng thái vận hành sau publish.</span>
+        <a class="action-card" href="/admin/operations.html#seo">
+          <div>
+            <strong>Kiểm tra hiển thị</strong>
+            <p>
+              Rà tiêu đề, mô tả, ảnh và nội dung quan trọng trước khi khách nhìn
+              thấy.
+            </p>
+          </div>
+          <span class="button secondary">Kiểm tra</span>
         </a>
-        <a class="task-link primary" href="/admin/operations.html">
-          <strong>Vận hành</strong>
-          <span>Dashboard vận hành, health check, review queue, media, subscribers, SEO và audit.</span>
+        <a class="action-card" href="/admin/console.html">
+          <div>
+            <strong>Kỹ thuật</strong>
+            <p>
+              Cấu hình, tải ảnh nâng cao, kiểm tra kết nối và các thao tác phục
+              hồi.
+            </p>
+          </div>
+          <span class="button secondary">Mở khu kỹ thuật</span>
         </a>
       </section>
 
@@ -518,11 +806,13 @@
             <div class="icon">A</div>
             <h2>Kỹ thuật</h2>
             <p>
-              Khu vực kỹ thuật cho media upload, deploy checklist, bảo mật và công cụ
-              kiểm tra nâng cao.
+              Khu vực kỹ thuật cho media upload, deploy checklist, bảo mật và
+              công cụ kiểm tra nâng cao.
             </p>
           </div>
-          <span class="status ready" data-module-status="console">Kỹ thuật</span>
+          <span class="status ready" data-module-status="console"
+            >Kỹ thuật</span
+          >
         </a>
 
         <a class="card" href="/admin/operations.html">
@@ -530,10 +820,13 @@
             <div class="icon">O</div>
             <h2>Vận hành</h2>
             <p>
-              Theo dõi lead, ảnh, người đăng ký, hàng chờ duyệt, lịch sử thao tác và các mục cần kiểm tra.
+              Theo dõi lead, ảnh, người đăng ký, hàng chờ duyệt, lịch sử thao
+              tác và các mục cần kiểm tra.
             </p>
           </div>
-          <span class="status ready" data-module-status="operations">Đang tải</span>
+          <span class="status ready" data-module-status="operations"
+            >Đang tải</span
+          >
         </a>
 
         <a class="card" href="/admin/leads.html">
@@ -541,8 +834,9 @@
             <div class="icon">L</div>
             <h2>Lead</h2>
             <p>
-              Quản lý liên hệ từ website theo trạng thái Mới, Đã liên hệ, Đang xử lý,
-              Đã xong. Thêm ghi chú nội bộ và mở email trả lời trong một bước.
+              Quản lý liên hệ từ website theo trạng thái Mới, Đã liên hệ, Đang
+              xử lý, Đã xong. Thêm ghi chú nội bộ và mở email trả lời trong một
+              bước.
             </p>
           </div>
           <span class="status ready" data-module-status="leads">Đang tải</span>
@@ -556,7 +850,9 @@
               Tạo bài mới, lưu nháp, xem trước, gửi duyệt và đăng lên website.
             </p>
           </div>
-          <span class="status ready" data-module-status="blog">Draft/Review</span>
+          <span class="status ready" data-module-status="blog"
+            >Draft/Review</span
+          >
         </a>
 
         <a class="card" href="/admin/content.html">
@@ -568,7 +864,9 @@
               kiểm tra preview rồi đăng lên website.
             </p>
           </div>
-          <span class="status ready" data-module-status="content">Live check</span>
+          <span class="status ready" data-module-status="content"
+            >Live check</span
+          >
         </a>
 
         <a class="card" href="/admin/text.html">
@@ -576,10 +874,13 @@
             <div class="icon">T</div>
             <h2>Sửa chữ hàng loạt</h2>
             <p>
-              Tìm và sửa nhiều dòng chữ cùng lúc. Phù hợp khi cần rà nhanh nội dung trên nhiều trang.
+              Tìm và sửa nhiều dòng chữ cùng lúc. Phù hợp khi cần rà nhanh nội
+              dung trên nhiều trang.
             </p>
           </div>
-          <span class="status ready" data-module-status="text">Bulk editor</span>
+          <span class="status ready" data-module-status="text"
+            >Bulk editor</span
+          >
         </a>
 
         <a class="card" href="/admin/guide.html">
@@ -596,8 +897,8 @@
       </section>
 
       <p class="footer-note">
-        Tip: bookmark trực tiếp `/admin/blog.html` hoặc `/admin/content.html` nếu
-        đang thao tác thường xuyên.
+        Tip: bookmark trực tiếp `/admin/blog.html` hoặc `/admin/content.html`
+        nếu đang thao tác thường xuyên.
       </p>
     </main>
     <script src="/admin/admin-session.js"></script>
@@ -608,20 +909,89 @@
       const notificationList = document.getElementById('notification-list');
       const dailyTodos = document.getElementById('daily-todos');
       const globalSearch = document.getElementById('global-search');
-      const globalSearchResults = document.getElementById('global-search-results');
+      const globalSearchResults = document.getElementById(
+        'global-search-results'
+      );
+      const heroPriority = document.getElementById('hero-priority');
+      const heroPriorityNote = document.getElementById('hero-priority-note');
+      const heroReadiness = document.getElementById('hero-readiness');
+      const heroReadinessNote = document.getElementById('hero-readiness-note');
 
       const adminSearchItems = [
-        { title: 'Lead', keywords: 'lead khách contact email sla tag priority duplicate', description: 'Xem người liên hệ, phản hồi email, ghi chú và đánh dấu đã xử lý.', url: '/admin/leads.html' },
-        { title: 'Sửa trang', keywords: 'content cms sửa trang preview mobile autosave publish', description: 'Mở website thật, click vào chữ hoặc ảnh cần sửa, xem lại rồi đăng.', url: '/admin/content.html' },
-        { title: 'Sửa chữ hàng loạt', keywords: 'text manager bulk search replace json copy', description: 'Tìm nhiều dòng chữ cùng lúc và thay đổi theo danh sách trang.', url: '/admin/text.html' },
-        { title: 'Viết blog', keywords: 'blog draft review seo image alt calendar publish', description: 'Soạn bài, xem trước, lưu nháp, gửi duyệt hoặc đăng bài.', url: '/admin/blog.html' },
-        { title: 'Vận hành', keywords: 'operations health audit rollback subscribers media seo review', description: 'Theo dõi lead, ảnh, người đăng ký, hàng chờ duyệt và lịch sử thao tác.', url: '/admin/operations.html' },
-        { title: 'Kiểm tra nội dung', keywords: 'seo title description alt draft blog issue', description: 'Tìm tiêu đề, mô tả hoặc ảnh cần chỉnh trước khi đăng.', url: '/admin/operations.html#seo' },
-        { title: 'Duyệt nội dung', keywords: 'draft review approved publish duyệt', description: 'Xem các mục đang chờ duyệt trước khi công khai.', url: '/admin/operations.html#review' },
-        { title: 'Thư viện ảnh', keywords: 'ảnh image upload copy url alt crop resize', description: 'Tải ảnh lên, xem ảnh đã có và lấy đường dẫn dùng trong bài/trang.', url: '/admin/operations.html#media' },
-        { title: 'Lịch sử và khôi phục', keywords: 'audit log rollback commit snapshot restore', description: 'Xem lịch sử thay đổi và khôi phục khi cần.', url: '/admin/operations.html#audit' },
-        { title: 'Kỹ thuật', keywords: 'console deploy security upload config kỹ thuật', description: 'Khu vực dành cho cấu hình, bảo mật và thao tác nâng cao.', url: '/admin/console.html' },
-        { title: 'Hướng dẫn', keywords: 'guide quy trình role publisher editor admin', description: 'Quy trình thao tác chuẩn cho người quản trị nội dung.', url: '/admin/guide.html' },
+        {
+          title: 'Lead',
+          keywords: 'lead khách contact email sla tag priority duplicate',
+          description:
+            'Xem người liên hệ, phản hồi email, ghi chú và đánh dấu đã xử lý.',
+          url: '/admin/leads.html',
+        },
+        {
+          title: 'Sửa trang',
+          keywords: 'content cms sửa trang preview mobile autosave publish',
+          description:
+            'Mở website thật, click vào chữ hoặc ảnh cần sửa, xem lại rồi đăng.',
+          url: '/admin/content.html',
+        },
+        {
+          title: 'Sửa chữ hàng loạt',
+          keywords: 'text manager bulk search replace',
+          description:
+            'Tìm nhiều dòng chữ cùng lúc và thay đổi theo danh sách trang.',
+          url: '/admin/text.html',
+        },
+        {
+          title: 'Viết blog',
+          keywords: 'blog nháp duyệt seo image alt calendar đăng',
+          description:
+            'Soạn bài, xem trước, lưu nháp, gửi duyệt hoặc đăng bài.',
+          url: '/admin/blog.html',
+        },
+        {
+          title: 'Vận hành',
+          keywords:
+            'operations health audit rollback subscribers media seo review',
+          description:
+            'Theo dõi lead, ảnh, người đăng ký, hàng chờ duyệt và lịch sử thao tác.',
+          url: '/admin/operations.html',
+        },
+        {
+          title: 'Kiểm tra nội dung',
+          keywords: 'seo title description alt draft blog issue',
+          description: 'Tìm tiêu đề, mô tả hoặc ảnh cần chỉnh trước khi đăng.',
+          url: '/admin/operations.html#seo',
+        },
+        {
+          title: 'Duyệt nội dung',
+          keywords: 'draft review approved publish duyệt',
+          description: 'Xem các mục đang chờ duyệt trước khi công khai.',
+          url: '/admin/operations.html#review',
+        },
+        {
+          title: 'Thư viện ảnh',
+          keywords: 'ảnh image upload copy url alt crop resize',
+          description:
+            'Tải ảnh lên, xem ảnh đã có và lấy đường dẫn dùng trong bài/trang.',
+          url: '/admin/operations.html#media',
+        },
+        {
+          title: 'Lịch sử và khôi phục',
+          keywords: 'lịch sử khôi phục thay đổi snapshot restore',
+          description: 'Xem lịch sử thay đổi và khôi phục khi cần.',
+          url: '/admin/operations.html#audit',
+        },
+        {
+          title: 'Kỹ thuật',
+          keywords: 'console deploy security upload config kỹ thuật',
+          description:
+            'Khu vực dành cho cấu hình, bảo mật và thao tác nâng cao.',
+          url: '/admin/console.html',
+        },
+        {
+          title: 'Hướng dẫn',
+          keywords: 'guide quy trình role publisher editor admin',
+          description: 'Quy trình thao tác chuẩn cho người quản trị nội dung.',
+          url: '/admin/guide.html',
+        },
       ];
 
       function escapeHtml(value) {
@@ -679,22 +1049,58 @@
 
       function renderGlobalSearch() {
         const keyword = globalSearch.value.trim().toLowerCase();
-        const items = adminSearchItems.filter(item => !keyword || `${item.title} ${item.keywords}`.toLowerCase().includes(keyword)).slice(0, 7);
+        const items = adminSearchItems
+          .filter(
+            item =>
+              !keyword ||
+              `${item.title} ${item.keywords}`.toLowerCase().includes(keyword)
+          )
+          .slice(0, 7);
         globalSearchResults.innerHTML = items
-          .map(item => `<a class="search-result" href="${escapeHtml(item.url)}"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.description || item.keywords)}</p></a>`)
+          .map(
+            item =>
+              `<a class="search-result" href="${escapeHtml(item.url)}"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.description || item.keywords)}</p></a>`
+          )
           .join('');
       }
 
       function renderNotifications(data = {}) {
         const metrics = data.metrics || {};
         const notifications = [
-          metrics.staleNewLeads ? { type: 'urgent', title: `${metrics.staleNewLeads} lead quá 24h`, url: '/admin/leads.html' } : null,
-          metrics.newLeads ? { type: 'warn', title: `${metrics.newLeads} lead mới cần xử lý`, url: '/admin/leads.html' } : null,
-          metrics.pendingReviews ? { type: 'warn', title: `${metrics.pendingReviews} mục đang chờ review`, url: '/admin/operations.html#review' } : null,
-          !metrics.pendingReviews && !metrics.newLeads ? { type: '', title: 'Không có cảnh báo vận hành lớn.', url: '/admin/operations.html' } : null,
+          metrics.staleNewLeads
+            ? {
+                type: 'urgent',
+                title: `${metrics.staleNewLeads} lead quá 24h`,
+                url: '/admin/leads.html',
+              }
+            : null,
+          metrics.newLeads
+            ? {
+                type: 'warn',
+                title: `${metrics.newLeads} lead mới cần xử lý`,
+                url: '/admin/leads.html',
+              }
+            : null,
+          metrics.pendingReviews
+            ? {
+                type: 'warn',
+                title: `${metrics.pendingReviews} mục đang chờ review`,
+                url: '/admin/operations.html#review',
+              }
+            : null,
+          !metrics.pendingReviews && !metrics.newLeads
+            ? {
+                type: '',
+                title: 'Không có cảnh báo vận hành lớn.',
+                url: '/admin/operations.html',
+              }
+            : null,
         ].filter(Boolean);
         notificationList.innerHTML = notifications
-          .map(item => `<a class="notification ${item.type}" href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a>`)
+          .map(
+            item =>
+              `<a class="notification ${item.type}" href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a>`
+          )
           .join('');
       }
 
@@ -721,66 +1127,156 @@
             ? {
                 type: 'warn',
                 title: `Duyệt ${metrics.pendingReviews} mục trong review queue`,
-                note: data.latest?.reviewAt ? `Review mới nhất: ${compactDate(data.latest.reviewAt)}.` : 'Có draft hoặc thay đổi đang chờ duyệt.',
+                note: data.latest?.reviewAt
+                  ? `Review mới nhất: ${compactDate(data.latest.reviewAt)}.`
+                  : 'Có draft hoặc thay đổi đang chờ duyệt.',
                 url: '/admin/operations.html#review',
               }
             : null,
           {
             title: 'Kiểm tra health và audit sau lần publish gần nhất',
-            note: data.latest?.auditAt ? `Audit mới nhất: ${compactDate(data.latest.auditAt)}.` : 'Mở Control Center để kiểm tra cấu hình và log vận hành.',
+            note: data.latest?.auditAt
+              ? `Audit mới nhất: ${compactDate(data.latest.auditAt)}.`
+              : 'Mở Control Center để kiểm tra cấu hình và log vận hành.',
             url: '/admin/operations.html#health',
           },
         ].filter(Boolean);
 
-        dailyTodos.innerHTML = todos.map(item => todoItem(item.title, item.note, item.url, item.type)).join('');
+        dailyTodos.innerHTML = todos
+          .map(item => todoItem(item.title, item.note, item.url, item.type))
+          .join('');
+      }
+
+      function updateHeroInsights(data = {}) {
+        const metrics = data.metrics || {};
+        if (metrics.staleNewLeads) {
+          heroPriority.textContent = `${metrics.staleNewLeads} lead quá 24h`;
+          heroPriorityNote.textContent =
+            'Ưu tiên phản hồi trước khi làm việc nội dung.';
+        } else if (metrics.newLeads) {
+          heroPriority.textContent = `${metrics.newLeads} lead mới`;
+          heroPriorityNote.textContent =
+            'Nên phân loại, gán người phụ trách hoặc ghi chú ngay hôm nay.';
+        } else if (metrics.pendingReviews) {
+          heroPriority.textContent = `${metrics.pendingReviews} mục chờ duyệt`;
+          heroPriorityNote.textContent =
+            'Có nội dung cần đọc lại trước khi công khai.';
+        } else {
+          heroPriority.textContent = 'Không có việc khẩn';
+          heroPriorityNote.textContent =
+            'Có thể kiểm tra nội dung, viết bài mới hoặc rà website.';
+        }
+
+        heroReadiness.textContent = metrics.pendingReviews
+          ? 'Cần duyệt trước khi đăng'
+          : 'Sẵn sàng vận hành';
+        heroReadinessNote.textContent = data.latest?.auditAt
+          ? `Lần thay đổi gần nhất: ${compactDate(data.latest.auditAt)}.`
+          : 'Chưa có lịch sử thay đổi gần đây.';
       }
 
       async function loadDashboard() {
-        dashboardStatus.textContent = 'Đang tải số liệu admin...';
+        dashboardStatus.textContent = 'Đang tải số liệu...';
         dashboardMetrics.innerHTML = '';
         dashboardAttention.innerHTML = '';
         dailyTodos.innerHTML = '';
         try {
-          const response = await fetch('/api/admin-operations?module=dashboard', {
-            credentials: 'same-origin',
-          });
+          const response = await fetch(
+            '/api/admin-operations?module=dashboard',
+            {
+              credentials: 'same-origin',
+            }
+          );
           const data = await response.json().catch(() => ({}));
           if (!response.ok || data.ok === false) {
-            throw new Error(data.message || `Không tải được dashboard (${response.status}).`);
+            throw new Error(
+              data.message || `Không tải được dashboard (${response.status}).`
+            );
           }
           const metrics = data.metrics || {};
-          dashboardStatus.textContent = `Repo ${data.repo || '-'} / ${data.branch || '-'} · cập nhật ${compactDate(data.updatedAt)}`;
+          dashboardStatus.textContent = `Dữ liệu mới nhất được cập nhật lúc ${compactDate(data.updatedAt)}.`;
+          updateHeroInsights(data);
           renderNotifications(data);
           renderDailyTodos(data);
           dashboardMetrics.innerHTML = [
             metricCard('Lead mới', metrics.newLeads || 0),
             metricCard('Đang xử lý', metrics.workingLeads || 0),
             metricCard('Chờ review', metrics.pendingReviews || 0),
-            metricCard('Audit events', metrics.auditEvents || 0),
+            metricCard('Lịch sử', metrics.auditEvents || 0),
           ].join('');
-          updateModuleStatus('operations', metrics.pendingReviews ? `${metrics.pendingReviews} chờ review` : 'Ổn định', Boolean(metrics.pendingReviews));
-          updateModuleStatus('leads', metrics.newLeads ? `${metrics.newLeads} lead mới` : 'Không có lead mới', Boolean(metrics.staleNewLeads));
+          updateModuleStatus(
+            'operations',
+            metrics.pendingReviews
+              ? `${metrics.pendingReviews} chờ review`
+              : 'Ổn định',
+            Boolean(metrics.pendingReviews)
+          );
+          updateModuleStatus(
+            'leads',
+            metrics.newLeads
+              ? `${metrics.newLeads} lead mới`
+              : 'Không có lead mới',
+            Boolean(metrics.staleNewLeads)
+          );
           updateModuleStatus('content', 'Live check');
-          updateModuleStatus('blog', metrics.pendingReviews ? 'Có review' : 'Draft/Review');
+          updateModuleStatus(
+            'blog',
+            metrics.pendingReviews ? 'Có review' : 'Draft/Review'
+          );
           dashboardAttention.innerHTML = [
-            attentionCard('Lead cần phản hồi', metrics.newLeads || 0, metrics.staleNewLeads ? `${metrics.staleNewLeads} lead đã quá 24h.` : 'Không có lead quá hạn.', '/admin/leads.html', metrics.staleNewLeads ? 'urgent' : ''),
-            attentionCard('Review queue', metrics.pendingReviews || 0, data.latest?.reviewAt ? `Mới nhất: ${compactDate(data.latest.reviewAt)}` : 'Chưa có mục review.', '/admin/operations.html#review', metrics.pendingReviews ? 'warn' : ''),
-            attentionCard('Health check', data.contentCounts?.adminPages || 0, 'Kiểm tra cấu hình GitHub, Vercel, email và biến môi trường.', '/admin/operations.html#health'),
+            attentionCard(
+              'Lead cần phản hồi',
+              metrics.newLeads || 0,
+              metrics.staleNewLeads
+                ? `${metrics.staleNewLeads} lead đã quá 24h.`
+                : 'Không có lead quá hạn.',
+              '/admin/leads.html',
+              metrics.staleNewLeads ? 'urgent' : ''
+            ),
+            attentionCard(
+              'Chờ duyệt',
+              metrics.pendingReviews || 0,
+              data.latest?.reviewAt
+                ? `Mới nhất: ${compactDate(data.latest.reviewAt)}`
+                : 'Chưa có mục chờ duyệt.',
+              '/admin/operations.html#review',
+              metrics.pendingReviews ? 'warn' : ''
+            ),
+            attentionCard(
+              'Sẵn sàng đăng',
+              data.contentCounts?.adminPages || 0,
+              'Kiểm tra nội dung, ảnh, email và trạng thái website trước khi công khai.',
+              '/admin/operations.html#health'
+            ),
           ].join('');
         } catch (error) {
-          dashboardStatus.textContent = error instanceof Error ? error.message : 'Không tải được dashboard.';
-          notificationList.innerHTML = '<div class="notification urgent">Không tải được notification center.</div>';
-          dailyTodos.innerHTML = todoItem('Mở Control Center để kiểm tra API dashboard', 'Dashboard chưa tải được số liệu. Kiểm tra session, GitHub token hoặc dữ liệu vận hành.', '/admin/operations.html#health', 'urgent');
+          dashboardStatus.textContent =
+            error instanceof Error
+              ? error.message
+              : 'Không tải được dashboard.';
+          heroPriority.textContent = 'Chưa tải được số liệu';
+          heroPriorityNote.textContent =
+            'Mở Vận hành để kiểm tra trạng thái đăng nhập hoặc dữ liệu.';
+          notificationList.innerHTML =
+            '<div class="notification urgent">Không tải được notification center.</div>';
+          dailyTodos.innerHTML = todoItem(
+            'Mở Vận hành để kiểm tra dashboard',
+            'Dashboard chưa tải được số liệu. Kiểm tra phiên đăng nhập hoặc dữ liệu vận hành.',
+            '/admin/operations.html#health',
+            'urgent'
+          );
           dashboardMetrics.innerHTML = [
             metricCard('Lead mới', '-'),
             metricCard('Đang xử lý', '-'),
             metricCard('Chờ review', '-'),
-            metricCard('Audit events', '-'),
+            metricCard('Lịch sử', '-'),
           ].join('');
         }
       }
 
-      document.getElementById('refresh-dashboard').addEventListener('click', loadDashboard);
+      document
+        .getElementById('refresh-dashboard')
+        .addEventListener('click', loadDashboard);
       globalSearch.addEventListener('input', renderGlobalSearch);
       renderGlobalSearch();
       loadDashboard();

@@ -10,7 +10,9 @@
         var separator = part.indexOf('=');
         var key = separator >= 0 ? part.slice(0, separator) : part;
         if (key !== name) return value;
-        return decodeURIComponent(separator >= 0 ? part.slice(separator + 1) : '');
+        return decodeURIComponent(
+          separator >= 0 ? part.slice(separator + 1) : ''
+        );
       }, '');
   }
 
@@ -18,12 +20,17 @@
   var redirectingToLogin = false;
 
   function loginUrl() {
-    var next = window.location.pathname + window.location.search + window.location.hash;
+    var next =
+      window.location.pathname + window.location.search + window.location.hash;
     return '/admin/login.html?next=' + encodeURIComponent(next);
   }
 
   function showSessionExpired() {
-    if (redirectingToLogin || window.location.pathname.endsWith('/admin/login.html')) return;
+    if (
+      redirectingToLogin ||
+      window.location.pathname.endsWith('/admin/login.html')
+    )
+      return;
     redirectingToLogin = true;
     var banner = document.createElement('div');
     banner.setAttribute('role', 'alert');
@@ -39,9 +46,10 @@
       'color:#991b1b',
       'box-shadow:0 18px 55px rgb(38 38 38 / 18%)',
       'padding:12px 14px',
-      'font:850 14px/1.45 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'
+      'font:850 14px/1.45 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
     ].join(';');
-    banner.textContent = 'Phiên đăng nhập admin đã hết hạn. CMS đang chuyển bạn về trang đăng nhập...';
+    banner.textContent =
+      'Phiên đăng nhập admin đã hết hạn. CMS đang chuyển bạn về trang đăng nhập...';
     document.body.appendChild(banner);
     window.setTimeout(function () {
       window.location.assign(loginUrl());
@@ -51,11 +59,17 @@
   window.fetch = function (input, init) {
     var url = typeof input === 'string' ? input : input && input.url;
     var options = init ? Object.assign({}, init) : {};
-    var method = String(options.method || (input && input.method) || 'GET').toUpperCase();
-    var isAdminApi = String(url || '').startsWith('/api/admin-') && !String(url || '').startsWith('/api/admin-auth');
+    var method = String(
+      options.method || (input && input.method) || 'GET'
+    ).toUpperCase();
+    var isAdminApi =
+      String(url || '').startsWith('/api/admin-') &&
+      !String(url || '').startsWith('/api/admin-auth');
 
     if (isAdminApi && !['GET', 'HEAD', 'OPTIONS'].includes(method)) {
-      var headers = new Headers(options.headers || (input && input.headers) || {});
+      var headers = new Headers(
+        options.headers || (input && input.headers) || {}
+      );
       var csrf = readCookie('folks_admin_csrf');
       if (csrf && !headers.has('x-csrf-token')) {
         headers.set('x-csrf-token', csrf);
@@ -79,16 +93,20 @@
   }
 
   function setOfficialFavicon() {
-    document.querySelectorAll('link[rel~="icon"], link[rel="shortcut icon"]').forEach(function (link) {
-      if (String(link.type || '').includes('svg')) {
-        link.href = '/favicon.svg?v=folks-main';
-        return;
-      }
-      link.href = '/favicon.png?v=folks-main';
-    });
-    document.querySelectorAll('link[rel="apple-touch-icon"]').forEach(function (link) {
-      link.href = '/apple-touch-icon.png?v=folks-main';
-    });
+    document
+      .querySelectorAll('link[rel~="icon"], link[rel="shortcut icon"]')
+      .forEach(function (link) {
+        if (String(link.type || '').includes('svg')) {
+          link.href = '/favicon.svg?v=folks-main';
+          return;
+        }
+        link.href = '/favicon.png?v=folks-main';
+      });
+    document
+      .querySelectorAll('link[rel="apple-touch-icon"]')
+      .forEach(function (link) {
+        link.href = '/apple-touch-icon.png?v=folks-main';
+      });
   }
 
   function makeBrandGoHome() {
@@ -112,8 +130,14 @@
 
   function tagAdminPage() {
     var path = window.location.pathname;
-    document.body.classList.toggle('admin-home', path === '/admin/' || path === '/admin/index.html');
-    document.body.classList.toggle('admin-console', path.endsWith('/admin/console.html'));
+    document.body.classList.toggle(
+      'admin-home',
+      path === '/admin/' || path === '/admin/index.html'
+    );
+    document.body.classList.toggle(
+      'admin-console',
+      path.endsWith('/admin/console.html')
+    );
   }
 
   function simplifyAdminNav() {
@@ -121,7 +145,8 @@
       if (nav.dataset.standardized === 'true') return;
       var path = window.location.pathname.replace(/\/$/, '/');
       var isCurrent = function (href) {
-        if (href === '/admin/') return path === '/admin/' || path === '/admin/index.html';
+        if (href === '/admin/')
+          return path === '/admin/' || path === '/admin/index.html';
         return path.endsWith(href);
       };
       var items = [
@@ -131,17 +156,20 @@
         { label: 'Lead', href: '/admin/leads.html' },
         { label: 'Vận hành', href: '/admin/operations.html' },
         { label: 'Xem website', href: '/' },
-        { label: 'Hướng dẫn', href: '/admin/guide.html' }
+        { label: 'Hướng dẫn', href: '/admin/guide.html' },
       ];
       if (path.endsWith('/admin/text.html')) {
-        items.splice(3, 0, { label: 'Sửa chữ hàng loạt', href: '/admin/text.html' });
+        items.splice(3, 0, {
+          label: 'Sửa chữ hàng loạt',
+          href: '/admin/text.html',
+        });
       }
       if (path.endsWith('/admin/console.html')) {
         items = [
           { label: 'Trang chính', href: '/admin/' },
           { label: 'Vận hành', href: '/admin/operations.html' },
           { label: 'Kỹ thuật', href: '/admin/console.html' },
-          { label: 'Xem website', href: '/' }
+          { label: 'Xem website', href: '/' },
         ];
       }
       if (path.endsWith('/admin/leads.html')) {
@@ -186,17 +214,19 @@
       'Bulk Text Editor': 'Sửa chữ',
       'Blog EN': 'Blog EN',
       'Blog VI': 'Blog VI',
-      'Home': 'Xem website',
+      Home: 'Xem website',
       'Trang live': 'Xem website',
       'Xem website': 'Xem website',
       'Hướng dẫn': 'Hướng dẫn',
       'Đăng xuất': 'Đăng xuất',
-      'Mở form': 'Mở form'
+      'Mở form': 'Mở form',
     };
-    document.querySelectorAll('.nav a, .nav button, [data-admin-logout]').forEach(function (item) {
-      var text = item.textContent.trim();
-      if (labels[text]) item.textContent = labels[text];
-    });
+    document
+      .querySelectorAll('.nav a, .nav button, [data-admin-logout]')
+      .forEach(function (item) {
+        var text = item.textContent.trim();
+        if (labels[text]) item.textContent = labels[text];
+      });
   }
 
   function normalizeVisibleCopy(root) {
@@ -222,8 +252,12 @@
       ['Review queue', 'Hàng chờ duyệt'],
       ['Review item', 'Mục cần duyệt'],
       ['Draft -> Review -> Publish', 'Nháp -> Duyệt -> Đăng'],
-      ['Audit log local + rollback target', 'Lịch sử thao tác và điểm khôi phục'],
+      [
+        'Audit log local + rollback target',
+        'Lịch sử thao tác và điểm khôi phục',
+      ],
       ['Audit log', 'Lịch sử thao tác'],
+      ['Audit events', 'Lịch sử thay đổi'],
       ['Audit', 'Lịch sử'],
       ['Rollback file này', 'Khôi phục mục này'],
       ['Rollback', 'Khôi phục'],
@@ -237,6 +271,7 @@
       ['deploy', 'đăng website'],
       ['Deploy', 'Đăng website'],
       ['Repository', 'Kho lưu dữ liệu'],
+      ['Repo', 'Nơi lưu dữ liệu'],
       ['Branch', 'Nhánh dữ liệu'],
       ['repo/branch', 'nơi lưu dữ liệu'],
       ['GitHub', 'nơi lưu website'],
@@ -244,6 +279,7 @@
       ['CSRF + khóa repo/branch', 'Bảo vệ đăng nhập và nơi lưu dữ liệu'],
       ['CSRF', 'Bảo vệ form'],
       ['API', 'kết nối'],
+      ['Health check', 'Kiểm tra sẵn sàng'],
       ['JSON', 'dữ liệu kỹ thuật'],
       ['Markdown', 'mã bài viết'],
       ['Search & replace có kiểm tra', 'Tìm và thay chữ có xem trước'],
@@ -254,17 +290,31 @@
       ['Kiểm tra cấu hình production', 'Kiểm tra trước khi đăng'],
       ['Chạy kiểm tra SEO', 'Chạy kiểm tra nội dung'],
       ['Xem audit', 'Xem lịch sử'],
-      ['Mở Lead Inbox', 'Mở Lead']
+      ['Mở Lead Inbox', 'Mở Lead'],
     ];
-    var skipTags = ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'OPTION', 'CODE', 'PRE'];
-    var walker = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode: function (node) {
-        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-        var parent = node.parentElement;
-        if (!parent || skipTags.includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
-        return NodeFilter.FILTER_ACCEPT;
+    var skipTags = [
+      'SCRIPT',
+      'STYLE',
+      'TEXTAREA',
+      'INPUT',
+      'OPTION',
+      'CODE',
+      'PRE',
+    ];
+    var walker = document.createTreeWalker(
+      root || document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function (node) {
+          if (!node.nodeValue || !node.nodeValue.trim())
+            return NodeFilter.FILTER_REJECT;
+          var parent = node.parentElement;
+          if (!parent || skipTags.includes(parent.tagName))
+            return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        },
       }
-    });
+    );
     var nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(function (node) {
@@ -280,7 +330,12 @@
     var pending = false;
     var observer = new MutationObserver(function (mutations) {
       if (pending) return;
-      if (!mutations.some(function (mutation) { return mutation.addedNodes && mutation.addedNodes.length; })) return;
+      if (
+        !mutations.some(function (mutation) {
+          return mutation.addedNodes && mutation.addedNodes.length;
+        })
+      )
+        return;
       pending = true;
       window.setTimeout(function () {
         pending = false;
@@ -293,22 +348,26 @@
   }
 
   function markTechnicalContent() {
-    document.querySelectorAll('details.advanced-box > summary').forEach(function (summary) {
-      if (!summary.textContent.includes('nâng cao')) return;
-      summary.textContent = 'Cài đặt dành cho kỹ thuật';
-    });
+    document
+      .querySelectorAll('details.advanced-box > summary')
+      .forEach(function (summary) {
+        if (!summary.textContent.includes('nâng cao')) return;
+        summary.textContent = 'Cài đặt dành cho kỹ thuật';
+      });
   }
 
   function simplifyAdminHome() {
     if (!document.body.classList.contains('admin-home')) return;
 
     var heroTitle = document.querySelector('.hero h2');
-    if (heroTitle) heroTitle.textContent = 'Bảng điều khiển hằng ngày';
+    if (heroTitle)
+      heroTitle.textContent =
+        'Việc quan trọng, trạng thái rõ, thao tác trong một nhịp.';
 
     var heroCopy = document.querySelector('.hero p:not(.eyebrow)');
     if (heroCopy) {
       heroCopy.textContent =
-        'Tập trung vào 3 việc chính: xử lý lead, sửa nội dung đang live và kiểm tra vận hành trước khi đăng. Các công cụ kỹ thuật được đưa xuống dưới hoặc tách riêng để màn hình chính dễ quét hơn.';
+        'Màn hình này ưu tiên lead cần phản hồi, nội dung đang chờ duyệt và tình trạng website sau khi đăng. Thông tin cấu hình, kết nối dịch vụ và mã kỹ thuật được đưa về khu Kỹ thuật.';
     }
 
     var searchTitle = document.querySelector('.global-search h2');
@@ -319,12 +378,14 @@
       moduleGrid.setAttribute('aria-hidden', 'true');
     }
 
-    document.querySelectorAll('.task-board .task-link').forEach(function (link) {
-      var href = link.getAttribute('href') || '';
-      if (href.includes('/admin/console.html')) {
-        link.setAttribute('href', '/admin/operations.html#media');
-      }
-    });
+    document
+      .querySelectorAll('.task-board .task-link')
+      .forEach(function (link) {
+        var href = link.getAttribute('href') || '';
+        if (href.includes('/admin/console.html')) {
+          link.setAttribute('href', '/admin/operations.html#media');
+        }
+      });
   }
 
   function simplifyConsolePage() {
@@ -334,19 +395,28 @@
     var heroTitle = document.querySelector('.hero h2');
     var heroCopy = document.querySelector('.hero p:not(.eyebrow)');
     if (heroEyebrow) heroEyebrow.textContent = 'Khu kỹ thuật';
-    if (heroTitle) heroTitle.textContent = 'Công cụ kiểm tra, ảnh và an toàn trước khi đăng';
+    if (heroTitle)
+      heroTitle.textContent = 'Công cụ kiểm tra, ảnh và an toàn trước khi đăng';
     if (heroCopy) {
       heroCopy.textContent =
         'Console chỉ giữ các thao tác kỹ thuật thật sự cần đứng riêng: tải ảnh, checklist trước khi public, nhật ký cục bộ và các cài đặt đã khóa. Việc sửa trang, viết blog và xử lý lead mở trực tiếp từ Admin Hub.';
     }
 
-    document.querySelectorAll('[data-open-task="pages"], [data-open-task="leads"], [data-open-task="blog"]').forEach(function (item) {
-      item.remove();
-    });
+    document
+      .querySelectorAll(
+        '[data-open-task="pages"], [data-open-task="leads"], [data-open-task="blog"]'
+      )
+      .forEach(function (item) {
+        item.remove();
+      });
 
-    document.querySelectorAll('[data-view-target="leads"], [data-view-target="pages"], [data-view-target="blog"], [data-view-target="guide"]').forEach(function (item) {
-      item.remove();
-    });
+    document
+      .querySelectorAll(
+        '[data-view-target="leads"], [data-view-target="pages"], [data-view-target="blog"], [data-view-target="guide"]'
+      )
+      .forEach(function (item) {
+        item.remove();
+      });
 
     ['leads', 'pages', 'blog', 'guide'].forEach(function (id) {
       var section = document.getElementById(id);
@@ -361,29 +431,29 @@
           title: 'Tải ảnh lên thư viện',
           copy: 'Thêm ảnh từ máy, kiểm tra định dạng và lấy đường dẫn để dùng trong trang hoặc bài viết.',
           target: 'media',
-          action: 'Mở thư viện ảnh'
+          action: 'Mở thư viện ảnh',
         },
         {
           icon: '2',
           title: 'Kiểm tra trước khi public',
           copy: 'Đi qua checklist cuối: preview, SEO, ảnh, duyệt nội dung và hướng khôi phục.',
           target: 'deployments',
-          action: 'Mở checklist'
+          action: 'Mở checklist',
         },
         {
           icon: '3',
           title: 'Ghi nhận lần kiểm tra live',
           copy: 'Lưu lại mốc kiểm tra trong trình duyệt để admin biết lần rà gần nhất.',
           target: 'history',
-          action: 'Xem nhật ký'
+          action: 'Xem nhật ký',
         },
         {
           icon: '4',
           title: 'Xem cấu hình đã khóa',
           copy: 'Kiểm tra các phần server kiểm soát như session, nơi lưu dữ liệu, bảo vệ form và phục hồi.',
           target: 'settings',
-          action: 'Mở cài đặt'
-        }
+          action: 'Mở cài đặt',
+        },
       ]
         .map(function (item) {
           return (
@@ -413,7 +483,9 @@
       });
     }
 
-    if (['#leads', '#pages', '#blog', '#guide'].includes(window.location.hash)) {
+    if (
+      ['#leads', '#pages', '#blog', '#guide'].includes(window.location.hash)
+    ) {
       history.replaceState(null, '', '#home');
       var home = document.getElementById('home');
       if (home) {
@@ -429,7 +501,7 @@
 
   window.FolksAdminSession = {
     showSessionExpired: showSessionExpired,
-    loginUrl: loginUrl
+    loginUrl: loginUrl,
   };
 
   function checkSessionEarly() {
@@ -438,8 +510,8 @@
       credentials: 'same-origin',
       cache: 'no-store',
       headers: {
-        Accept: 'application/json'
-      }
+        Accept: 'application/json',
+      },
     })
       .then(function (response) {
         if (response.status === 401) showSessionExpired();

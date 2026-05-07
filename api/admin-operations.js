@@ -1,5 +1,10 @@
 import { getAdminSession } from './_admin-session.js';
-import { githubRequest, loadLeadStore, targetBranch, targetRepo } from './_lead-store.js';
+import {
+  githubRequest,
+  loadLeadStore,
+  targetBranch,
+  targetRepo,
+} from './_lead-store.js';
 import {
   AUDIT_TARGET_PATH,
   REVIEW_QUEUE_TARGET_PATH,
@@ -18,18 +23,53 @@ import {
 } from './_admin-data.js';
 
 const COLLECTIONS = {
-  products: { label: 'Products', prefix: 'src/content/products/', extensions: /\.(md|mdx)$/i },
-  insights: { label: 'Insights', prefix: 'src/content/insights/', extensions: /\.(md|mdx)$/i },
-  docs: { label: 'Docs', prefix: 'src/content/docs/', extensions: /\.(md|mdx)$/i },
-  projects: { label: 'Projects', prefix: 'src/pages/projects/', extensions: /\.(astro|md|mdx)$/i },
-  caseStudies: { label: 'Case studies', prefix: 'src/pages/case-studies/', extensions: /\.(astro|md|mdx)$/i },
-  pages: { label: 'Website pages', prefix: 'src/pages/', extensions: /\.(astro|md|mdx)$/i },
+  products: {
+    label: 'Products',
+    prefix: 'src/content/products/',
+    extensions: /\.(md|mdx)$/i,
+  },
+  insights: {
+    label: 'Insights',
+    prefix: 'src/content/insights/',
+    extensions: /\.(md|mdx)$/i,
+  },
+  docs: {
+    label: 'Docs',
+    prefix: 'src/content/docs/',
+    extensions: /\.(md|mdx)$/i,
+  },
+  projects: {
+    label: 'Projects',
+    prefix: 'src/pages/projects/',
+    extensions: /\.(astro|md|mdx)$/i,
+  },
+  caseStudies: {
+    label: 'Case studies',
+    prefix: 'src/pages/case-studies/',
+    extensions: /\.(astro|md|mdx)$/i,
+  },
+  pages: {
+    label: 'Website pages',
+    prefix: 'src/pages/',
+    extensions: /\.(astro|md|mdx)$/i,
+  },
 };
 
 const MEDIA_PREFIXES = ['src/images/', 'public/'];
 const MEDIA_EXTENSIONS = /\.(avif|gif|ico|jpe?g|png|svg|webp)$/i;
-const SUBSCRIBER_STATUSES = new Set(['active', 'unsubscribed', 'bounced', 'spam']);
-const REVIEW_STATUSES = new Set(['draft', 'review', 'approved', 'published', 'archived']);
+const SUBSCRIBER_STATUSES = new Set([
+  'active',
+  'unsubscribed',
+  'bounced',
+  'spam',
+]);
+const REVIEW_STATUSES = new Set([
+  'draft',
+  'review',
+  'approved',
+  'published',
+  'archived',
+]);
 const CMS_CONTENT_TARGET_PATH = 'src/data_files/cmsContent.json';
 
 function countByStatus(items, field = 'status') {
@@ -65,12 +105,9 @@ function isSafeMediaTarget(target) {
 
 function isSafeRollbackTarget(target) {
   return (
-    [
-      'src/data_files/',
-      'src/content/',
-      'src/pages/',
-      'public/admin/',
-    ].some(prefix => target.startsWith(prefix)) &&
+    ['src/data_files/', 'src/content/', 'src/pages/', 'public/admin/'].some(
+      prefix => target.startsWith(prefix)
+    ) &&
     !target.includes('..') &&
     !target.includes('\\') &&
     !MEDIA_EXTENSIONS.test(target)
@@ -79,7 +116,8 @@ function isSafeRollbackTarget(target) {
 
 function publicPath(path) {
   if (path.startsWith('public/')) return `/${path.slice('public/'.length)}`;
-  if (path.startsWith('src/images/')) return `@/images/${path.slice('src/images/'.length)}`;
+  if (path.startsWith('src/images/'))
+    return `@/images/${path.slice('src/images/'.length)}`;
   return path;
 }
 
@@ -91,8 +129,16 @@ function frontmatterSummary(content) {
     const separator = line.indexOf(':');
     if (separator < 0) return;
     const key = line.slice(0, separator).trim();
-    const value = line.slice(separator + 1).trim().replace(/^['"]|['"]$/g, '');
-    if (['title', 'description', 'pubDate', 'category', 'cardImageAlt'].includes(key)) summary[key] = value;
+    const value = line
+      .slice(separator + 1)
+      .trim()
+      .replace(/^['"]|['"]$/g, '');
+    if (
+      ['title', 'description', 'pubDate', 'category', 'cardImageAlt'].includes(
+        key
+      )
+    )
+      summary[key] = value;
   });
   return summary;
 }
@@ -112,35 +158,68 @@ function normalizeReviews(content) {
 }
 
 function allCmsFields(page) {
-  return (page?.sections || []).flatMap(section => (section.fields || []).map(field => ({ section, field })));
+  return (page?.sections || []).flatMap(section =>
+    (section.fields || []).map(field => ({ section, field }))
+  );
 }
 
 function seoValue(page, key) {
-  return allCmsFields(page).find(({ field }) => field.key === key || field.elementType === key)?.field?.value || '';
+  return (
+    allCmsFields(page).find(
+      ({ field }) => field.key === key || field.elementType === key
+    )?.field?.value || ''
+  );
 }
 
 async function handleDashboard(admin, response) {
-  const [leadStore, subscriberStore, auditStore, reviewStore, tree] = await Promise.all([
-    loadLeadStore(admin.token),
-    loadJsonFile(admin.token, SUBSCRIBERS_TARGET_PATH, { subscribers: [] }),
-    loadJsonFile(admin.token, AUDIT_TARGET_PATH, { events: [] }),
-    loadJsonFile(admin.token, REVIEW_QUEUE_TARGET_PATH, { items: [] }),
-    listTree(admin.token),
-  ]);
+  const [leadStore, subscriberStore, auditStore, reviewStore, tree] =
+    await Promise.all([
+      loadLeadStore(admin.token),
+      loadJsonFile(admin.token, SUBSCRIBERS_TARGET_PATH, { subscribers: [] }),
+      loadJsonFile(admin.token, AUDIT_TARGET_PATH, { events: [] }),
+      loadJsonFile(admin.token, REVIEW_QUEUE_TARGET_PATH, { items: [] }),
+      listTree(admin.token),
+    ]);
 
-  const leads = Array.isArray(leadStore.content.leads) ? leadStore.content.leads : [];
-  const subscribers = Array.isArray(subscriberStore.content.subscribers) ? subscriberStore.content.subscribers : [];
-  const events = Array.isArray(auditStore.content.events) ? auditStore.content.events : [];
-  const reviewItems = Array.isArray(reviewStore.content.items) ? reviewStore.content.items : [];
+  const leads = Array.isArray(leadStore.content.leads)
+    ? leadStore.content.leads
+    : [];
+  const subscribers = Array.isArray(subscriberStore.content.subscribers)
+    ? subscriberStore.content.subscribers
+    : [];
+  const events = Array.isArray(auditStore.content.events)
+    ? auditStore.content.events
+    : [];
+  const reviewItems = Array.isArray(reviewStore.content.items)
+    ? reviewStore.content.items
+    : [];
   const files = tree.filter(item => item.type === 'blob');
 
   const contentCounts = {
-    blog: files.filter(item => item.path.startsWith('src/content/blog/') && /\.mdx?$/.test(item.path)).length,
-    products: files.filter(item => item.path.startsWith('src/content/products/') && /\.mdx?$/.test(item.path)).length,
-    insights: files.filter(item => item.path.startsWith('src/content/insights/') && /\.mdx?$/.test(item.path)).length,
-    docs: files.filter(item => item.path.startsWith('src/content/docs/') && /\.mdx?$/.test(item.path)).length,
-    media: files.filter(item => item.path.startsWith('src/images/') && MEDIA_EXTENSIONS.test(item.path)).length,
-    adminPages: files.filter(item => item.path.startsWith('public/admin/')).length,
+    blog: files.filter(
+      item =>
+        item.path.startsWith('src/content/blog/') && /\.mdx?$/.test(item.path)
+    ).length,
+    products: files.filter(
+      item =>
+        item.path.startsWith('src/content/products/') &&
+        /\.mdx?$/.test(item.path)
+    ).length,
+    insights: files.filter(
+      item =>
+        item.path.startsWith('src/content/insights/') &&
+        /\.mdx?$/.test(item.path)
+    ).length,
+    docs: files.filter(
+      item =>
+        item.path.startsWith('src/content/docs/') && /\.mdx?$/.test(item.path)
+    ).length,
+    media: files.filter(
+      item =>
+        item.path.startsWith('src/images/') && MEDIA_EXTENSIONS.test(item.path)
+    ).length,
+    adminPages: files.filter(item => item.path.startsWith('public/admin/'))
+      .length,
   };
 
   return sendJson(response, 200, {
@@ -153,13 +232,18 @@ async function handleDashboard(admin, response) {
       workingLeads: leads.filter(lead => lead.status === 'working').length,
       staleNewLeads: leads.filter(lead => {
         if ((lead.status || 'new') !== 'new' || !lead.createdAt) return false;
-        return Date.now() - new Date(lead.createdAt).getTime() > 24 * 60 * 60 * 1000;
+        return (
+          Date.now() - new Date(lead.createdAt).getTime() > 24 * 60 * 60 * 1000
+        );
       }).length,
       subscribers: subscribers.length,
       auditEvents: events.length,
       reviewItems: reviewItems.length,
-      pendingReviews: reviewItems.filter(item => ['draft', 'review'].includes(item.status || 'draft')).length,
-      contentItems: contentCounts.blog + contentCounts.products + contentCounts.insights,
+      pendingReviews: reviewItems.filter(item =>
+        ['draft', 'review'].includes(item.status || 'draft')
+      ).length,
+      contentItems:
+        contentCounts.blog + contentCounts.products + contentCounts.insights,
       mediaItems: contentCounts.media,
     },
     leadStatus: countByStatus(leads),
@@ -167,25 +251,32 @@ async function handleDashboard(admin, response) {
     contentCounts,
     recentLeads: leads
       .slice()
-      .sort((left, right) => String(right.createdAt || '').localeCompare(String(left.createdAt || '')))
+      .sort((left, right) =>
+        String(right.createdAt || '').localeCompare(
+          String(left.createdAt || '')
+        )
+      )
       .slice(0, 8),
     recentEvents: events.slice(0, 10),
     latest: {
-      leadAt: leads
-        .map(lead => lead.createdAt)
-        .filter(Boolean)
-        .sort()
-        .at(-1) || null,
-      auditAt: events
-        .map(event => event.createdAt)
-        .filter(Boolean)
-        .sort()
-        .at(-1) || null,
-      reviewAt: reviewItems
-        .map(item => item.updatedAt || item.createdAt)
-        .filter(Boolean)
-        .sort()
-        .at(-1) || null,
+      leadAt:
+        leads
+          .map(lead => lead.createdAt)
+          .filter(Boolean)
+          .sort()
+          .at(-1) || null,
+      auditAt:
+        events
+          .map(event => event.createdAt)
+          .filter(Boolean)
+          .sort()
+          .at(-1) || null,
+      reviewAt:
+        reviewItems
+          .map(item => item.updatedAt || item.createdAt)
+          .filter(Boolean)
+          .sort()
+          .at(-1) || null,
     },
     updatedAt: new Date().toISOString(),
   });
@@ -193,41 +284,81 @@ async function handleDashboard(admin, response) {
 
 async function handleHealth(request, response) {
   const adminSecret = process.env.ADMIN_SECRET;
-  if (!adminSecret) return sendJson(response, 500, { ok: false, message: 'Server is missing ADMIN_SECRET.' });
+  if (!adminSecret)
+    return sendJson(response, 500, {
+      ok: false,
+      message: 'CMS chưa sẵn sàng. Nhờ kỹ thuật kiểm tra cấu hình đăng nhập.',
+    });
   if (!getAdminSession(request, adminSecret)) {
-    return sendJson(response, 401, { ok: false, message: 'Admin session is missing or expired.' });
+    return sendJson(response, 401, {
+      ok: false,
+      message: 'Admin session is missing or expired.',
+    });
   }
 
   async function checkGithub(token) {
-    if (!token) return { ok: false, status: 'missing', message: 'Missing GITHUB_TOKEN.' };
+    if (!token)
+      return {
+        ok: false,
+        status: 'missing',
+        message: 'Chưa kết nối nơi lưu website.',
+      };
     try {
       await githubRequest(`/repos/${targetRepo()}`, token);
-      return { ok: true, status: 'ready', message: `GitHub token can access ${targetRepo()}.` };
+      return {
+        ok: true,
+        status: 'ready',
+        message: 'Nơi lưu website đang hoạt động.',
+      };
     } catch (error) {
       return { ok: false, status: 'error', message: error.message };
     }
   }
 
   async function checkVercel(token) {
-    if (!token) return { ok: false, status: 'optional', message: 'Missing VERCEL_TOKEN; deploy checks rely on GitHub status.' };
+    if (!token)
+      return {
+        ok: false,
+        status: 'optional',
+        message: 'Chưa bật kiểm tra tự động sau khi đăng.',
+      };
     try {
       const result = await fetch('https://api.vercel.com/v2/user', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!result.ok) return { ok: false, status: 'error', message: `Vercel API returned HTTP ${result.status}.` };
-      return { ok: true, status: 'ready', message: 'Vercel token is valid.' };
+      if (!result.ok)
+        return {
+          ok: false,
+          status: 'error',
+          message: `Dịch vụ đăng website trả về lỗi ${result.status}.`,
+        };
+      return {
+        ok: true,
+        status: 'ready',
+        message: 'Dịch vụ đăng website đang hoạt động.',
+      };
     } catch (error) {
       return { ok: false, status: 'error', message: error.message };
     }
   }
 
   async function checkResend(apiKey) {
-    if (!apiKey) return { ok: false, status: 'missing', message: 'Missing RESEND_API_KEY.' };
+    if (!apiKey)
+      return {
+        ok: false,
+        status: 'missing',
+        message: 'Chưa bật email thông báo.',
+      };
     try {
       const result = await fetch('https://api.resend.com/domains', {
         headers: { Authorization: `Bearer ${apiKey}` },
       });
-      if (!result.ok) return { ok: false, status: 'error', message: `Resend API returned HTTP ${result.status}.` };
+      if (!result.ok)
+        return {
+          ok: false,
+          status: 'error',
+          message: `Resend API returned HTTP ${result.status}.`,
+        };
       return { ok: true, status: 'ready', message: 'Resend API key responds.' };
     } catch (error) {
       return { ok: false, status: 'error', message: error.message };
@@ -244,7 +375,9 @@ async function handleHealth(request, response) {
     CONTACT_TO_EMAIL: Boolean(process.env.CONTACT_TO_EMAIL),
     CONTACT_FROM_EMAIL: Boolean(process.env.CONTACT_FROM_EMAIL),
     VERCEL_TOKEN: Boolean(process.env.VERCEL_TOKEN),
-    VERCEL_PROJECT_ID: Boolean(process.env.VERCEL_PROJECT_ID || process.env.VERCEL_PROJECT_NAME),
+    VERCEL_PROJECT_ID: Boolean(
+      process.env.VERCEL_PROJECT_ID || process.env.VERCEL_PROJECT_NAME
+    ),
     VERCEL_DEPLOY_HOOK_URL: Boolean(process.env.VERCEL_DEPLOY_HOOK_URL),
   };
 
@@ -259,54 +392,118 @@ async function handleHealth(request, response) {
     env,
     checks: { github, vercel, resend },
     recommendations: [
-      !env.RESEND_API_KEY ? 'Add RESEND_API_KEY so contact/newsletter forms can send email.' : null,
-      !env.CONTACT_FROM_EMAIL ? 'Set CONTACT_FROM_EMAIL to a verified Resend sender.' : null,
-      !env.VERCEL_TOKEN ? 'Add VERCEL_TOKEN and VERCEL_PROJECT_ID for automatic deploy verification.' : null,
-      !env.VERCEL_DEPLOY_HOOK_URL ? 'Add VERCEL_DEPLOY_HOOK_URL if GitHub commits do not auto-deploy.' : null,
+      !env.RESEND_API_KEY
+        ? 'Email thông báo chưa sẵn sàng. Nhờ kỹ thuật kiểm tra cấu hình gửi email.'
+        : null,
+      !env.CONTACT_FROM_EMAIL
+        ? 'Email người gửi chưa được xác nhận. Nhờ kỹ thuật kiểm tra địa chỉ gửi.'
+        : null,
+      !env.VERCEL_TOKEN
+        ? 'CMS chưa tự kiểm tra được website sau khi đăng. Nhờ kỹ thuật kiểm tra kết nối dịch vụ đăng website.'
+        : null,
+      !env.VERCEL_DEPLOY_HOOK_URL
+        ? 'Nếu website không tự cập nhật sau khi đăng, nhờ kỹ thuật kiểm tra kết nối cập nhật website.'
+        : null,
     ].filter(Boolean),
   });
 }
 
 async function handleCollections(request, response, admin, body) {
   const requestUrl = new URL(request.url, 'https://folksteam.com');
-  const collection = selectedCollection(body?.collection || requestUrl.searchParams.get('collection') || 'products');
-  const target = String(body?.target || requestUrl.searchParams.get('target') || '').trim();
+  const collection = selectedCollection(
+    body?.collection || requestUrl.searchParams.get('collection') || 'products'
+  );
+  const target = String(
+    body?.target || requestUrl.searchParams.get('target') || ''
+  ).trim();
 
-  if (!collection) return sendJson(response, 400, { ok: false, message: 'Invalid collection.' });
+  if (!collection)
+    return sendJson(response, 400, {
+      ok: false,
+      message: 'Invalid collection.',
+    });
 
   if (request.method === 'GET') {
     if (target) {
-      if (!isSafeTarget(target, collection)) return sendJson(response, 400, { ok: false, message: 'Invalid target path.' });
+      if (!isSafeTarget(target, collection))
+        return sendJson(response, 400, {
+          ok: false,
+          message: 'Mục nội dung không hợp lệ.',
+        });
       const file = await readTextFile(admin.token, target);
-      return sendJson(response, 200, { ok: true, collection: collection.key, target, ...file, summary: frontmatterSummary(file.content) });
+      return sendJson(response, 200, {
+        ok: true,
+        collection: collection.key,
+        target,
+        ...file,
+        summary: frontmatterSummary(file.content),
+      });
     }
 
     const tree = await listTree(admin.token, collection.prefix);
     const items = tree
-      .filter(item => item.type === 'blob' && collection.extensions.test(item.path))
-      .map(item => ({ path: item.path, name: item.path.replace(collection.prefix, ''), size: item.size || 0, sha: item.sha }))
+      .filter(
+        item => item.type === 'blob' && collection.extensions.test(item.path)
+      )
+      .map(item => ({
+        path: item.path,
+        name: item.path.replace(collection.prefix, ''),
+        size: item.size || 0,
+        sha: item.sha,
+      }))
       .sort((left, right) => left.name.localeCompare(right.name));
     return sendJson(response, 200, {
       ok: true,
       collection: collection.key,
       label: collection.label,
       items,
-      collections: Object.keys(COLLECTIONS).map(key => ({ key, label: COLLECTIONS[key].label })),
+      collections: Object.keys(COLLECTIONS).map(key => ({
+        key,
+        label: COLLECTIONS[key].label,
+      })),
     });
   }
 
-  if (!isSafeTarget(target, collection)) return sendJson(response, 400, { ok: false, message: 'Invalid target path.' });
+  if (!isSafeTarget(target, collection))
+    return sendJson(response, 400, {
+      ok: false,
+      message: 'Mục nội dung không hợp lệ.',
+    });
 
   if (body.action === 'delete') {
-    if (!body.sha) return sendJson(response, 400, { ok: false, message: 'Missing file SHA.' });
-    await deleteFile(admin.token, target, String(body.sha), `Delete ${collection.label}: ${target}`);
-    await appendAuditEvent(admin.token, { type: 'collection-delete', actor: admin.session.username, target });
+    if (!body.sha)
+      return sendJson(response, 400, {
+        ok: false,
+        message:
+          'Thiếu mốc phiên bản để cập nhật. Hãy tải lại nội dung rồi thử lại.',
+      });
+    await deleteFile(
+      admin.token,
+      target,
+      String(body.sha),
+      `Delete ${collection.label}: ${target}`
+    );
+    await appendAuditEvent(admin.token, {
+      type: 'collection-delete',
+      actor: admin.session.username,
+      target,
+    });
     return sendJson(response, 200, { ok: true, target });
   }
 
   const content = String(body.content || '');
-  if (!content.trim()) return sendJson(response, 400, { ok: false, message: 'Content is empty.' });
-  const result = await saveTextFile(admin.token, target, content, String(body.sha || '').trim(), `${body.sha ? 'Update' : 'Create'} ${collection.label}: ${target}`);
+  if (!content.trim())
+    return sendJson(response, 400, {
+      ok: false,
+      message: 'Nội dung đang trống.',
+    });
+  const result = await saveTextFile(
+    admin.token,
+    target,
+    content,
+    String(body.sha || '').trim(),
+    `${body.sha ? 'Update' : 'Create'} ${collection.label}: ${target}`
+  );
   await appendAuditEvent(admin.token, {
     type: body.sha ? 'collection-update' : 'collection-create',
     actor: admin.session.username,
@@ -337,39 +534,86 @@ async function handleLibrary(request, response, admin, body) {
 
   const target = String(body.target || '').trim();
   if (body.action !== 'delete' || !isSafeMediaTarget(target) || !body.sha) {
-    return sendJson(response, 400, { ok: false, message: 'Invalid media delete request.' });
+    return sendJson(response, 400, {
+      ok: false,
+      message: 'Invalid media delete request.',
+    });
   }
-  await deleteFile(admin.token, target, String(body.sha), `Delete media: ${target}`);
-  await appendAuditEvent(admin.token, { type: 'media-delete', actor: admin.session.username, target });
+  await deleteFile(
+    admin.token,
+    target,
+    String(body.sha),
+    `Delete media: ${target}`
+  );
+  await appendAuditEvent(admin.token, {
+    type: 'media-delete',
+    actor: admin.session.username,
+    target,
+  });
   return sendJson(response, 200, { ok: true, target });
 }
 
 async function handleSubscribers(request, response, admin, body) {
-  const store = await loadJsonFile(admin.token, SUBSCRIBERS_TARGET_PATH, { subscribers: [] });
+  const store = await loadJsonFile(admin.token, SUBSCRIBERS_TARGET_PATH, {
+    subscribers: [],
+  });
   const content = normalizeSubscribers(store.content);
-  if (request.method === 'GET') return sendJson(response, 200, { ok: true, ...content, sha: store.sha });
+  if (request.method === 'GET')
+    return sendJson(response, 200, { ok: true, ...content, sha: store.sha });
 
-  const email = String(body.email || '').trim().toLowerCase();
+  const email = String(body.email || '')
+    .trim()
+    .toLowerCase();
   const id = String(body.id || '').trim();
   const now = new Date().toISOString();
 
   if (body.action === 'delete') {
-    const subscribers = content.subscribers.filter(subscriber => subscriber.id !== id);
-    const saved = await saveJsonFile(admin.token, SUBSCRIBERS_TARGET_PATH, { ...content, subscribers }, store.sha, `Delete subscriber: ${id}`);
-    await appendAuditEvent(admin.token, { type: 'subscriber-delete', actor: admin.session.username, target: id });
+    const subscribers = content.subscribers.filter(
+      subscriber => subscriber.id !== id
+    );
+    const saved = await saveJsonFile(
+      admin.token,
+      SUBSCRIBERS_TARGET_PATH,
+      { ...content, subscribers },
+      store.sha,
+      `Delete subscriber: ${id}`
+    );
+    await appendAuditEvent(admin.token, {
+      type: 'subscriber-delete',
+      actor: admin.session.username,
+      target: id,
+    });
     return sendJson(response, 200, { ok: true, ...saved });
   }
 
-  if (!email || !email.includes('@')) return sendJson(response, 400, { ok: false, message: 'Email is required.' });
+  if (!email || !email.includes('@'))
+    return sendJson(response, 400, {
+      ok: false,
+      message: 'Email is required.',
+    });
   const status = SUBSCRIBER_STATUSES.has(body.status) ? body.status : 'active';
-  const existingIndex = content.subscribers.findIndex(subscriber => subscriber.email === email || subscriber.id === id);
+  const existingIndex = content.subscribers.findIndex(
+    subscriber => subscriber.email === email || subscriber.id === id
+  );
   const next = {
-    id: existingIndex >= 0 ? content.subscribers[existingIndex].id : `sub-${Date.now()}`,
+    id:
+      existingIndex >= 0
+        ? content.subscribers[existingIndex].id
+        : `sub-${Date.now()}`,
     email,
     status,
-    locale: String(body.locale || content.subscribers[existingIndex]?.locale || 'en').trim(),
-    source: String(body.source || content.subscribers[existingIndex]?.source || 'admin').trim(),
-    tags: Array.isArray(body.tags) ? body.tags : String(body.tags || '').split(',').map(tag => tag.trim()).filter(Boolean),
+    locale: String(
+      body.locale || content.subscribers[existingIndex]?.locale || 'en'
+    ).trim(),
+    source: String(
+      body.source || content.subscribers[existingIndex]?.source || 'admin'
+    ).trim(),
+    tags: Array.isArray(body.tags)
+      ? body.tags
+      : String(body.tags || '')
+          .split(',')
+          .map(tag => tag.trim())
+          .filter(Boolean),
     note: String(body.note || '').trim(),
     createdAt: content.subscribers[existingIndex]?.createdAt || now,
     updatedAt: now,
@@ -377,35 +621,71 @@ async function handleSubscribers(request, response, admin, body) {
   const subscribers = content.subscribers.slice();
   if (existingIndex >= 0) subscribers[existingIndex] = next;
   else subscribers.unshift(next);
-  const saved = await saveJsonFile(admin.token, SUBSCRIBERS_TARGET_PATH, { ...content, subscribers }, store.sha, `${existingIndex >= 0 ? 'Update' : 'Create'} subscriber: ${email}`);
-  await appendAuditEvent(admin.token, { type: existingIndex >= 0 ? 'subscriber-update' : 'subscriber-create', actor: admin.session.username, target: email });
+  const saved = await saveJsonFile(
+    admin.token,
+    SUBSCRIBERS_TARGET_PATH,
+    { ...content, subscribers },
+    store.sha,
+    `${existingIndex >= 0 ? 'Update' : 'Create'} subscriber: ${email}`
+  );
+  await appendAuditEvent(admin.token, {
+    type: existingIndex >= 0 ? 'subscriber-update' : 'subscriber-create',
+    actor: admin.session.username,
+    target: email,
+  });
   return sendJson(response, 200, { ok: true, subscriber: next, ...saved });
 }
 
 async function handleAudit(request, response, admin, body) {
   if (request.method === 'GET') {
-    const store = await loadJsonFile(admin.token, AUDIT_TARGET_PATH, { events: [] });
-    return sendJson(response, 200, { ok: true, events: Array.isArray(store.content.events) ? store.content.events : [], updatedAt: store.content.updatedAt || null, sha: store.sha });
+    const store = await loadJsonFile(admin.token, AUDIT_TARGET_PATH, {
+      events: [],
+    });
+    return sendJson(response, 200, {
+      ok: true,
+      events: Array.isArray(store.content.events) ? store.content.events : [],
+      updatedAt: store.content.updatedAt || null,
+      sha: store.sha,
+    });
   }
 
   if (body.action === 'rollback-commit-file') {
     const target = String(body.target || '').trim();
     const commitSha = String(body.commitSha || '').trim();
     if (!isSafeRollbackTarget(target) || !commitSha) {
-      return sendJson(response, 400, { ok: false, message: 'Rollback target or commit SHA is invalid.' });
+      return sendJson(response, 400, {
+        ok: false,
+        message: 'Mục cần khôi phục hoặc mốc thay đổi không hợp lệ.',
+      });
     }
 
-    const commit = await githubRequest(`/repos/${admin.repo}/commits/${encodeURIComponent(commitSha)}`, admin.token);
+    const commit = await githubRequest(
+      `/repos/${admin.repo}/commits/${encodeURIComponent(commitSha)}`,
+      admin.token
+    );
     const parentSha = commit?.parents?.[0]?.sha;
-    if (!parentSha) return sendJson(response, 400, { ok: false, message: 'Commit has no parent to restore from.' });
+    if (!parentSha)
+      return sendJson(response, 400, {
+        ok: false,
+        message: 'Không tìm thấy phiên bản trước để khôi phục.',
+      });
 
     const previousFile = await githubRequest(
       `/repos/${admin.repo}/contents/${apiPath(target)}?ref=${encodeURIComponent(parentSha)}`,
       admin.token
     );
     const currentFile = await readTextFile(admin.token, target);
-    const previousContent = Buffer.from(previousFile.content || '', 'base64').toString('utf8');
-    const result = await saveTextFile(admin.token, target, previousContent, currentFile.sha, `Rollback ${target} to before ${commitSha.slice(0, 7)}`);
+    const previousContent = Buffer.from(
+      previousFile.content || '',
+      'base64'
+    ).toString('utf8');
+    const result = await saveTextFile(
+      admin.token,
+      target,
+      previousContent,
+      currentFile.sha,
+      `Rollback ${target} to before ${commitSha.slice(0, 7)}`
+    );
     await appendAuditEvent(admin.token, {
       type: 'rollback',
       actor: admin.session.username,
@@ -414,15 +694,35 @@ async function handleAudit(request, response, admin, body) {
       commitSha: result.commitSha,
       commitUrl: result.commitUrl,
     });
-    return sendJson(response, 200, { ok: true, result, restoredFrom: parentSha });
+    return sendJson(response, 200, {
+      ok: true,
+      result,
+      restoredFrom: parentSha,
+    });
   }
 
   if (body.action === 'restore-file') {
     const target = String(body.target || '').trim();
     const content = String(body.content || '');
-    if (!target || !content) return sendJson(response, 400, { ok: false, message: 'Restore target and content are required.' });
-    const result = await saveTextFile(admin.token, target, content, String(body.sha || '').trim(), `Restore file from admin audit: ${target}`);
-    await appendAuditEvent(admin.token, { type: 'rollback', actor: admin.session.username, target, commitSha: result.commitSha, commitUrl: result.commitUrl });
+    if (!target || !content)
+      return sendJson(response, 400, {
+        ok: false,
+        message: 'Restore target and content are required.',
+      });
+    const result = await saveTextFile(
+      admin.token,
+      target,
+      content,
+      String(body.sha || '').trim(),
+      `Restore file from admin audit: ${target}`
+    );
+    await appendAuditEvent(admin.token, {
+      type: 'rollback',
+      actor: admin.session.username,
+      target,
+      commitSha: result.commitSha,
+      commitUrl: result.commitUrl,
+    });
     return sendJson(response, 200, { ok: true, result });
   }
 
@@ -436,16 +736,29 @@ async function handleAudit(request, response, admin, body) {
 }
 
 async function handleReview(request, response, admin, body) {
-  const store = await loadJsonFile(admin.token, REVIEW_QUEUE_TARGET_PATH, { items: [] });
+  const store = await loadJsonFile(admin.token, REVIEW_QUEUE_TARGET_PATH, {
+    items: [],
+  });
   const content = normalizeReviews(store.content);
-  if (request.method === 'GET') return sendJson(response, 200, { ok: true, ...content, sha: store.sha });
+  if (request.method === 'GET')
+    return sendJson(response, 200, { ok: true, ...content, sha: store.sha });
 
   const id = String(body.id || '').trim();
   const now = new Date().toISOString();
   if (body.action === 'delete') {
     const items = content.items.filter(item => item.id !== id);
-    const saved = await saveJsonFile(admin.token, REVIEW_QUEUE_TARGET_PATH, { ...content, items }, store.sha, `Delete review item: ${id}`);
-    await appendAuditEvent(admin.token, { type: 'review-delete', actor: admin.session.username, target: id });
+    const saved = await saveJsonFile(
+      admin.token,
+      REVIEW_QUEUE_TARGET_PATH,
+      { ...content, items },
+      store.sha,
+      `Delete review item: ${id}`
+    );
+    await appendAuditEvent(admin.token, {
+      type: 'review-delete',
+      actor: admin.session.username,
+      target: id,
+    });
     return sendJson(response, 200, { ok: true, ...saved });
   }
 
@@ -463,15 +776,31 @@ async function handleReview(request, response, admin, body) {
     createdAt: existing.createdAt || now,
     updatedAt: now,
     history: [
-      { status, actor: admin.session.username, note: String(body.note || '').trim(), createdAt: now },
+      {
+        status,
+        actor: admin.session.username,
+        note: String(body.note || '').trim(),
+        createdAt: now,
+      },
       ...(Array.isArray(existing.history) ? existing.history : []),
     ].slice(0, 50),
   };
   const items = content.items.slice();
   if (existingIndex >= 0) items[existingIndex] = item;
   else items.unshift(item);
-  const saved = await saveJsonFile(admin.token, REVIEW_QUEUE_TARGET_PATH, { ...content, items }, store.sha, `${existingIndex >= 0 ? 'Update' : 'Create'} review item: ${item.title}`);
-  await appendAuditEvent(admin.token, { type: existingIndex >= 0 ? 'review-update' : 'review-create', actor: admin.session.username, target: item.target || item.title, status });
+  const saved = await saveJsonFile(
+    admin.token,
+    REVIEW_QUEUE_TARGET_PATH,
+    { ...content, items },
+    store.sha,
+    `${existingIndex >= 0 ? 'Update' : 'Create'} review item: ${item.title}`
+  );
+  await appendAuditEvent(admin.token, {
+    type: existingIndex >= 0 ? 'review-update' : 'review-create',
+    actor: admin.session.username,
+    target: item.target || item.title,
+    status,
+  });
   return sendJson(response, 200, { ok: true, item, ...saved });
 }
 
@@ -480,11 +809,23 @@ async function handleSeo(admin, response) {
     loadJsonFile(admin.token, CMS_CONTENT_TARGET_PATH, { pages: [] }),
     listTree(admin.token),
   ]);
-  const pages = Array.isArray(cmsStore.content.pages) ? cmsStore.content.pages : [];
+  const pages = Array.isArray(cmsStore.content.pages)
+    ? cmsStore.content.pages
+    : [];
   const files = tree.filter(item => item.type === 'blob');
-  const blogFiles = files.filter(item => item.path.startsWith('src/content/blog/') && /\.mdx?$/.test(item.path));
-  const draftBlogFiles = files.filter(item => item.path.startsWith('src/data_files/blogDrafts/') && /\.mdx?$/.test(item.path));
-  const mediaFiles = files.filter(item => item.path.startsWith('src/images/') && MEDIA_EXTENSIONS.test(item.path));
+  const blogFiles = files.filter(
+    item =>
+      item.path.startsWith('src/content/blog/') && /\.mdx?$/.test(item.path)
+  );
+  const draftBlogFiles = files.filter(
+    item =>
+      item.path.startsWith('src/data_files/blogDrafts/') &&
+      /\.mdx?$/.test(item.path)
+  );
+  const mediaFiles = files.filter(
+    item =>
+      item.path.startsWith('src/images/') && MEDIA_EXTENSIONS.test(item.path)
+  );
 
   const issues = [];
   pages.forEach(page => {
@@ -573,7 +914,10 @@ export default async function handler(request, response) {
   const module = String(requestUrl.searchParams.get('module') || '').trim();
 
   if (request.method !== 'GET' && request.method !== 'POST') {
-    return sendJson(response, 405, { ok: false, message: 'Method not allowed.' });
+    return sendJson(response, 405, {
+      ok: false,
+      message: 'Thao tác này không được hỗ trợ.',
+    });
   }
 
   let body = {};
@@ -581,7 +925,10 @@ export default async function handler(request, response) {
     try {
       body = await readJson(request);
     } catch {
-      return sendJson(response, 400, { ok: false, message: 'Invalid JSON body.' });
+      return sendJson(response, 400, {
+        ok: false,
+        message: 'Dữ liệu gửi lên không hợp lệ.',
+      });
     }
   }
 
@@ -590,7 +937,8 @@ export default async function handler(request, response) {
     ((module === 'library' && body.action === 'delete') ||
       (module === 'subscribers' && body.action === 'delete') ||
       (module === 'review' && body.action === 'delete') ||
-      (module === 'audit' && ['restore-file', 'rollback-commit-file'].includes(body.action)));
+      (module === 'audit' &&
+        ['restore-file', 'rollback-commit-file'].includes(body.action)));
   const roles = adminOnlyAction
     ? ['admin']
     : request.method === 'GET'
@@ -604,14 +952,25 @@ export default async function handler(request, response) {
   try {
     if (module === 'health') return handleHealth(request, response);
     if (module === 'dashboard') return await handleDashboard(admin, response);
-    if (module === 'collections') return await handleCollections(request, response, admin, body);
-    if (module === 'library') return await handleLibrary(request, response, admin, body);
-    if (module === 'subscribers') return await handleSubscribers(request, response, admin, body);
-    if (module === 'audit') return await handleAudit(request, response, admin, body);
-    if (module === 'review') return await handleReview(request, response, admin, body);
+    if (module === 'collections')
+      return await handleCollections(request, response, admin, body);
+    if (module === 'library')
+      return await handleLibrary(request, response, admin, body);
+    if (module === 'subscribers')
+      return await handleSubscribers(request, response, admin, body);
+    if (module === 'audit')
+      return await handleAudit(request, response, admin, body);
+    if (module === 'review')
+      return await handleReview(request, response, admin, body);
     if (module === 'seo') return await handleSeo(admin, response);
-    return sendJson(response, 404, { ok: false, message: 'Unknown admin operations module.' });
+    return sendJson(response, 404, {
+      ok: false,
+      message: 'Unknown admin operations module.',
+    });
   } catch (error) {
-    return sendJson(response, error.status || 502, { ok: false, message: error.message });
+    return sendJson(response, error.status || 502, {
+      ok: false,
+      message: error.message,
+    });
   }
 }

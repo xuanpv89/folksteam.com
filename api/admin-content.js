@@ -5,7 +5,9 @@ const GITHUB_API = 'https://api.github.com';
 const TARGET_PATH = 'src/data_files/cmsContent.json';
 
 function sendJson(response, status, body) {
-  response.status(status).setHeader('content-type', 'application/json; charset=utf-8');
+  response
+    .status(status)
+    .setHeader('content-type', 'application/json; charset=utf-8');
   response.end(JSON.stringify(body));
 }
 
@@ -45,36 +47,52 @@ function validateContent(content) {
 
   pages.forEach((page, pageIndex) => {
     const pageName = page.title || `Trang ${pageIndex + 1}`;
-    if (!String(page.title || '').trim()) errors.push(`${pageName}: thiếu tên trang.`);
-    if (!String(page.path || '').trim().startsWith('/')) {
+    if (!String(page.title || '').trim())
+      errors.push(`${pageName}: thiếu tên trang.`);
+    if (
+      !String(page.path || '')
+        .trim()
+        .startsWith('/')
+    ) {
       errors.push(`${pageName}: đường dẫn trang phải bắt đầu bằng "/".`);
     }
 
     const sections = Array.isArray(page.sections) ? page.sections : [];
-    if (!sections.length) errors.push(`${pageName}: cần có ít nhất một section.`);
+    if (!sections.length)
+      errors.push(`${pageName}: cần có ít nhất một section.`);
 
     sections.forEach((section, sectionIndex) => {
       const sectionName = section.title || `Section ${sectionIndex + 1}`;
       const fields = Array.isArray(section.fields) ? section.fields : [];
       const keys = new Set();
 
-      if (!String(section.id || '').trim()) errors.push(`${pageName} / ${sectionName}: thiếu mã section.`);
-      if (!String(section.title || '').trim()) errors.push(`${pageName} / ${sectionName}: thiếu tên section.`);
+      if (!String(section.id || '').trim())
+        errors.push(`${pageName} / ${sectionName}: thiếu mã section.`);
+      if (!String(section.title || '').trim())
+        errors.push(`${pageName} / ${sectionName}: thiếu tên section.`);
 
       fields.forEach((field, fieldIndex) => {
         const key = String(field.key || '').trim();
         if (!key) {
-          errors.push(`${pageName} / ${sectionName}: trường ${fieldIndex + 1} thiếu mã nội dung.`);
+          errors.push(
+            `${pageName} / ${sectionName}: trường ${fieldIndex + 1} thiếu mã nội dung.`
+          );
         } else if (keys.has(key)) {
-          errors.push(`${pageName} / ${sectionName}: mã nội dung "${key}" bị trùng.`);
+          errors.push(
+            `${pageName} / ${sectionName}: mã nội dung "${key}" bị trùng.`
+          );
         }
         keys.add(key);
 
         if (!String(field.label || '').trim()) {
-          errors.push(`${pageName} / ${sectionName}: trường "${key || fieldIndex + 1}" thiếu tên hiển thị.`);
+          errors.push(
+            `${pageName} / ${sectionName}: trường "${key || fieldIndex + 1}" thiếu tên hiển thị.`
+          );
         }
         if (!['text', 'textarea', 'url', 'image'].includes(field.type)) {
-          errors.push(`${pageName} / ${sectionName}: trường "${key || fieldIndex + 1}" có kiểu nội dung không hợp lệ.`);
+          errors.push(
+            `${pageName} / ${sectionName}: trường "${key || fieldIndex + 1}" có kiểu nội dung không hợp lệ.`
+          );
         }
       });
     });
@@ -99,7 +117,9 @@ async function githubRequest(path, token, options = {}) {
   const data = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
-    const error = new Error(data?.message || `GitHub API error ${response.status}`);
+    const error = new Error(
+      data?.message || `GitHub API error ${response.status}`
+    );
     error.status = response.status;
     throw error;
   }
@@ -127,11 +147,14 @@ export default async function handler(request, response) {
   if (!adminSecret || !githubToken) {
     return sendJson(response, 500, {
       ok: false,
-      message: 'Server chưa có ADMIN_SECRET hoặc GITHUB_TOKEN.',
+      message:
+        'CMS chưa sẵn sàng để đăng nội dung. Nhờ kỹ thuật kiểm tra cấu hình đăng website.',
     });
   }
 
-  const session = requireAdminSession(request, adminSecret, { csrf: request.method !== 'GET' });
+  const session = requireAdminSession(request, adminSecret, {
+    csrf: request.method !== 'GET',
+  });
   if (!session) {
     return sendJson(response, 401, {
       ok: false,
@@ -184,7 +207,8 @@ export default async function handler(request, response) {
   if (!hasAdminRole(session, ['publisher'])) {
     return sendJson(response, 403, {
       ok: false,
-      message: 'Tài khoản hiện tại chỉ được sửa/lưu nháp. Cần quyền publisher hoặc admin để đăng lên website.',
+      message:
+        'Tài khoản hiện tại chỉ được sửa/lưu nháp. Cần quyền publisher hoặc admin để đăng lên website.',
     });
   }
 
@@ -202,7 +226,8 @@ export default async function handler(request, response) {
   const branch = targetBranch();
   const content = body.content;
   const baseSha = String(body.baseSha || '').trim();
-  const shouldBlockStalePublish = process.env.CMS_BLOCK_STALE_PUBLISH === 'true';
+  const shouldBlockStalePublish =
+    process.env.CMS_BLOCK_STALE_PUBLISH === 'true';
   const validationErrors = validateContent(content);
 
   if (!isSafeRepo(repo) || !isSafeBranch(branch)) {
@@ -269,15 +294,19 @@ export default async function handler(request, response) {
       null,
       2
     );
-    const commit = await githubRequest(`/repos/${repo}/contents/${apiPath}`, githubToken, {
-      method: 'PUT',
-      body: JSON.stringify({
-        message: 'Update CMS page content',
-        content: Buffer.from(json, 'utf8').toString('base64'),
-        branch,
-        ...(sha ? { sha } : {}),
-      }),
-    });
+    const commit = await githubRequest(
+      `/repos/${repo}/contents/${apiPath}`,
+      githubToken,
+      {
+        method: 'PUT',
+        body: JSON.stringify({
+          message: 'Update CMS page content',
+          content: Buffer.from(json, 'utf8').toString('base64'),
+          branch,
+          ...(sha ? { sha } : {}),
+        }),
+      }
+    );
     const deployHook = await triggerDeployHook();
 
     try {
@@ -303,8 +332,9 @@ export default async function handler(request, response) {
       deploy:
         deployHook === null
           ? {
-            status: 'github',
-              message: 'Đã gửi nội dung mới. Website sẽ tự cập nhật sau khi deploy hoàn tất.',
+              status: 'github',
+              message:
+                'Đã gửi nội dung mới. Website sẽ tự cập nhật sau khi deploy hoàn tất.',
             }
           : {
               status: deployHook.ok ? 'queued' : 'failed',

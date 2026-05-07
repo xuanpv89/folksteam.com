@@ -4,7 +4,9 @@ import { appendAuditEvent } from './_admin-data.js';
 const GITHUB_API = 'https://api.github.com';
 
 function sendJson(response, status, body) {
-  response.status(status).setHeader('content-type', 'application/json; charset=utf-8');
+  response
+    .status(status)
+    .setHeader('content-type', 'application/json; charset=utf-8');
   response.end(JSON.stringify(body));
 }
 
@@ -75,7 +77,9 @@ async function githubRequest(path, token, options = {}) {
   const data = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
-    const error = new Error(data?.message || `GitHub API error ${response.status}`);
+    const error = new Error(
+      data?.message || `GitHub API error ${response.status}`
+    );
     error.status = response.status;
     throw error;
   }
@@ -99,14 +103,17 @@ async function triggerDeployHook() {
 }
 
 function decodeGithubContent(file) {
-  return Buffer.from(String(file?.content || '').replace(/\s/g, ''), file?.encoding || 'base64').toString('utf8');
+  return Buffer.from(
+    String(file?.content || '').replace(/\s/g, ''),
+    file?.encoding || 'base64'
+  ).toString('utf8');
 }
 
 export default async function handler(request, response) {
   if (!['GET', 'POST'].includes(request.method)) {
     return sendJson(response, 405, {
       ok: false,
-      message: 'Method not allowed.',
+      message: 'Thao tác này không được hỗ trợ.',
     });
   }
 
@@ -116,11 +123,14 @@ export default async function handler(request, response) {
   if (!adminSecret || !githubToken) {
     return sendJson(response, 500, {
       ok: false,
-      message: 'Server is missing ADMIN_SECRET or GITHUB_TOKEN.',
+      message:
+        'CMS chưa sẵn sàng để đăng bài. Nhờ kỹ thuật kiểm tra cấu hình đăng website.',
     });
   }
 
-  const session = requireAdminSession(request, adminSecret, { csrf: request.method === 'POST' });
+  const session = requireAdminSession(request, adminSecret, {
+    csrf: request.method === 'POST',
+  });
   if (!session) {
     return sendJson(response, 401, {
       ok: false,
@@ -138,7 +148,8 @@ export default async function handler(request, response) {
     if (!isSafeRepo(repo) || !isSafeBranch(branch)) {
       return sendJson(response, 400, {
         ok: false,
-        message: 'Invalid repository or branch.',
+        message:
+          'Nơi lưu bài viết chưa hợp lệ. Nhờ kỹ thuật kiểm tra cấu hình.',
       });
     }
 
@@ -190,7 +201,7 @@ export default async function handler(request, response) {
   } catch {
     return sendJson(response, 400, {
       ok: false,
-      message: 'Invalid JSON body.',
+      message: 'Dữ liệu gửi lên không hợp lệ.',
     });
   }
 
@@ -198,7 +209,8 @@ export default async function handler(request, response) {
   if (action === 'publish' && !hasAdminRole(session, ['publisher'])) {
     return sendJson(response, 403, {
       ok: false,
-      message: 'This account can save drafts, but publishing requires publisher or admin access.',
+      message:
+        'This account can save drafts, but publishing requires publisher or admin access.',
     });
   }
   const repo = targetRepo();
@@ -210,14 +222,14 @@ export default async function handler(request, response) {
   if (!isSafeRepo(repo) || !isSafeBranch(branch)) {
     return sendJson(response, 400, {
       ok: false,
-      message: 'Invalid repository or branch.',
+      message: 'Nơi lưu bài viết chưa hợp lệ. Nhờ kỹ thuật kiểm tra cấu hình.',
     });
   }
 
   if (!markdown.trim()) {
     return sendJson(response, 400, {
       ok: false,
-      message: 'Markdown content is empty.',
+      message: 'Nội dung bài viết đang trống.',
     });
   }
 
@@ -252,24 +264,29 @@ export default async function handler(request, response) {
   if (sha && action === 'publish' && body.allowUpdate !== true) {
     return sendJson(response, 409, {
       ok: false,
-      message: 'A post with this slug already exists. Enable update mode or choose another slug.',
+      message:
+        'A post with this slug already exists. Enable update mode or choose another slug.',
       target,
     });
   }
 
   try {
-    const commit = await githubRequest(`/repos/${repo}/contents/${apiPath}`, githubToken, {
-      method: 'PUT',
-      body: JSON.stringify({
-        message:
-          action === 'draft'
-            ? `${sha ? 'Update' : 'Create'} blog draft: ${slug}`
-            : `${sha ? 'Update' : 'Create'} blog post: ${slug}`,
-        content: Buffer.from(markdown, 'utf8').toString('base64'),
-        branch,
-        ...(sha ? { sha } : {}),
-      }),
-    });
+    const commit = await githubRequest(
+      `/repos/${repo}/contents/${apiPath}`,
+      githubToken,
+      {
+        method: 'PUT',
+        body: JSON.stringify({
+          message:
+            action === 'draft'
+              ? `${sha ? 'Update' : 'Create'} blog draft: ${slug}`
+              : `${sha ? 'Update' : 'Create'} blog post: ${slug}`,
+          content: Buffer.from(markdown, 'utf8').toString('base64'),
+          branch,
+          ...(sha ? { sha } : {}),
+        }),
+      }
+    );
 
     const deployHook = action === 'publish' ? await triggerDeployHook() : null;
 
@@ -296,7 +313,8 @@ export default async function handler(request, response) {
         deployHook === null
           ? {
               status: 'github',
-              message: 'Committed to GitHub. Vercel should deploy from the connected main branch.',
+              message:
+                'Bài đã được lưu. Website sẽ tự cập nhật từ hệ thống đã kết nối.',
             }
           : {
               status: deployHook.ok ? 'queued' : 'failed',

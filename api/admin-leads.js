@@ -1,6 +1,11 @@
 import { requireAdminSession } from './_admin-session.js';
 import { appendAuditEvent } from './_admin-data.js';
-import { loadLeadStore, readJson, saveLeadStore, sendJson } from './_lead-store.js';
+import {
+  loadLeadStore,
+  readJson,
+  saveLeadStore,
+  sendJson,
+} from './_lead-store.js';
 
 const STATUSES = new Set(['new', 'contacted', 'working', 'done', 'ignored']);
 const PRIORITIES = new Set(['low', 'normal', 'high', 'urgent']);
@@ -16,11 +21,16 @@ export default async function handler(request, response) {
   if (!adminSecret || !githubToken) {
     return sendJson(response, 500, {
       ok: false,
-      message: 'Server is missing ADMIN_SECRET or GITHUB_TOKEN.',
+      message:
+        'CMS chưa tải được lead. Nhờ kỹ thuật kiểm tra cấu hình lưu dữ liệu.',
     });
   }
 
-  if (!requireAdminSession(request, adminSecret, { csrf: request.method !== 'GET' })) {
+  if (
+    !requireAdminSession(request, adminSecret, {
+      csrf: request.method !== 'GET',
+    })
+  ) {
     return sendJson(response, 401, {
       ok: false,
       message: 'Phiên đăng nhập admin đã hết hạn. Hãy đăng nhập lại.',
@@ -32,7 +42,11 @@ export default async function handler(request, response) {
       const store = await loadLeadStore(githubToken);
       const leads = store.content.leads
         .slice()
-        .sort((left, right) => String(right.createdAt || '').localeCompare(String(left.createdAt || '')));
+        .sort((left, right) =>
+          String(right.createdAt || '').localeCompare(
+            String(left.createdAt || '')
+          )
+        );
 
       return sendJson(response, 200, {
         ok: true,
@@ -51,7 +65,7 @@ export default async function handler(request, response) {
   if (request.method !== 'POST') {
     return sendJson(response, 405, {
       ok: false,
-      message: 'Method not allowed.',
+      message: 'Thao tác này không được hỗ trợ.',
     });
   }
 
@@ -70,7 +84,9 @@ export default async function handler(request, response) {
   const note = String(body.note || '').trim();
   const owner = String(body.owner || '').trim();
   const priority = String(body.priority || '').trim();
-  const tags = (Array.isArray(body.tags) ? body.tags : String(body.tags || '').split(','))
+  const tags = (
+    Array.isArray(body.tags) ? body.tags : String(body.tags || '').split(',')
+  )
     .map(tag => String(tag || '').trim())
     .filter(Boolean);
 
@@ -114,7 +130,11 @@ export default async function handler(request, response) {
       status: status || current.status || 'new',
       owner: owner || current.owner || '',
       priority: priority || current.priority || 'normal',
-      tags: tags.length ? [...new Set(tags)].slice(0, 8) : Array.isArray(current.tags) ? current.tags : [],
+      tags: tags.length
+        ? [...new Set(tags)].slice(0, 8)
+        : Array.isArray(current.tags)
+          ? current.tags
+          : [],
       updatedAt: now,
       notes: Array.isArray(current.notes) ? current.notes.slice() : [],
       events: Array.isArray(current.events) ? current.events.slice() : [],

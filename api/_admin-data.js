@@ -20,7 +20,8 @@ export function requireAdmin(request, response, options = {}) {
   if (!adminSecret || !githubToken) {
     sendJson(response, 500, {
       ok: false,
-      message: 'Server is missing ADMIN_SECRET or GITHUB_TOKEN.',
+      message:
+        'CMS chưa sẵn sàng để lưu dữ liệu. Nhờ kỹ thuật kiểm tra cấu hình.',
     });
     return null;
   }
@@ -101,15 +102,21 @@ export async function saveJsonFile(token, target, content, sha, message) {
     updatedAt: new Date().toISOString(),
   };
 
-  const commit = await githubRequest(`/repos/${repo}/contents/${apiPath(target)}`, token, {
-    method: 'PUT',
-    body: JSON.stringify({
-      message,
-      content: Buffer.from(JSON.stringify(payload, null, 2), 'utf8').toString('base64'),
-      branch,
-      ...(sha ? { sha } : {}),
-    }),
-  });
+  const commit = await githubRequest(
+    `/repos/${repo}/contents/${apiPath(target)}`,
+    token,
+    {
+      method: 'PUT',
+      body: JSON.stringify({
+        message,
+        content: Buffer.from(JSON.stringify(payload, null, 2), 'utf8').toString(
+          'base64'
+        ),
+        branch,
+        ...(sha ? { sha } : {}),
+      }),
+    }
+  );
 
   return {
     content: payload,
@@ -130,7 +137,10 @@ export async function appendAuditEvent(token, event) {
     createdAt: now,
     ...event,
   };
-  const events = [nextEvent, ...(Array.isArray(store.content.events) ? store.content.events : [])].slice(0, 1000);
+  const events = [
+    nextEvent,
+    ...(Array.isArray(store.content.events) ? store.content.events : []),
+  ].slice(0, 1000);
   const saved = await saveJsonFile(
     token,
     AUDIT_TARGET_PATH,
@@ -148,10 +158,18 @@ export async function listTree(token, prefix = '') {
   const repo = targetRepo();
   const branch = targetBranch();
   assertRepoTarget(repo, branch);
-  const ref = await githubRequest(`/repos/${repo}/git/ref/heads/${encodeURIComponent(branch)}`, token);
-  const tree = await githubRequest(`/repos/${repo}/git/trees/${ref.object.sha}?recursive=1`, token);
+  const ref = await githubRequest(
+    `/repos/${repo}/git/ref/heads/${encodeURIComponent(branch)}`,
+    token
+  );
+  const tree = await githubRequest(
+    `/repos/${repo}/git/trees/${ref.object.sha}?recursive=1`,
+    token
+  );
   const items = Array.isArray(tree?.tree) ? tree.tree : [];
-  return prefix ? items.filter(item => String(item.path || '').startsWith(prefix)) : items;
+  return prefix
+    ? items.filter(item => String(item.path || '').startsWith(prefix))
+    : items;
 }
 
 export async function readTextFile(token, target) {
@@ -173,15 +191,19 @@ export async function saveTextFile(token, target, content, sha, message) {
   const repo = targetRepo();
   const branch = targetBranch();
   assertRepoTarget(repo, branch);
-  const commit = await githubRequest(`/repos/${repo}/contents/${apiPath(target)}`, token, {
-    method: 'PUT',
-    body: JSON.stringify({
-      message,
-      content: Buffer.from(content, 'utf8').toString('base64'),
-      branch,
-      ...(sha ? { sha } : {}),
-    }),
-  });
+  const commit = await githubRequest(
+    `/repos/${repo}/contents/${apiPath(target)}`,
+    token,
+    {
+      method: 'PUT',
+      body: JSON.stringify({
+        message,
+        content: Buffer.from(content, 'utf8').toString('base64'),
+        branch,
+        ...(sha ? { sha } : {}),
+      }),
+    }
+  );
   return {
     target,
     sha: commit?.content?.sha || sha || null,

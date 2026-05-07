@@ -12,7 +12,9 @@ const ALLOWED_MIME_TYPES = new Map([
 ]);
 
 function sendJson(response, status, body) {
-  response.status(status).setHeader('content-type', 'application/json; charset=utf-8');
+  response
+    .status(status)
+    .setHeader('content-type', 'application/json; charset=utf-8');
   response.end(JSON.stringify(body));
 }
 
@@ -67,7 +69,9 @@ async function githubRequest(path, token, options = {}) {
   const data = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
-    const error = new Error(data?.message || `GitHub API error ${response.status}`);
+    const error = new Error(
+      data?.message || `GitHub API error ${response.status}`
+    );
     error.status = response.status;
     throw error;
   }
@@ -90,14 +94,20 @@ function bufferFromDataUrl(value) {
 async function getRemoteImage(url) {
   const parsed = new URL(url);
   const allowedHosts = String(
-    process.env.ADMIN_MEDIA_REMOTE_HOSTS || 'images.unsplash.com,i.ytimg.com,raw.githubusercontent.com'
+    process.env.ADMIN_MEDIA_REMOTE_HOSTS ||
+      'images.unsplash.com,i.ytimg.com,raw.githubusercontent.com'
   )
     .split(',')
     .map(host => host.trim().toLowerCase())
     .filter(Boolean);
 
-  if (parsed.protocol !== 'https:' || !allowedHosts.includes(parsed.hostname.toLowerCase())) {
-    throw new Error('Remote image URL is not allowed. Upload the image file directly or use an approved image host.');
+  if (
+    parsed.protocol !== 'https:' ||
+    !allowedHosts.includes(parsed.hostname.toLowerCase())
+  ) {
+    throw new Error(
+      'Remote image URL is not allowed. Upload the image file directly or use an approved image host.'
+    );
   }
 
   const response = await fetch(parsed, {
@@ -108,7 +118,9 @@ async function getRemoteImage(url) {
     throw new Error(`Could not fetch image URL. HTTP ${response.status}`);
   }
 
-  const mimeType = String(response.headers.get('content-type') || '').split(';')[0].trim();
+  const mimeType = String(response.headers.get('content-type') || '')
+    .split(';')[0]
+    .trim();
   const arrayBuffer = await response.arrayBuffer();
   return {
     mimeType,
@@ -120,7 +132,7 @@ export default async function handler(request, response) {
   if (request.method !== 'POST') {
     return sendJson(response, 405, {
       ok: false,
-      message: 'Method not allowed.',
+      message: 'Thao tác này không được hỗ trợ.',
     });
   }
 
@@ -130,7 +142,7 @@ export default async function handler(request, response) {
   } catch {
     return sendJson(response, 400, {
       ok: false,
-      message: 'Invalid JSON body.',
+      message: 'Dữ liệu gửi lên không hợp lệ.',
     });
   }
 
@@ -140,7 +152,8 @@ export default async function handler(request, response) {
   if (!adminSecret || !githubToken) {
     return sendJson(response, 500, {
       ok: false,
-      message: 'Server is missing ADMIN_SECRET or GITHUB_TOKEN.',
+      message:
+        'CMS chưa sẵn sàng để tải ảnh. Nhờ kỹ thuật kiểm tra cấu hình lưu dữ liệu.',
     });
   }
 
@@ -156,13 +169,15 @@ export default async function handler(request, response) {
   if (!isSafeRepo(repo) || !isSafeBranch(branch)) {
     return sendJson(response, 400, {
       ok: false,
-      message: 'Invalid repository or branch.',
+      message: 'Nơi lưu ảnh chưa hợp lệ. Nhờ kỹ thuật kiểm tra cấu hình.',
     });
   }
 
   let image;
   try {
-    image = body.imageUrl ? await getRemoteImage(String(body.imageUrl)) : bufferFromDataUrl(body.dataUrl);
+    image = body.imageUrl
+      ? await getRemoteImage(String(body.imageUrl))
+      : bufferFromDataUrl(body.dataUrl);
   } catch (error) {
     return sendJson(response, 400, {
       ok: false,
@@ -192,20 +207,26 @@ export default async function handler(request, response) {
     });
   }
 
-  const baseName = slugify(body.name || body.fileName || `blog-image-${Date.now()}`) || `blog-image-${Date.now()}`;
+  const baseName =
+    slugify(body.name || body.fileName || `blog-image-${Date.now()}`) ||
+    `blog-image-${Date.now()}`;
   const fileName = `${baseName}-${Date.now()}.${extension}`;
   const target = `src/images/blog/uploads/${fileName}`;
   const apiPath = encodeURIComponent(target).replace(/%2F/g, '/');
 
   try {
-    const commit = await githubRequest(`/repos/${repo}/contents/${apiPath}`, githubToken, {
-      method: 'PUT',
-      body: JSON.stringify({
-        message: `Upload blog media: ${fileName}`,
-        content: image.buffer.toString('base64'),
-        branch,
-      }),
-    });
+    const commit = await githubRequest(
+      `/repos/${repo}/contents/${apiPath}`,
+      githubToken,
+      {
+        method: 'PUT',
+        body: JSON.stringify({
+          message: `Upload blog media: ${fileName}`,
+          content: image.buffer.toString('base64'),
+          branch,
+        }),
+      }
+    );
 
     try {
       await appendAuditEvent(githubToken, {

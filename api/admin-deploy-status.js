@@ -3,7 +3,9 @@ import { getAdminSession } from './_admin-session.js';
 const VERCEL_API = 'https://api.vercel.com';
 
 function sendJson(response, status, body) {
-  response.status(status).setHeader('content-type', 'application/json; charset=utf-8');
+  response
+    .status(status)
+    .setHeader('content-type', 'application/json; charset=utf-8');
   response.end(JSON.stringify(body));
 }
 
@@ -26,7 +28,11 @@ async function vercelRequest(path, token) {
   const data = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
-    const error = new Error(data?.error?.message || data?.message || `Vercel API error ${response.status}`);
+    const error = new Error(
+      data?.error?.message ||
+        data?.message ||
+        `Vercel API error ${response.status}`
+    );
     error.status = response.status;
     throw error;
   }
@@ -37,10 +43,15 @@ async function vercelRequest(path, token) {
 function deploymentMessage(deployment) {
   const state = deployment?.readyState || deployment?.state;
   if (state === 'READY') return 'Website đã cập nhật xong.';
-  if (state === 'ERROR') return deployment?.errorMessage || 'Website chưa cập nhật được. Hãy thử lại hoặc nhờ kỹ thuật kiểm tra.';
+  if (state === 'ERROR')
+    return (
+      deployment?.errorMessage ||
+      'Website chưa cập nhật được. Hãy thử lại hoặc nhờ kỹ thuật kiểm tra.'
+    );
   if (state === 'CANCELED') return 'Lượt cập nhật đã bị hủy.';
   if (state === 'BUILDING') return 'Website đang cập nhật bản mới.';
-  if (state === 'INITIALIZING' || state === 'QUEUED') return 'Website đang xếp hàng cập nhật.';
+  if (state === 'INITIALIZING' || state === 'QUEUED')
+    return 'Website đang xếp hàng cập nhật.';
   return 'Chưa thấy lượt cập nhật tương ứng. CMS sẽ kiểm tra lại.';
 }
 
@@ -48,7 +59,7 @@ export default async function handler(request, response) {
   if (request.method !== 'GET') {
     return sendJson(response, 405, {
       ok: false,
-      message: 'Method not allowed.',
+      message: 'Thao tác này không được hỗ trợ.',
     });
   }
 
@@ -58,7 +69,8 @@ export default async function handler(request, response) {
   if (!adminSecret) {
     return sendJson(response, 500, {
       ok: false,
-      message: 'Server is missing ADMIN_SECRET.',
+      message:
+        'CMS chưa sẵn sàng để kiểm tra trạng thái website. Nhờ kỹ thuật kiểm tra cấu hình.',
     });
   }
 
@@ -73,30 +85,40 @@ export default async function handler(request, response) {
     return sendJson(response, 200, {
       ok: true,
       status: 'unconfigured',
-      message: 'Đã lưu nội dung mới. Website thường sẽ tự cập nhật trong ít phút, nhưng CMS chưa kiểm tra được trạng thái live.',
+      message:
+        'Đã lưu nội dung mới. Website thường sẽ tự cập nhật trong ít phút, nhưng CMS chưa kiểm tra được trạng thái live.',
     });
   }
 
   const requestUrl = new URL(request.url, 'https://folksteam.com');
   const commitSha = String(requestUrl.searchParams.get('sha') || '').trim();
-  const branch = String(requestUrl.searchParams.get('branch') || process.env.GITHUB_BRANCH || 'main').trim();
-  const project = String(
-    requestUrl.searchParams.get('project') || process.env.VERCEL_PROJECT_ID || process.env.VERCEL_PROJECT_NAME || ''
+  const branch = String(
+    requestUrl.searchParams.get('branch') || process.env.GITHUB_BRANCH || 'main'
   ).trim();
-  const teamId = String(requestUrl.searchParams.get('teamId') || process.env.VERCEL_TEAM_ID || '').trim();
-  const slug = String(requestUrl.searchParams.get('slug') || process.env.VERCEL_TEAM_SLUG || '').trim();
+  const project = String(
+    requestUrl.searchParams.get('project') ||
+      process.env.VERCEL_PROJECT_ID ||
+      process.env.VERCEL_PROJECT_NAME ||
+      ''
+  ).trim();
+  const teamId = String(
+    requestUrl.searchParams.get('teamId') || process.env.VERCEL_TEAM_ID || ''
+  ).trim();
+  const slug = String(
+    requestUrl.searchParams.get('slug') || process.env.VERCEL_TEAM_SLUG || ''
+  ).trim();
 
   if (!isSafeSha(commitSha)) {
     return sendJson(response, 400, {
       ok: false,
-      message: 'Commit SHA không hợp lệ.',
+      message: 'Mã lần thay đổi không hợp lệ.',
     });
   }
 
   if (!isSafeBranch(branch)) {
     return sendJson(response, 400, {
       ok: false,
-      message: 'Branch không hợp lệ.',
+      message: 'Nơi đăng website không hợp lệ.',
     });
   }
 
@@ -104,7 +126,8 @@ export default async function handler(request, response) {
     return sendJson(response, 200, {
       ok: true,
       status: 'unconfigured',
-      message: 'Đã lưu nội dung mới. Website thường sẽ tự cập nhật trong ít phút, nhưng CMS chưa xác định được dự án live để kiểm tra tự động.',
+      message:
+        'Đã lưu nội dung mới. Website thường sẽ tự cập nhật trong ít phút, nhưng CMS chưa xác định được dự án live để kiểm tra tự động.',
     });
   }
 
@@ -119,8 +142,13 @@ export default async function handler(request, response) {
   if (slug) params.set('slug', slug);
 
   try {
-    const data = await vercelRequest(`/v6/deployments?${params.toString()}`, vercelToken);
-    const deployment = Array.isArray(data?.deployments) ? data.deployments[0] : null;
+    const data = await vercelRequest(
+      `/v6/deployments?${params.toString()}`,
+      vercelToken
+    );
+    const deployment = Array.isArray(data?.deployments)
+      ? data.deployments[0]
+      : null;
 
     if (!deployment) {
       return sendJson(response, 200, {
