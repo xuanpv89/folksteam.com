@@ -1,6 +1,13 @@
 {
-  "updatedAt": "2026-05-07T05:27:53.448Z",
+  "updatedAt": "2026-05-07T05:28:03.490Z",
   "events": [
+    {
+      "id": "audit-1778131683490-zhyf6l",
+      "createdAt": "2026-05-07T05:28:03.490Z",
+      "type": "media-delete",
+      "actor": "admin",
+      "target": "src/images/hero-image.avif"
+    },
     {
       "id": "audit-1778131673448-kth2uq",
       "createdAt": "2026-05-07T05:27:53.447Z",
