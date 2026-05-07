@@ -1,6 +1,14 @@
 {
-  "updatedAt": "2026-05-07T06:07:29.068Z",
+  "updatedAt": "2026-05-07T06:16:23.977Z",
   "events": [
+    {
+      "id": "audit-1778134583976-lryfag",
+      "createdAt": "2026-05-07T06:16:23.976Z",
+      "type": "review-update",
+      "actor": "admin",
+      "target": "src/data_files/blogDrafts/en/test1.md",
+      "status": "approved"
+    },
     {
       "id": "audit-1778134049067-dnd50t",
       "createdAt": "2026-05-07T06:07:29.067Z",
