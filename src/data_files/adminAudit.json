@@ -1,6 +1,13 @@
 {
-  "updatedAt": "2026-05-07T05:26:29.061Z",
+  "updatedAt": "2026-05-07T05:26:33.777Z",
   "events": [
+    {
+      "id": "audit-1778131593777-8lqc6d",
+      "createdAt": "2026-05-07T05:26:33.777Z",
+      "type": "media-delete",
+      "actor": "admin",
+      "target": "src/images/progress-building.avif"
+    },
     {
       "id": "audit-1778131589061-vgy0cz",
       "createdAt": "2026-05-07T05:26:29.061Z",
