@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-07T18:36:43.320Z",
+  "updatedAt": "2026-05-08T10:33:22.853Z",
   "leads": [
     {
       "id": "lead-1778086047898-1morpw",
@@ -130,8 +130,8 @@
     {
       "id": "lead-1778071052773-inhob7",
       "createdAt": "2026-05-06T12:37:32.773Z",
-      "updatedAt": "2026-05-06T12:37:32.773Z",
-      "status": "new",
+      "updatedAt": "2026-05-08T10:33:22.853Z",
+      "status": "done",
       "priority": "normal",
       "source": "contact-form",
       "locale": "en",
@@ -146,10 +146,18 @@
       "notes": [],
       "events": [
         {
+          "type": "admin-update",
+          "status": "done",
+          "priority": "normal",
+          "note": "",
+          "createdAt": "2026-05-08T10:33:22.853Z"
+        },
+        {
           "type": "submitted",
           "createdAt": "2026-05-06T12:37:32.773Z"
         }
-      ]
+      ],
+      "tags": []
     },
     {
       "id": "lead-1778071045528-attt6w",
