@@ -649,17 +649,48 @@
         margin: 12px 18px 0;
       }
 
+      body.admin-content .content-modebar {
+        position: sticky;
+        top: 67px;
+        z-index: 35;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        border-bottom: 1px solid var(--line);
+        background: rgb(255 255 255 / 94%);
+        padding: 10px 18px;
+        backdrop-filter: blur(14px);
+      }
+
+      body.admin-content .content-modebar button {
+        min-height: 36px !important;
+      }
+
+      body.admin-content .content-modebar button.active {
+        border-color: #bde8cb !important;
+        background: var(--brand-soft) !important;
+        color: #20472f !important;
+      }
+
+      body.admin-content .content-view {
+        display: none !important;
+      }
+
+      body.admin-content .content-view.active {
+        display: grid !important;
+      }
+
       body.admin-content .layout {
         grid-template-columns: 320px minmax(0, 1fr) !important;
         gap: 0;
-        min-height: calc(100vh - 68px);
+        min-height: calc(100vh - 124px);
       }
 
       body.admin-content .sidebar,
       body.admin-content .editor {
         position: sticky;
-        top: 68px;
-        max-height: calc(100vh - 68px);
+        top: 124px;
+        max-height: calc(100vh - 124px);
         overflow: auto;
         border-width: 0 1px 0 0;
         border-radius: 0;
@@ -669,7 +700,7 @@
       body.admin-content .editor {
         position: static;
         max-height: none;
-        min-height: calc(100vh - 68px);
+        min-height: calc(100vh - 124px);
         border: 0;
         padding: 34px clamp(18px, 5vw, 72px);
       }
@@ -781,19 +812,52 @@
       }
 
       body.admin-content .collections-workspace {
-        margin-top: 16px;
+        min-height: calc(100vh - 124px);
+        border-width: 0;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 0;
+        padding: 24px 18px;
       }
 
       body.admin-content .collections-layout {
         display: grid;
         gap: 14px;
+        width: min(100%, 1480px);
+        margin: 0 auto;
       }
 
       @media (min-width: 1040px) {
         body.admin-content .collections-layout {
-          grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+          grid-template-columns: minmax(310px, 0.42fr) minmax(0, 1fr);
           align-items: start;
         }
+      }
+
+      body.admin-content .collection-head {
+        width: min(100%, 1480px);
+        margin: 0 auto 14px;
+      }
+
+      body.admin-content .collection-browser,
+      body.admin-content .collection-editor {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: var(--shadow);
+        padding: 16px;
+      }
+
+      body.admin-content .collection-browser {
+        position: sticky;
+        top: 138px;
+        max-height: calc(100vh - 156px);
+        overflow: auto;
+      }
+
+      body.admin-content .collection-editor {
+        display: grid;
+        gap: 12px;
       }
 
       body.admin-content .collection-toolbar {
@@ -827,6 +891,13 @@
         box-shadow: none !important;
       }
 
+      body.admin-content .collection-card span {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        min-width: 0;
+      }
+
       body.admin-content .collection-card.active {
         border-color: #bde8cb !important;
         background: #fbfffc !important;
@@ -845,7 +916,7 @@
       }
 
       body.admin-content .collection-editor textarea {
-        min-height: 420px;
+        min-height: min(58vh, 680px);
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 13px;
         line-height: 1.55;
@@ -856,6 +927,59 @@
         color: var(--muted);
         font-size: 13px;
         font-weight: 800;
+      }
+
+      body.admin-content .collection-help {
+        border: 1px solid #bde8cb;
+        border-radius: 8px;
+        background: var(--brand-soft);
+        color: var(--brand-dark);
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      body.admin-content .collection-friendly-editor {
+        display: grid;
+        gap: 12px;
+      }
+
+      body.admin-content .collection-friendly-editor.hidden,
+      body.admin-content .collection-empty.hidden {
+        display: none;
+      }
+
+      body.admin-content .collection-friendly-editor textarea {
+        min-height: 190px;
+        font-family: inherit;
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      body.admin-content .collection-friendly-editor input,
+      body.admin-content .collection-friendly-editor textarea {
+        background: #fff;
+      }
+
+      body.admin-content .collection-advanced {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fafafa;
+        padding: 10px 12px;
+      }
+
+      body.admin-content .collection-advanced summary {
+        cursor: pointer;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      body.admin-content .collection-empty {
+        border: 1px dashed #bde8cb;
+        border-radius: 8px;
+        background: #fbfffc;
+        padding: 18px;
       }
 
       body.admin-content .collection-dirty {
@@ -879,6 +1003,11 @@
           position: static;
           max-height: none;
           border-width: 0 0 1px;
+        }
+
+        body.admin-content .collection-browser {
+          position: static;
+          max-height: none;
         }
 
         body.admin-content .editor {
@@ -935,7 +1064,20 @@
         </nav>
       </header>
 
-      <section class="layout">
+      <div class="content-modebar" role="tablist" aria-label="Content modes">
+        <button
+          type="button"
+          class="secondary active"
+          data-content-view="pages"
+        >
+          Sửa nội dung trang
+        </button>
+        <button type="button" class="secondary" data-content-view="collections">
+          Sửa nhóm trang
+        </button>
+      </div>
+
+      <section class="layout content-view active" id="page-editor-view">
         <aside class="panel sidebar">
           <div id="source-status" class="status" aria-live="polite">
             <strong>Đang tải nội dung...</strong>
@@ -1046,14 +1188,14 @@
         </aside>
       </section>
 
-      <section class="panel collections-workspace" id="collections">
-        <div class="collection-toolbar">
+      <section class="panel collections-workspace content-view" id="collections">
+        <div class="collection-toolbar collection-head">
           <div>
-            <p class="eyebrow">Kho nội dung</p>
-            <h2>File sản phẩm, insight, docs và trang tĩnh</h2>
+            <p class="eyebrow">Sửa nhóm trang</p>
+            <h2>Sửa các nhóm trang như sản phẩm, insight, tài liệu</h2>
             <p class="hint">
-              Khu này dùng chung chức năng với Vận hành, nhưng nằm ngay trong
-              trang Sửa trang để khỏi phải nhảy qua lại.
+              Chọn nhóm, chọn trang con, rồi sửa bằng các ô nội dung dễ đọc.
+              Phần kỹ thuật được giấu riêng để tránh sửa nhầm.
             </p>
           </div>
           <div class="actions">
@@ -1064,27 +1206,31 @@
         </div>
 
         <div class="collections-layout">
-          <div>
+          <div class="collection-browser">
             <div class="collection-filters">
               <label>
-                Nhóm nội dung
+                Nhóm trang
                 <select id="collection-select">
-                  <option value="products">Products</option>
-                  <option value="insights">Insights</option>
-                  <option value="docs">Docs</option>
-                  <option value="projects">Projects</option>
-                  <option value="caseStudies">Case studies</option>
-                  <option value="pages">Website pages</option>
+                  <option value="products">Sản phẩm</option>
+                  <option value="insights">Insight</option>
+                  <option value="docs">Tài liệu / hướng dẫn</option>
+                  <option value="projects">Dự án</option>
+                  <option value="caseStudies">Case study</option>
+                  <option value="pages">Trang website khác</option>
                 </select>
               </label>
               <label>
-                Tìm file
+                Tìm trang con
                 <input
                   id="collection-search"
-                  placeholder="Nhập tên file, ngôn ngữ hoặc path..."
+                  placeholder="Nhập tên, ngôn ngữ, đường dẫn..."
                 />
               </label>
             </div>
+            <p class="collection-help">
+              Mẹo: chọn nhóm trước, sau đó bấm vào một trang con trong danh
+              sách. Nếu chưa thấy trang cần sửa, dùng ô tìm kiếm.
+            </p>
             <p class="collection-summary" id="collection-summary"></p>
             <div class="list" id="collection-list"></div>
           </div>
@@ -1092,31 +1238,70 @@
           <div class="collection-editor">
             <div class="collection-toolbar">
               <div>
-                <p class="eyebrow">Trình sửa file</p>
-                <h2 id="collection-editor-title">Chọn file để sửa</h2>
+                <p class="eyebrow">Nội dung nhóm trang</p>
+                <h2 id="collection-editor-title">Chọn trang con để sửa</h2>
               </div>
               <div class="actions">
                 <button type="button" class="secondary" id="new-collection-file">
-                  Tạo file
+                  Tạo trang con
                 </button>
                 <button type="button" id="save-collection-file" disabled>
-                  Lưu file
+                  Lưu thay đổi
                 </button>
               </div>
             </div>
-            <label>
-              Đường dẫn file
-              <input
-                id="collection-target"
-                placeholder="src/content/products/en/new-item.md"
-              />
-            </label>
-            <textarea
-              id="collection-content"
-              placeholder="---&#10;title: New item&#10;description: Short description&#10;---&#10;&#10;Body..."
-            ></textarea>
+            <div class="collection-empty" id="collection-empty">
+              <strong>Chưa chọn trang con.</strong>
+              <p class="hint">
+                Hãy chọn một mục ở danh sách bên trái. Với nội dung thường,
+                bạn sẽ thấy form gồm tiêu đề, mô tả và nội dung chính.
+              </p>
+            </div>
+            <div
+              class="collection-friendly-editor hidden"
+              id="collection-friendly-editor"
+            >
+              <label>
+                Tiêu đề hiển thị
+                <input
+                  id="collection-title-field"
+                  placeholder="Ví dụ: C.H.E.S.S Application"
+                />
+              </label>
+              <label>
+                Mô tả ngắn
+                <textarea
+                  id="collection-description-field"
+                  placeholder="Viết 1-2 câu mô tả trang này..."
+                ></textarea>
+              </label>
+              <label>
+                Nội dung chính
+                <textarea
+                  id="collection-body-field"
+                  placeholder="Viết nội dung chính ở đây..."
+                ></textarea>
+              </label>
+            </div>
+            <details class="collection-advanced" id="collection-advanced">
+              <summary>Thông tin kỹ thuật</summary>
+              <label>
+                Đường dẫn lưu
+                <input
+                  id="collection-target"
+                  placeholder="src/content/products/en/new-item.md"
+                />
+              </label>
+              <label>
+                Nội dung mã nguồn
+                <textarea
+                  id="collection-content"
+                  placeholder="---&#10;title: New item&#10;description: Short description&#10;---&#10;&#10;Body..."
+                ></textarea>
+              </label>
+            </details>
             <p class="collection-dirty hidden" id="collection-dirty-note">
-              File đang có thay đổi chưa lưu.
+              Trang con này đang có thay đổi chưa lưu.
             </p>
           </div>
         </div>
@@ -1225,7 +1410,14 @@
         originalContent: '',
         originalTarget: '',
         dirty: false,
+        loaded: false,
+        friendly: null,
       };
+      const pageEditorView = document.getElementById('page-editor-view');
+      const collectionsView = document.getElementById('collections');
+      const contentViewButtons = Array.from(
+        document.querySelectorAll('[data-content-view]')
+      );
       const collectionSelect = document.getElementById('collection-select');
       const collectionSearch = document.getElementById('collection-search');
       const collectionSummary = document.getElementById('collection-summary');
@@ -1235,6 +1427,20 @@
       );
       const collectionTarget = document.getElementById('collection-target');
       const collectionContent = document.getElementById('collection-content');
+      const collectionEmpty = document.getElementById('collection-empty');
+      const collectionFriendlyEditor = document.getElementById(
+        'collection-friendly-editor'
+      );
+      const collectionTitleField = document.getElementById(
+        'collection-title-field'
+      );
+      const collectionDescriptionField = document.getElementById(
+        'collection-description-field'
+      );
+      const collectionBodyField = document.getElementById(
+        'collection-body-field'
+      );
+      const collectionAdvanced = document.getElementById('collection-advanced');
       const collectionDirtyNote = document.getElementById(
         'collection-dirty-note'
       );
@@ -1292,6 +1498,117 @@
           .replaceAll("'", '&#039;');
       }
 
+      const collectionLabels = {
+        products: 'sản phẩm',
+        insights: 'insight',
+        docs: 'tài liệu',
+        projects: 'dự án',
+        caseStudies: 'case study',
+        pages: 'trang website',
+      };
+
+      function friendlyFileName(item = {}) {
+        return String(item.name || item.path || '')
+          .replace(/\.(astro|md|mdx)$/i, '')
+          .split('/')
+          .filter(Boolean)
+          .join(' / ');
+      }
+
+      function parseFriendlyContent(content, target) {
+        if (!/\.(md|mdx)$/i.test(target || '')) return null;
+        const match = String(content || '').match(
+          /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/
+        );
+        if (!match) return null;
+        const frontmatter = match[1];
+        const body = match[2] || '';
+        const fields = {};
+        frontmatter.split(/\r?\n/).forEach(line => {
+          const separator = line.indexOf(':');
+          if (separator < 0) return;
+          const key = line.slice(0, separator).trim();
+          const value = line
+            .slice(separator + 1)
+            .trim()
+            .replace(/^['"]|['"]$/g, '');
+          fields[key] = value;
+        });
+        return { frontmatter, body, fields };
+      }
+
+      function setFrontmatterValue(frontmatter, key, value) {
+        const lines = String(frontmatter || '').split(/\r?\n/);
+        const nextValue = String(value || '').replace(/\n/g, ' ').trim();
+        const index = lines.findIndex(line =>
+          new RegExp(`^${key}\\s*:`).test(line.trim())
+        );
+        const nextLine = `${key}: ${JSON.stringify(nextValue)}`;
+        if (index >= 0) {
+          lines[index] = nextLine;
+        } else if (nextValue) {
+          lines.push(nextLine);
+        }
+        return lines.join('\n').replace(/\n{3,}/g, '\n\n');
+      }
+
+      function friendlyContentToRaw() {
+        if (!collectionState.friendly) return;
+        let frontmatter = collectionState.friendly.frontmatter;
+        frontmatter = setFrontmatterValue(
+          frontmatter,
+          'title',
+          collectionTitleField.value
+        );
+        frontmatter = setFrontmatterValue(
+          frontmatter,
+          'description',
+          collectionDescriptionField.value
+        );
+        collectionContent.value = `---\n${frontmatter}\n---\n\n${collectionBodyField.value}`;
+      }
+
+      function suggestedCollectionPath() {
+        if (collectionState.originalTarget || collectionTarget.value.trim())
+          return collectionTarget.value.trim();
+        const title = slugify(collectionTitleField.value || 'new-page');
+        const prefix =
+          {
+            products: 'src/content/products/en/',
+            insights: 'src/content/insights/en/',
+            docs: 'src/content/docs/',
+            projects: 'src/pages/projects/',
+            caseStudies: 'src/pages/case-studies/',
+            pages: 'src/pages/',
+          }[collectionState.selected] || 'src/content/products/en/';
+        return `${prefix}${title}.md`;
+      }
+
+      function updateSuggestedPath() {
+        if (collectionState.originalTarget || collectionTarget.value.trim())
+          return;
+        collectionTarget.value = suggestedCollectionPath();
+      }
+
+      function showFriendlyEditor(data) {
+        const parsed = parseFriendlyContent(data.content, data.target);
+        collectionState.friendly = parsed;
+        collectionEmpty.classList.add('hidden');
+        collectionFriendlyEditor.classList.toggle('hidden', !parsed);
+        collectionAdvanced.open = !parsed;
+
+        if (!parsed) {
+          collectionTitle.textContent = data.summary?.title || data.target;
+          return;
+        }
+
+        collectionTitleField.value = parsed.fields.title || '';
+        collectionDescriptionField.value = parsed.fields.description || '';
+        collectionBodyField.value = parsed.body.trim();
+        collectionTitle.textContent =
+          parsed.fields.title || friendlyFileName({ path: data.target });
+      }
+
       async function collectionApi(url, options = {}) {
         const response = await fetch(url, {
           credentials: 'same-origin',
@@ -1319,7 +1636,7 @@
           const haystack = normalizeSearch(`${item.name} ${item.path}`);
           return haystack.includes(query);
         });
-        collectionSummary.textContent = `Đang hiển thị ${items.length} / ${collectionState.items.length} file`;
+        collectionSummary.textContent = `Đang hiển thị ${items.length} / ${collectionState.items.length} trang con trong nhóm ${collectionLabels[collectionState.selected] || 'này'}`;
         collectionList.innerHTML = items.length
           ? items
               .map(
@@ -1330,23 +1647,24 @@
                   data-collection-path="${escapeHtml(item.path)}"
                 >
                   <span>
-                    <strong>${escapeHtml(item.name)}</strong>
+                    <strong>${escapeHtml(friendlyFileName(item))}</strong>
                     <small>${Math.round((item.size || 0) / 1024)} KB</small>
                   </span>
                   <code>${escapeHtml(item.path)}</code>
                 </button>`
               )
               .join('')
-          : '<p class="empty">Không có file phù hợp với bộ lọc hiện tại.</p>';
+          : '<p class="empty">Không có trang con phù hợp với bộ lọc hiện tại.</p>';
       }
 
       async function loadCollection() {
         collectionState.selected = collectionSelect.value;
-        collectionList.innerHTML = '<p class="hint">Đang tải kho nội dung...</p>';
+        collectionList.innerHTML = '<p class="hint">Đang tải nhóm trang...</p>';
         const data = await collectionApi(
           `/api/admin-operations?module=collections&collection=${encodeURIComponent(collectionState.selected)}`
         );
         collectionState.items = data.items || [];
+        collectionState.loaded = true;
         renderCollectionList();
       }
 
@@ -1354,13 +1672,13 @@
         const data = await collectionApi(
           `/api/admin-operations?module=collections&collection=${encodeURIComponent(collectionState.selected)}&target=${encodeURIComponent(path)}`
         );
-        collectionTitle.textContent = data.summary?.title || path;
         collectionTarget.value = data.target;
         collectionContent.value = data.content;
         collectionState.sha = data.sha || '';
         collectionState.originalContent = data.content || '';
         collectionState.originalTarget = data.target || '';
         collectionState.dirty = false;
+        showFriendlyEditor(data);
         updateCollectionDirty();
         saveCollectionButton.disabled = false;
         renderCollectionList();
@@ -1374,7 +1692,16 @@
         collectionDirtyNote.classList.toggle('hidden', !dirty);
       }
 
+      function updateFriendlyCollectionDirty() {
+        friendlyContentToRaw();
+        collectionTitle.textContent =
+          collectionTitleField.value.trim() || 'Trang con mới';
+        updateCollectionDirty();
+      }
+
       async function saveCollectionFile() {
+        updateSuggestedPath();
+        friendlyContentToRaw();
         const target = collectionTarget.value.trim();
         const content = collectionContent.value;
         if (!target) {
@@ -1382,7 +1709,7 @@
         }
         if (
           collectionState.dirty &&
-          !window.confirm(`Lưu thay đổi vào "${target}"?`)
+          !window.confirm(`Lưu thay đổi cho trang con này?\n\n${target}`)
         ) {
           return;
         }
@@ -1403,7 +1730,7 @@
         collectionState.originalTarget = target;
         collectionState.dirty = false;
         updateCollectionDirty();
-        showToast('Đã lưu file nội dung.');
+        showToast('Đã lưu nhóm trang.');
         await loadCollection();
       }
 
@@ -1411,12 +1738,60 @@
         collectionState.sha = '';
         collectionState.originalContent = '';
         collectionState.originalTarget = '';
-        collectionTitle.textContent = 'File mới';
+        collectionState.friendly = {
+          frontmatter: 'title: \"\"\ndescription: \"\"',
+          body: '',
+          fields: {},
+        };
+        collectionTitle.textContent = 'Trang con mới';
         collectionTarget.value = '';
-        collectionContent.value =
-          '---\ntitle: New item\ndescription: Short description\n---\n\nBody content...';
+        collectionContent.value = '---\ntitle: \"\"\ndescription: \"\"\n---\n\n';
+        collectionEmpty.classList.add('hidden');
+        collectionFriendlyEditor.classList.remove('hidden');
+        collectionAdvanced.open = false;
+        collectionTitleField.value = '';
+        collectionDescriptionField.value = '';
+        collectionBodyField.value = '';
         saveCollectionButton.disabled = false;
         updateCollectionDirty();
+      }
+
+      function resetCollectionEditor() {
+        collectionState.sha = '';
+        collectionState.originalContent = '';
+        collectionState.originalTarget = '';
+        collectionState.friendly = null;
+        collectionTitle.textContent = 'Chọn trang con để sửa';
+        collectionTarget.value = '';
+        collectionContent.value = '';
+        collectionTitleField.value = '';
+        collectionDescriptionField.value = '';
+        collectionBodyField.value = '';
+        collectionEmpty.classList.remove('hidden');
+        collectionFriendlyEditor.classList.add('hidden');
+        collectionAdvanced.open = false;
+        saveCollectionButton.disabled = true;
+        updateCollectionDirty();
+      }
+
+      function setContentView(view, updateHash = true) {
+        const isCollections = view === 'collections';
+        pageEditorView.classList.toggle('active', !isCollections);
+        collectionsView.classList.toggle('active', isCollections);
+        contentViewButtons.forEach(button => {
+          button.classList.toggle('active', button.dataset.contentView === view);
+        });
+
+        if (updateHash) {
+          const nextUrl = isCollections
+            ? `${location.pathname}#collections`
+            : location.pathname;
+          history.replaceState(null, '', nextUrl);
+        }
+
+        if (isCollections && !collectionState.loaded) {
+          loadCollection().catch(error => showToast(error.message, 'error'));
+        }
       }
 
       function currentPage() {
@@ -2871,6 +3246,11 @@
         }
       }
 
+      contentViewButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          setContentView(button.dataset.contentView || 'pages');
+        });
+      });
       pageSearch.addEventListener('input', renderPages);
       pageSearchClear.addEventListener('click', () => {
         pageSearch.value = '';
@@ -2886,10 +3266,28 @@
       });
       collectionSearch.addEventListener('input', renderCollectionList);
       collectionSelect.addEventListener('change', () => {
+        collectionState.loaded = false;
+        resetCollectionEditor();
         loadCollection().catch(error => showToast(error.message, 'error'));
       });
-      collectionContent.addEventListener('input', updateCollectionDirty);
+      collectionContent.addEventListener('input', () => {
+        if (document.activeElement === collectionContent) {
+          collectionState.friendly = null;
+          collectionFriendlyEditor.classList.add('hidden');
+          collectionAdvanced.open = true;
+        }
+        updateCollectionDirty();
+      });
       collectionTarget.addEventListener('input', updateCollectionDirty);
+      collectionTitleField.addEventListener('input', () => {
+        updateSuggestedPath();
+        updateFriendlyCollectionDirty();
+      });
+      collectionDescriptionField.addEventListener(
+        'input',
+        updateFriendlyCollectionDirty
+      );
+      collectionBodyField.addEventListener('input', updateFriendlyCollectionDirty);
       document
         .getElementById('reload-collection')
         .addEventListener('click', () =>
@@ -2951,9 +3349,7 @@
         });
       });
 
-      if (location.hash === '#collections') {
-        loadCollection().catch(error => showToast(error.message, 'error'));
-      }
+      setContentView(location.hash === '#collections' ? 'collections' : 'pages', false);
 
       window.addEventListener('beforeunload', event => {
         if (!collectionState.dirty) return;
