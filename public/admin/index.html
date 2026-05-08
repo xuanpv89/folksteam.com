@@ -329,17 +329,23 @@
       .kpi.date-kpi .kpi-value {
         min-width: 112px;
         font-size: 14px;
+        grid-row: 1;
         white-space: nowrap;
+      }
+
+      .kpi.date-kpi .kpi-note {
+        grid-column: 1 / -1;
+        max-width: none;
       }
 
       .kpi-note {
         margin: 5px 0 0;
         color: var(--admin-muted);
-        font-size: 11px;
-        font-weight: 850;
+        font-size: 12px;
+        font-weight: 500;
         letter-spacing: 0;
         line-height: 1.32;
-        text-transform: uppercase;
+        text-transform: none;
       }
 
       .dashboard-grid {
@@ -501,11 +507,11 @@
       .detail-row p {
         margin: 3px 0 0;
         color: var(--admin-muted);
-        font-size: 11px;
-        font-weight: 780;
+        font-size: 12px;
+        font-weight: 500;
         letter-spacing: 0;
         line-height: 1.3;
-        text-transform: uppercase;
+        text-transform: none;
       }
 
       .detail-value {
@@ -994,8 +1000,6 @@
           <footer class="sidebar-footer" aria-label="Thông tin Admin">
             <p>
               <a href="https://www.folksteam.com/">© Folks Team 2026</a>
-              <br />
-              <a href="https://www.folksteam.com/">Folksteam.com</a>
             </p>
             <div class="sidebar-tools">
               <span class="sidebar-chip" aria-label="Ngôn ngữ hiện tại">
