@@ -991,12 +991,19 @@ body[data-theme='dark'].admin-page .admin-stat-value {
 
   body.admin-page .topbar {
     top: 4px !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
   }
 
   body.admin-page .brand {
-    width: auto !important;
-    max-width: 210px;
+    width: 100% !important;
+    max-width: none;
+  }
+
+  body.admin-page .nav {
+    flex: 0 0 100% !important;
+    justify-content: flex-start !important;
+    padding-bottom: 2px;
   }
 
   body.admin-page .topbar h1 {
@@ -1007,5 +1014,956 @@ body[data-theme='dark'].admin-page .admin-stat-value {
   body.admin-page .status-item,
   body.admin-page .attention-card {
     grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+/* Final blog CMS simplification: match the admin concept and keep writing first. */
+body.admin-blog {
+  background:
+    radial-gradient(circle at 12% 8%, rgb(79 177 111 / 8%), transparent 28%),
+    radial-gradient(circle at 88% 14%, rgb(247 181 0 / 6%), transparent 24%),
+    var(--paper) !important;
+}
+
+body.admin-blog .shell {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 8px !important;
+}
+
+body.admin-blog .topbar {
+  position: sticky !important;
+  top: 8px !important;
+  margin: 0 0 12px !important;
+  border: 1px solid rgb(220 244 228 / 82%) !important;
+  border-radius: 14px !important;
+  background: rgb(255 255 255 / 94%) !important;
+  color: var(--ink) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+body.admin-blog .topbar h1 {
+  color: var(--ink) !important;
+}
+
+body.admin-blog .topbar .eyebrow {
+  color: var(--brand-dark) !important;
+}
+
+body.admin-blog .topbar .nav a,
+body.admin-blog .topbar .nav button {
+  border-color: #d4d4d4 !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+}
+
+body.admin-blog .topbar .nav a[href='/admin/blog.html'] {
+  border-color: #bde8cb !important;
+  background: var(--brand-soft) !important;
+  color: #20472f !important;
+}
+
+body.admin-blog .intro,
+body.admin-blog .editor-rail {
+  display: none !important;
+}
+
+body.admin-blog .post-manager {
+  display: grid !important;
+  gap: 12px !important;
+  margin: 0 0 12px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: rgb(255 255 255 / 94%) !important;
+  padding: 14px !important;
+  box-shadow: 0 12px 30px rgb(38 38 38 / 6%) !important;
+}
+
+body.admin-blog .manager-head h2 {
+  margin: 0 !important;
+  font-size: 22px !important;
+  line-height: 1.15 !important;
+}
+
+body.admin-blog .manager-actions,
+body.admin-blog .manager-filters {
+  gap: 8px !important;
+}
+
+body.admin-blog .manager-search {
+  min-width: min(100%, 360px) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+}
+
+body.admin-blog .manager-filters button.active {
+  border-color: #bde8cb !important;
+  background: var(--brand-soft) !important;
+  color: #20472f !important;
+}
+
+body.admin-blog .manager-table {
+  border-color: var(--line) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+}
+
+body.admin-blog .post-row {
+  grid-template-columns: minmax(240px, 1fr) 120px 92px minmax(160px, auto) !important;
+  min-height: 62px !important;
+  padding: 10px 12px !important;
+}
+
+body.admin-blog .post-row.header {
+  min-height: 38px !important;
+  background: #fbfcfa !important;
+}
+
+body.admin-blog .grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.72fr) !important;
+  gap: 12px !important;
+  min-height: 0 !important;
+  padding-left: 0 !important;
+}
+
+body.admin-blog #post-form,
+body.admin-blog .preview-card {
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: rgb(255 255 255 / 94%) !important;
+  box-shadow: 0 12px 30px rgb(38 38 38 / 6%) !important;
+}
+
+body.admin-blog #post-form {
+  display: grid !important;
+  gap: 14px !important;
+  min-height: 0 !important;
+  padding: 16px !important;
+}
+
+body.admin-blog #post-form > .section-title {
+  position: static !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+body.admin-blog #post-form > .section-title .eyebrow,
+body.admin-blog #post-form > .section-title h2 {
+  display: block !important;
+}
+
+body.admin-blog .quick-actions {
+  width: auto !important;
+  justify-content: flex-end !important;
+}
+
+body.admin-blog .quick-actions::before,
+body.admin-blog .tab-nav::before,
+body.admin-blog .tab-nav::after {
+  content: none !important;
+}
+
+body.admin-blog .tab-nav {
+  position: sticky !important;
+  top: 78px !important;
+  z-index: 12 !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+  min-height: 0 !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: #f8faf9 !important;
+  padding: 4px !important;
+  box-shadow: none !important;
+}
+
+body.admin-blog .tab-nav button {
+  min-width: 0 !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+}
+
+body.admin-blog .tab-nav button.active {
+  background: #fff !important;
+  color: var(--ink) !important;
+  box-shadow: 0 6px 16px rgb(38 38 38 / 8%) !important;
+}
+
+body.admin-blog .next-step {
+  position: static !important;
+  width: auto !important;
+  border-color: #bde8cb !important;
+  border-radius: 8px !important;
+  background: #f7fcf8 !important;
+  padding: 12px !important;
+  box-shadow: none !important;
+}
+
+body.admin-blog [data-tab-panel='write'].form-section,
+body.admin-blog #post-form > [data-tab-panel='write']:not(.form-section),
+body.admin-blog .block-toolbar,
+body.admin-blog #post-form > [data-tab-panel='settings'],
+body.admin-blog #post-form > [data-tab-panel='publish'] {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+body.admin-blog .form-section,
+body.admin-blog [data-tab-panel='write'].form-section {
+  border: 1px solid #e3e7df !important;
+  border-radius: 8px !important;
+  background: #fbfcfa !important;
+  padding: 14px !important;
+}
+
+body.admin-blog [data-tab-panel='write'].form-section h3,
+body.admin-blog [data-tab-panel='write'].form-section .field-note,
+body.admin-blog [data-tab-panel='write'].form-section label:has(#locale),
+body.admin-blog [data-tab-panel='write'].form-section label:has(#slug) {
+  display: grid !important;
+}
+
+body.admin-blog [data-tab-panel='write'].form-section .row {
+  display: grid !important;
+}
+
+body.admin-blog [data-tab-panel='write'] label {
+  color: #344054 !important;
+  font-size: 13px !important;
+}
+
+body.admin-blog input,
+body.admin-blog select,
+body.admin-blog textarea,
+body.admin-blog #title,
+body.admin-blog #description,
+body.admin-blog #block-list textarea,
+body.admin-blog #block-list input {
+  border: 1px solid #d0d5dd !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+  padding: 12px 13px !important;
+}
+
+body.admin-blog #title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+}
+
+body.admin-blog #description,
+body.admin-blog #block-list textarea {
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+}
+
+body.admin-blog #title::placeholder,
+body.admin-blog #description::placeholder,
+body.admin-blog #block-list textarea::placeholder {
+  color: #98a2b3 !important;
+}
+
+body.admin-blog .block-toolbar {
+  position: sticky !important;
+  top: 132px !important;
+  z-index: 10 !important;
+  border: 1px solid #e3e7df !important;
+  border-radius: 8px !important;
+  background: rgb(255 255 255 / 94%) !important;
+  padding: 8px !important;
+  backdrop-filter: blur(12px);
+}
+
+body.admin-blog .block-toolbar [data-add-block='image'],
+body.admin-blog .block-toolbar [data-add-block='video'],
+body.admin-blog .block-toolbar [data-add-block='quote'],
+body.admin-blog .block-toolbar details,
+body.admin-blog .technical-panel,
+body.admin-blog .media-actions,
+body.admin-blog #submit-review,
+body.admin-blog #copy,
+body.admin-blog #download,
+body.admin-blog #generate,
+body.admin-blog #tab-markdown,
+body.admin-blog #preview,
+body.admin-blog .path,
+body.admin-blog details.advanced-box summary,
+body.admin-blog details.advanced-box {
+  display: none !important;
+}
+
+body.admin-blog .content-block {
+  border: 1px solid #e3e7df !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  padding: 12px !important;
+}
+
+body.admin-blog .content-block .block-head {
+  opacity: 1 !important;
+}
+
+body.admin-blog .preview-card {
+  position: sticky !important;
+  top: 78px !important;
+  max-height: calc(100vh - 96px) !important;
+  overflow: auto !important;
+  padding: 16px !important;
+}
+
+body.admin-blog .preview-tabs {
+  display: block !important;
+  width: auto !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+body.admin-blog .preview-tabs #tab-live {
+  pointer-events: none;
+}
+
+body.admin-blog .article-preview {
+  border-color: #e3e7df !important;
+  background: #fff !important;
+}
+
+body.admin-blog .readiness li {
+  cursor: pointer;
+}
+
+body.admin-blog .readiness li:hover {
+  color: var(--brand-dark) !important;
+}
+
+@media (max-width: 1080px) {
+  body.admin-blog .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.admin-blog .preview-card,
+  body.admin-blog .tab-nav,
+  body.admin-blog .block-toolbar {
+    position: static !important;
+    max-height: none !important;
+  }
+
+  body.admin-blog .post-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Blog workspace v2: separate management from writing and make editing richer. */
+body.admin-blog [data-workspace-panel][hidden],
+body.admin-blog .post-manager[hidden] {
+  display: none !important;
+}
+
+body.admin-blog .workspace-tabs {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: 4px;
+  margin: 0 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 94%);
+  padding: 4px;
+  box-shadow: 0 12px 30px rgb(38 38 38 / 6%);
+}
+
+body.admin-blog .workspace-tabs button {
+  border: 0 !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+}
+
+body.admin-blog .workspace-tabs button.active {
+  background: var(--brand-soft) !important;
+  color: #20472f !important;
+  box-shadow: inset 0 0 0 1px rgb(79 177 111 / 18%) !important;
+}
+
+body.admin-blog .post-manager {
+  min-height: calc(100vh - 110px);
+}
+
+body.admin-blog .grid {
+  grid-template-columns: minmax(720px, 1.35fr) minmax(360px, 0.65fr) !important;
+  align-items: start !important;
+}
+
+body.admin-blog #post-form {
+  align-content: start !important;
+}
+
+body.admin-blog .quick-actions {
+  align-items: center !important;
+}
+
+body.admin-blog [data-tab-panel='write'].form-section:first-of-type {
+  background: #fff !important;
+}
+
+body.admin-blog .block-toolbar {
+  display: grid !important;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: 10px !important;
+  border: 1px solid #dde7df !important;
+  background: #fbfcfa !important;
+  padding: 12px !important;
+}
+
+body.admin-blog .block-toolbar > button {
+  display: none !important;
+}
+
+body.admin-blog .format-tools,
+body.admin-blog .insert-tools,
+body.admin-blog .block-toolbar .button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+body.admin-blog .format-tools {
+  padding: 0 0 10px;
+  border-right: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+body.admin-blog .tool-group-label {
+  flex: 0 0 100%;
+  color: var(--soft);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+body.admin-blog .format-tools button,
+body.admin-blog .insert-tools button,
+body.admin-blog .block-toolbar details summary,
+body.admin-blog .block-toolbar .button-row button {
+  min-height: 36px !important;
+  border: 1px solid #d0d5dd !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+}
+
+body.admin-blog .format-tools [data-format='bold'] {
+  font-weight: 950 !important;
+}
+
+body.admin-blog .format-tools [data-format='italic'] {
+  font-style: italic;
+}
+
+body.admin-blog .block-toolbar details.advanced-box,
+body.admin-blog .block-toolbar details.advanced-box summary,
+body.admin-blog .publish-box details.advanced-box,
+body.admin-blog .publish-box details.advanced-box summary,
+body.admin-blog [data-settings-primary] details.advanced-box,
+body.admin-blog [data-settings-primary] details.advanced-box summary {
+  display: block !important;
+}
+
+body.admin-blog .block-toolbar details.advanced-box,
+body.admin-blog .publish-box details.advanced-box,
+body.admin-blog [data-settings-primary] details.advanced-box {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+body.admin-blog .block-toolbar details.advanced-box[open],
+body.admin-blog .publish-box details.advanced-box[open],
+body.admin-blog [data-settings-primary] details.advanced-box[open] {
+  grid-column: 1 / -1;
+  border: 1px solid #e3e7df !important;
+  background: #fbfcfa !important;
+  padding: 10px !important;
+}
+
+body.admin-blog .block-toolbar [data-add-block='image'],
+body.admin-blog .block-toolbar [data-add-block='quote'],
+body.admin-blog .block-toolbar [data-add-block='heading'],
+body.admin-blog .block-toolbar [data-add-block='video'] {
+  display: inline-flex !important;
+}
+
+body.admin-blog .content-block {
+  display: grid !important;
+  gap: 12px !important;
+}
+
+body.admin-blog .content-block:focus-within {
+  border-color: #9bd9af !important;
+  box-shadow: 0 10px 24px rgb(38 38 38 / 6%) !important;
+}
+
+body.admin-blog .block-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+body.admin-blog .block-head strong {
+  border-radius: 999px;
+  background: #f3f4f1;
+  padding: 4px 9px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+body.admin-blog .block-actions button {
+  min-height: 28px !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+}
+
+body.admin-blog .media-actions {
+  display: flex !important;
+}
+
+body.admin-blog #tab-markdown,
+body.admin-blog #preview,
+body.admin-blog .technical-panel {
+  display: none !important;
+}
+
+body.admin-blog #block-list textarea {
+  min-height: 230px !important;
+  font-size: 17px !important;
+  line-height: 1.72 !important;
+}
+
+body.admin-blog .content-block {
+  padding: 18px !important;
+}
+
+body.admin-blog .preview-card {
+  top: 92px !important;
+  max-height: calc(100vh - 108px) !important;
+}
+
+body.admin-blog .article-preview {
+  gap: 18px !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+body.admin-blog .article-preview .article-cover {
+  margin: 0 !important;
+}
+
+body.admin-blog .article-preview .article-cover img {
+  width: 100%;
+  height: 220px;
+  max-height: none;
+  border-radius: 0 !important;
+  object-fit: cover;
+}
+
+body.admin-blog .article-preview > div,
+body.admin-blog .article-preview > p,
+body.admin-blog .article-preview > .article-tags,
+body.admin-blog .article-preview > .article-body {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+body.admin-blog .article-preview h1 {
+  font-size: clamp(30px, 4vw, 48px) !important;
+  line-height: 1.06 !important;
+}
+
+body.admin-blog .article-preview .article-body {
+  padding-bottom: 22px;
+  font-size: 16px;
+  line-height: 1.78;
+}
+
+body.admin-blog .article-preview .article-body h2,
+body.admin-blog .article-preview .article-body h3 {
+  margin: 8px 0 0;
+}
+
+body.admin-blog .article-preview .article-body blockquote {
+  margin: 0;
+  border-left: 4px solid var(--brand);
+  background: #f7fcf8;
+  padding: 14px 16px;
+  color: #244f34;
+  font-weight: 700;
+}
+
+body.admin-blog .article-preview .article-body a {
+  color: var(--brand-dark);
+  font-weight: 850;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+body.admin-blog .article-preview .article-body hr {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 1080px) {
+  body.admin-blog .workspace-tabs {
+    width: 100%;
+  }
+
+  body.admin-blog .block-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  body.admin-blog .format-tools {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0 0 8px;
+  }
+}
+
+/* Content CMS refinement: restore preview, keep editing dense, and make review state obvious. */
+body.admin-content {
+  background:
+    linear-gradient(180deg, #f7faf8 0%, #f2f5f1 100%) fixed,
+    var(--paper) !important;
+}
+
+body.admin-content .shell {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 8px !important;
+}
+
+body.admin-content .topbar {
+  top: 8px !important;
+  margin: 0 0 8px !important;
+  border: 1px solid rgb(220 244 228 / 82%) !important;
+  border-radius: 14px !important;
+  background: rgb(255 255 255 / 94%) !important;
+  box-shadow: 0 12px 30px rgb(38 38 38 / 6%) !important;
+}
+
+body.admin-content .layout {
+  display: grid !important;
+  grid-template-columns: minmax(268px, 0.76fr) minmax(420px, 1.18fr) minmax(
+      320px,
+      0.86fr
+    ) !important;
+  gap: 8px !important;
+  min-height: calc(100vh - 82px) !important;
+}
+
+body.admin-content .sidebar,
+body.admin-content .editor,
+body.admin-content .preview-panel {
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: rgb(255 255 255 / 94%) !important;
+  box-shadow: 0 12px 30px rgb(38 38 38 / 6%) !important;
+}
+
+body.admin-content .sidebar {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  position: sticky !important;
+  top: 86px !important;
+  max-height: calc(100vh - 94px) !important;
+  overflow: auto !important;
+  padding: 12px !important;
+}
+
+body.admin-content .editor {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  position: static !important;
+  min-height: calc(100vh - 94px) !important;
+  max-height: none !important;
+  padding: clamp(16px, 2.4vw, 30px) !important;
+  border-width: 1px !important;
+}
+
+body.admin-content .preview-panel {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  position: sticky !important;
+  top: 86px !important;
+  height: calc(100vh - 94px) !important;
+  max-height: calc(100vh - 94px) !important;
+  overflow: hidden !important;
+  flex-direction: column !important;
+  padding: 12px !important;
+}
+
+body.admin-content .preview-panel > .actions:first-child {
+  align-items: flex-start !important;
+  gap: 10px !important;
+}
+
+body.admin-content .preview-panel h2 {
+  margin: 2px 0 0 !important;
+  font-size: 18px !important;
+  line-height: 1.2 !important;
+}
+
+body.admin-content .preview-frame {
+  height: auto !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  border-color: #d7ded6 !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+}
+
+body.admin-content .preview-panel.mobile-preview .preview-frame {
+  width: min(390px, 100%) !important;
+  min-height: 0 !important;
+}
+
+body.admin-content .filter-panel,
+body.admin-content .tools,
+body.admin-content #undo-field,
+body.admin-content .field-diff,
+body.admin-content .change-pill {
+  display: revert !important;
+}
+
+body.admin-content .source-status {
+  margin-bottom: 12px !important;
+  border-color: #d7eadc !important;
+  background: #f7fcf8 !important;
+}
+
+body.admin-content .search-row {
+  position: sticky !important;
+  top: -12px !important;
+  z-index: 2 !important;
+  margin: 0 -12px 10px !important;
+  border-bottom: 1px solid var(--line) !important;
+  background: rgb(255 255 255 / 96%) !important;
+  padding: 12px !important;
+}
+
+body.admin-content .search-clear {
+  right: 20px !important;
+  bottom: 35px !important;
+  width: 30px !important;
+  min-height: 30px !important;
+  padding: 0 !important;
+}
+
+body.admin-content .page-summary {
+  gap: 6px !important;
+  margin: 8px 0 10px !important;
+}
+
+body.admin-content .page-summary span,
+body.admin-content .type-pill {
+  border-color: #d7eadc !important;
+  background: #f8fcf9 !important;
+  color: #2f7c48 !important;
+}
+
+body.admin-content .page-group {
+  gap: 6px !important;
+  padding-top: 8px !important;
+}
+
+body.admin-content .page-group-title {
+  min-height: 30px !important;
+  color: #2f7c48 !important;
+}
+
+body.admin-content .item {
+  min-height: 54px !important;
+  align-items: flex-start !important;
+  border-color: #e3e7df !important;
+  background: #fff !important;
+  padding: 10px !important;
+}
+
+body.admin-content .item.active {
+  border-color: #9bd9af !important;
+  background: #edf8f1 !important;
+  box-shadow: inset 3px 0 0 #4fb16f !important;
+}
+
+body.admin-content #editor-title {
+  max-width: 920px !important;
+  margin-bottom: 6px !important;
+  font-size: clamp(26px, 3vw, 40px) !important;
+  line-height: 1.08 !important;
+}
+
+body.admin-content #editor-hint {
+  max-width: 760px !important;
+  margin-bottom: 18px !important;
+  color: var(--muted) !important;
+}
+
+body.admin-content .simple-editor {
+  max-width: 980px !important;
+  gap: 14px !important;
+}
+
+body.admin-content .simple-section {
+  border: 1px solid #e3e7df !important;
+  border-radius: 8px !important;
+  background: #fbfcfa !important;
+  padding: 14px !important;
+}
+
+body.admin-content .simple-section:first-child {
+  border-top: 1px solid #e3e7df !important;
+  padding-top: 14px !important;
+}
+
+body.admin-content .simple-section h3 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  color: #2f7c48 !important;
+}
+
+body.admin-content .simple-field {
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+}
+
+body.admin-content .simple-field:focus-within {
+  border-color: #bde8cb !important;
+  background: #fff !important;
+  box-shadow: 0 10px 22px rgb(38 38 38 / 5%) !important;
+}
+
+body.admin-content .simple-field.changed {
+  border-color: #f6d58f !important;
+  background: #fffaf0 !important;
+}
+
+body.admin-content .simple-field textarea,
+body.admin-content .simple-field input {
+  border-color: #d0d5dd !important;
+  background: #fff !important;
+  color: var(--ink) !important;
+}
+
+body.admin-content .simple-field textarea {
+  min-height: 128px !important;
+}
+
+body.admin-content .simple-meta {
+  flex: 0 0 auto !important;
+  border-radius: 999px !important;
+  background: #eef4ef !important;
+  padding: 3px 8px !important;
+  color: var(--muted) !important;
+}
+
+body.admin-content .simple-field.changed .simple-meta {
+  background: #fffbeb !important;
+  color: #854d0e !important;
+}
+
+body.admin-content .sticky-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  max-width: 980px !important;
+  margin-top: 18px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: rgb(255 255 255 / 94%) !important;
+  padding: 10px !important;
+  box-shadow: 0 -10px 24px rgb(38 38 38 / 5%) !important;
+}
+
+body.admin-content #publish-github {
+  min-width: 172px !important;
+}
+
+body.admin-content .publish-log {
+  max-width: 980px !important;
+  border-color: #d7eadc !important;
+  background: #f8fcf9 !important;
+}
+
+body.admin-content .modal-backdrop {
+  width: min(760px, calc(100vw - 28px)) !important;
+}
+
+body.admin-content .diff-list {
+  max-height: min(48vh, 420px) !important;
+}
+
+@media (max-width: 1240px) {
+  body.admin-content .layout {
+    grid-template-columns: minmax(250px, 0.8fr) minmax(0, 1.2fr) !important;
+  }
+
+  body.admin-content .preview-panel {
+    display: none !important;
+  }
+}
+
+@media (max-width: 820px) {
+  body.admin-content .shell {
+    padding: 4px !important;
+  }
+
+  body.admin-content .topbar {
+    top: 4px !important;
+    margin-bottom: 4px !important;
+  }
+
+  body.admin-content .layout {
+    grid-template-columns: 1fr !important;
+    min-height: 0 !important;
+  }
+
+  body.admin-content .sidebar,
+  body.admin-content .editor,
+  body.admin-content .preview-panel {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    position: static !important;
+    max-height: none !important;
+    min-height: 0 !important;
+  }
+
+  body.admin-content .editor {
+    padding: 18px 12px !important;
+  }
+
+  body.admin-content .simple-field label {
+    display: grid !important;
+  }
+
+  body.admin-content .sticky-actions button,
+  body.admin-content #publish-github {
+    width: 100% !important;
   }
 }

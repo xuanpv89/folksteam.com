@@ -1520,6 +1520,316 @@
           margin: 12px;
         }
       }
+
+      /* Daily-use blog editor: keep the workflow quiet, direct, and scannable. */
+      body.admin-blog {
+        background: #f5f7f6 !important;
+      }
+
+      body.admin-blog .shell {
+        max-width: 1440px;
+        padding: 0 18px 48px;
+      }
+
+      body.admin-blog .topbar {
+        position: sticky !important;
+        top: 0 !important;
+        min-height: 64px;
+        margin: 0 -18px 18px !important;
+        border-width: 0 0 1px !important;
+        border-radius: 0 !important;
+        background: #ffffff !important;
+        color: var(--ink);
+        box-shadow: 0 1px 0 rgb(16 24 40 / 6%) !important;
+        padding: 10px 18px !important;
+      }
+
+      body.admin-blog .topbar h1,
+      body.admin-blog .topbar .eyebrow {
+        color: var(--ink) !important;
+      }
+
+      body.admin-blog .topbar .eyebrow {
+        color: var(--brand-dark) !important;
+      }
+
+      body.admin-blog .topbar .nav a,
+      body.admin-blog .topbar .nav button {
+        border-color: #d0d5dd !important;
+        background: #fff !important;
+        color: #344054 !important;
+      }
+
+      body.admin-blog .topbar .nav a[href='/admin/blog.html'] {
+        border-color: #bde8cb !important;
+        background: var(--brand-soft) !important;
+        color: #20472f !important;
+      }
+
+      body.admin-blog .editor-rail,
+      body.admin-blog .intro {
+        display: none !important;
+      }
+
+      body.admin-blog .post-manager {
+        margin-bottom: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 18px;
+        box-shadow: 0 12px 30px rgb(16 24 40 / 6%);
+      }
+
+      body.admin-blog .manager-head h2 {
+        font-size: 24px;
+      }
+
+      body.admin-blog .manager-filters {
+        gap: 8px;
+      }
+
+      body.admin-blog .manager-filters button.active {
+        border-color: #bde8cb !important;
+        background: var(--brand-soft) !important;
+        color: #20472f !important;
+      }
+
+      body.admin-blog .manager-search {
+        min-width: min(100%, 360px);
+        border-radius: 8px;
+      }
+
+      body.admin-blog .post-row {
+        grid-template-columns: minmax(260px, 1fr) 120px 92px 190px;
+      }
+
+      body.admin-blog .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.98fr) minmax(360px, 0.72fr);
+        gap: 18px !important;
+        min-height: 0;
+        padding-left: 0;
+      }
+
+      body.admin-blog #post-form,
+      body.admin-blog .preview-card {
+        border: 1px solid var(--line) !important;
+        border-radius: 8px !important;
+        background: #fff !important;
+        box-shadow: 0 12px 30px rgb(16 24 40 / 6%) !important;
+      }
+
+      body.admin-blog #post-form {
+        display: grid;
+        gap: 16px !important;
+        min-height: 0;
+        padding: 18px !important;
+      }
+
+      body.admin-blog #post-form > .section-title {
+        position: static;
+        min-height: 0;
+        margin: 0;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        backdrop-filter: none;
+      }
+
+      body.admin-blog #post-form > .section-title .eyebrow,
+      body.admin-blog #post-form > .section-title h2 {
+        display: block;
+      }
+
+      body.admin-blog .quick-actions {
+        width: auto;
+      }
+
+      body.admin-blog .quick-actions::before,
+      body.admin-blog .tab-nav::before,
+      body.admin-blog .tab-nav::after {
+        content: none !important;
+      }
+
+      body.admin-blog .tab-nav {
+        position: sticky !important;
+        top: 74px;
+        z-index: 12;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        min-height: 0;
+        border: 1px solid var(--line) !important;
+        border-radius: 8px !important;
+        background: #f8faf9 !important;
+        box-shadow: none !important;
+        padding: 5px;
+      }
+
+      body.admin-blog .tab-nav button {
+        min-width: 0;
+        border: 0 !important;
+        border-radius: 6px !important;
+        background: transparent !important;
+        color: var(--muted) !important;
+      }
+
+      body.admin-blog .tab-nav button.active {
+        background: #fff !important;
+        color: var(--ink) !important;
+        box-shadow: 0 6px 16px rgb(16 24 40 / 8%) !important;
+      }
+
+      body.admin-blog .next-step {
+        position: static;
+        width: auto;
+        border-color: #d7eadc !important;
+        box-shadow: none;
+      }
+
+      body.admin-blog [data-tab-panel='write'].form-section,
+      body.admin-blog #post-form > [data-tab-panel='write']:not(.form-section),
+      body.admin-blog .block-toolbar,
+      body.admin-blog #post-form > [data-tab-panel='settings'],
+      body.admin-blog #post-form > [data-tab-panel='publish'] {
+        width: 100%;
+        margin: 0;
+      }
+
+      body.admin-blog [data-tab-panel='write'].form-section,
+      body.admin-blog .form-section {
+        border: 1px solid #e3e7df !important;
+        background: #fbfcfa !important;
+        padding: 14px;
+      }
+
+      body.admin-blog [data-tab-panel='write'].form-section h3,
+      body.admin-blog [data-tab-panel='write'].form-section .field-note,
+      body.admin-blog [data-tab-panel='write'].form-section label:has(#locale),
+      body.admin-blog [data-tab-panel='write'].form-section label:has(#slug) {
+        display: grid;
+      }
+
+      body.admin-blog [data-tab-panel='write'].form-section .row {
+        display: grid;
+      }
+
+      body.admin-blog [data-tab-panel='write'] label {
+        color: #344054;
+        font-size: 13px;
+      }
+
+      body.admin-blog #title,
+      body.admin-blog #description,
+      body.admin-blog #block-list textarea,
+      body.admin-blog #block-list input {
+        border: 1px solid #d0d5dd !important;
+        border-radius: 8px !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        padding: 12px 13px;
+      }
+
+      body.admin-blog #title {
+        color: var(--ink);
+        font-size: 18px;
+        font-weight: 650;
+        line-height: 1.35;
+      }
+
+      body.admin-blog #title::placeholder,
+      body.admin-blog #description::placeholder,
+      body.admin-blog #block-list textarea::placeholder {
+        color: #98a2b3;
+      }
+
+      body.admin-blog #description {
+        min-height: 96px;
+        color: var(--ink);
+        font-size: 15px;
+      }
+
+      body.admin-blog .block-toolbar {
+        position: sticky;
+        top: 138px;
+        z-index: 10;
+        border: 1px solid #e3e7df;
+        border-radius: 8px;
+        background: rgb(255 255 255 / 94%);
+        padding: 8px;
+        backdrop-filter: blur(12px);
+      }
+
+      body.admin-blog .block-toolbar button,
+      body.admin-blog .block-toolbar summary {
+        border-color: #d0d5dd !important;
+        border-radius: 8px !important;
+        background: #fff !important;
+        color: var(--ink) !important;
+      }
+
+      body.admin-blog .content-block {
+        border: 1px solid #e3e7df !important;
+        border-radius: 8px;
+        background: #fff !important;
+        padding: 12px;
+      }
+
+      body.admin-blog .content-block .block-head {
+        opacity: 1;
+      }
+
+      body.admin-blog #block-list textarea {
+        min-height: 150px;
+        color: var(--ink);
+        font-size: 15px;
+      }
+
+      body.admin-blog .drafts {
+        max-height: 260px !important;
+      }
+
+      body.admin-blog .preview-card {
+        position: sticky;
+        top: 82px;
+        max-height: calc(100vh - 96px);
+        overflow: auto;
+        padding: 18px !important;
+      }
+
+      body.admin-blog .preview-tabs {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }
+
+      body.admin-blog .article-preview {
+        border-color: #e3e7df;
+      }
+
+      body.admin-blog .readiness li {
+        cursor: pointer;
+      }
+
+      body.admin-blog .readiness li:hover {
+        color: var(--brand-dark);
+      }
+
+      @media (max-width: 1080px) {
+        body.admin-blog .grid {
+          grid-template-columns: 1fr;
+        }
+
+        body.admin-blog .preview-card,
+        body.admin-blog .tab-nav,
+        body.admin-blog .block-toolbar {
+          position: static !important;
+          max-height: none;
+        }
+
+        body.admin-blog .post-row {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
     <link
       rel="icon"
@@ -1558,6 +1868,15 @@
         </nav>
       </header>
 
+      <div class="workspace-tabs" aria-label="Blog workspace">
+        <button type="button" class="active" data-workspace-tab="write">
+          Soạn bài
+        </button>
+        <button type="button" data-workspace-tab="manage">
+          Quản lý bài
+        </button>
+      </div>
+
       <aside class="editor-rail" aria-label="Blog editor tools">
         <button type="button" class="rail-button active" id="show-manager">
           <span>☰</span>
@@ -1589,7 +1908,13 @@
         </a>
       </aside>
 
-      <section class="post-manager" id="post-manager" aria-label="Manage blog posts">
+      <section
+        class="post-manager"
+        id="post-manager"
+        aria-label="Manage blog posts"
+        data-workspace-panel="manage"
+        hidden
+      >
         <div class="manager-head">
           <div>
             <p class="eyebrow">Blog CMS</p>
@@ -1691,7 +2016,7 @@
         </div>
       </section>
 
-      <section class="grid">
+      <section class="grid" data-workspace-panel="write">
         <form class="card form-grid" id="post-form" novalidate>
           <div class="section-title">
             <div>
@@ -1722,8 +2047,8 @@
           <div class="next-step">
             <div>
               <p id="next-step-text">
-                Bắt đầu bằng tiêu đề và mô tả ngắn. CMS sẽ tự lưu nháp trên máy
-                này.
+                Bắt đầu bằng tiêu đề và nội dung chính. CMS sẽ tự lưu nháp trên
+                máy này.
               </p>
               <span class="autosave" id="autosave-status">Chưa có thay đổi</span>
             </div>
@@ -1736,7 +2061,7 @@
           </div>
 
           <div class="form-section" data-tab-panel="write">
-            <h3>Thông tin bắt buộc</h3>
+            <h3>Thông tin chính</h3>
             <div class="row">
               <label>
                 Bài này đăng ở ngôn ngữ nào?
@@ -1778,24 +2103,28 @@
               <span class="field-error" data-error-for="title"></span>
             </label>
 
+          </div>
+
+          <div
+            class="form-section"
+            data-tab-panel="settings"
+            data-settings-primary
+            hidden
+          >
+            <h3>Cài đặt xuất bản</h3>
             <label>
               Mô tả ngắn
               <textarea
                 id="description"
                 name="description"
-                placeholder="Start writing or type / for plugins"
-                required
+                placeholder="Tóm tắt bài viết trong 1-2 câu"
               ></textarea>
               <span class="field-note"
-                >1-2 câu tóm tắt. Phần này hiện trên thẻ bài viết và
-                Google.</span
+                >Phần này hiện trên thẻ bài viết và Google. Có thể bổ sung sau
+                nếu chưa cần.</span
               >
               <span class="field-error" data-error-for="description"></span>
             </label>
-          </div>
-
-          <div class="form-section" data-tab-panel="settings" hidden>
-            <h3>Cài đặt xuất bản</h3>
             <div class="row">
               <label>
                 Tác giả
@@ -1950,15 +2279,25 @@
             <h3>Nội dung</h3>
             <p class="hint">
               Viết từng khối nhỏ cho dễ sửa. Nếu chỉ cần bài đơn giản, dùng
-              “Đoạn văn” là đủ.
+              “đoạn nội dung” là đủ.
             </p>
             <div class="block-toolbar" aria-label="Add content block">
-              <button type="button" data-add-block="paragraph">
-                + Đoạn văn
-              </button>
-              <button type="button" data-add-block="image">+ Hình ảnh</button>
-              <button type="button" data-add-block="video">+ Video</button>
-              <button type="button" data-add-block="quote">+ Trích dẫn</button>
+              <div class="format-tools" aria-label="Làm đẹp chữ đang chọn">
+                <span class="tool-group-label">Sửa chữ đang chọn</span>
+                <button type="button" data-format="bold">Đậm</button>
+                <button type="button" data-format="italic">Nghiêng</button>
+                <button type="button" data-format="heading">Tiêu đề</button>
+                <button type="button" data-format="link">Gắn link</button>
+                <button type="button" data-format="bullet">Danh sách</button>
+              </div>
+              <div class="insert-tools" aria-label="Thêm nội dung">
+                <span class="tool-group-label">Thêm khối</span>
+                <button type="button" data-add-block="paragraph">+ đoạn nội dung</button>
+                <button type="button" data-add-block="heading">+ Tiêu đề</button>
+                <button type="button" data-add-block="image">+ Ảnh</button>
+                <button type="button" data-add-block="video">+ Video</button>
+                <button type="button" data-add-block="quote">+ Trích dẫn</button>
+              </div>
               <details class="advanced-box">
                 <summary>Thêm định dạng</summary>
                 <div class="button-row">
@@ -1981,17 +2320,9 @@
             <div class="block-list" id="block-list"></div>
           </div>
 
-          <div data-tab-panel="write">
-            <div class="section-title">
-              <div>
-                <p class="eyebrow">Nháp</p>
-                <h3>Nháp đã lưu</h3>
-              </div>
-            </div>
-            <div class="drafts" id="drafts"></div>
-          </div>
+          <div class="hidden" id="drafts" hidden></div>
 
-          <div data-tab-panel="publish" hidden>
+          <div class="technical-panel" data-tab-panel="publish" hidden>
             <p class="hint">Đường dẫn lưu file:</p>
             <div class="path" id="target-path">
               src/content/blog/en/my-new-post.md
@@ -2003,8 +2334,8 @@
           <div class="publish-box" data-tab-panel="publish" hidden>
             <h3>Sẵn sàng đăng?</h3>
             <p>
-              Kiểm tra các mục dưới đây. Khi đủ, bạn có thể đăng bài lên
-              website.
+              Checklist này chỉ để bạn rà nhanh chất lượng bài. Chưa đủ vẫn có
+              thể đăng nếu bạn muốn.
             </p>
             <ul class="readiness" id="readiness-list">
               <li data-check="title">Có tiêu đề bài viết</li>
@@ -2019,10 +2350,7 @@
               Mẹo an toàn: nếu chưa chắc, bấm “Lưu nháp” trước. Nút “Đăng bài
               lên website” chỉ dùng khi bài đã sẵn sàng công khai.
             </div>
-            <label class="check-row">
-              <input id="allowUpdate" type="checkbox" />
-              Cập nhật bài cũ nếu đường dẫn đã tồn tại
-            </label>
+            <input id="allowUpdate" type="checkbox" checked hidden />
             <div class="status-log" id="publish-status">
               Chưa đăng. CMS sẽ báo tiến trình ở đây sau khi bạn bấm nút.
             </div>
@@ -2064,13 +2392,13 @@
                 <textarea
                   id="contents"
                   name="contents"
-                  placeholder="Tự tạo từ đoạn văn nếu để trống."
+                  placeholder="Tự tạo từ đoạn nội dung nếu để trống."
                 ></textarea>
               </label>
             </details>
           </div>
 
-          <div class="form-section" data-tab-panel="publish" hidden>
+          <div class="form-section technical-panel" data-tab-panel="publish" hidden>
             <h3>Công cụ nâng cao</h3>
             <div class="button-row">
               <button type="button" class="primary-action" id="generate">
@@ -2139,6 +2467,8 @@
       const postManager = document.getElementById('post-manager');
       const postManagerList = document.getElementById('post-manager-list');
       const postSearch = document.getElementById('post-search');
+      const workspaceTabs = document.querySelectorAll('[data-workspace-tab]');
+      const workspacePanels = document.querySelectorAll('[data-workspace-panel]');
       let postFilter = 'all';
       let remotePosts = [];
       let autosaveTimer;
@@ -2180,6 +2510,14 @@
           value: '',
         },
       ];
+
+      const primarySettings = document.querySelector('[data-settings-primary]');
+      const basicSettingsRow = document.querySelector(
+        '[data-tab-panel="write"] > .row:first-of-type'
+      );
+      if (primarySettings && basicSettingsRow) {
+        primarySettings.insertBefore(basicSettingsRow, primarySettings.children[1] || null);
+      }
 
       function today() {
         return new Date().toISOString().slice(0, 10);
@@ -2238,20 +2576,29 @@
         return { type: 'paragraph', value: '' };
       }
 
-      function blockTitle(type) {
-        return (
+      function blockNumber(type, index) {
+        const numberedTypes = ['paragraph', 'image', 'video'];
+        if (!numberedTypes.includes(type)) return '';
+        const count = contentBlocks
+          .slice(0, index + 1)
+          .filter(block => block.type === type).length;
+        return ` ${count}`;
+      }
+
+      function blockTitle(type, index = -1) {
+        const title =
           {
             heading: 'Tiêu đề phụ',
-            paragraph: 'Đoạn văn',
-            image: 'Hình ảnh',
+            paragraph: 'đoạn nội dung',
+            image: 'Ảnh',
             video: 'Video',
             quote: 'Trích dẫn',
             bullets: 'Danh sách chấm',
             numbers: 'Danh sách số',
             link: 'Link',
             divider: 'Đường kẻ',
-          }[type] || 'Đoạn văn'
-        );
+          }[type] || 'đoạn nội dung';
+        return `${title}${index >= 0 ? blockNumber(type, index) : ''}`;
       }
 
       function renderBlockFields(block, index) {
@@ -2272,7 +2619,7 @@
         }
 
         if (block.type === 'paragraph') {
-          return `<label>Đoạn văn<textarea data-block-field="value">${escapeHtml(block.value)}</textarea></label>`;
+          return `<label>đoạn nội dung<textarea data-block-field="value">${escapeHtml(block.value)}</textarea></label>`;
         }
 
         if (block.type === 'image') {
@@ -2353,7 +2700,7 @@
           item.dataset.blockIndex = String(index);
           item.innerHTML = `
             <div class="block-head">
-              <strong>${blockTitle(block.type)}</strong>
+              <strong>${blockTitle(block.type, index)}</strong>
               <div class="block-actions">
                 <button type="button" data-move-block="${index}" data-direction="-1">Lên</button>
                 <button type="button" data-move-block="${index}" data-direction="1">Xuống</button>
@@ -2383,6 +2730,47 @@
         renderBlocks();
         updatePreview();
         scheduleAutosave();
+      }
+
+      function activeTextField() {
+        const active = document.activeElement;
+        if (
+          active &&
+          ['TEXTAREA', 'INPUT'].includes(active.tagName) &&
+          active.closest('#post-form')
+        ) {
+          return active;
+        }
+        return blockList.querySelector('textarea[data-block-field="value"]');
+      }
+
+      function insertAroundSelection(field, before, after = '', fallback = '') {
+        if (!field) return;
+        const start = field.selectionStart ?? field.value.length;
+        const end = field.selectionEnd ?? field.value.length;
+        const selected = field.value.slice(start, end) || fallback;
+        const next = `${field.value.slice(0, start)}${before}${selected}${after}${field.value.slice(end)}`;
+        field.value = next;
+        field.focus();
+        field.setSelectionRange(
+          start + before.length,
+          start + before.length + selected.length
+        );
+        field.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+
+      function applyTextFormat(format) {
+        const field = activeTextField();
+        if (!field) return;
+        const formats = {
+          bold: ['**', '**', 'đoạn chữ cần nhấn mạnh'],
+          italic: ['_', '_', 'đoạn chữ cần làm mềm'],
+          heading: ['\n## ', '', 'Tiêu đề phụ'],
+          link: ['[', '](https://)', 'tên liên kết'],
+          bullet: ['\n- ', '', 'ý chính'],
+        };
+        const [before, after, fallback] = formats[format] || ['', '', ''];
+        insertAroundSelection(field, before, after, fallback);
       }
 
       function markdownImagePath(src) {
@@ -2530,20 +2918,6 @@
         const errors = [];
 
         if (!title) errors.push({ field: 'title', label: 'tiêu đề bài viết' });
-        if (!description)
-          errors.push({ field: 'description', label: 'mô tả ngắn' });
-        if (title && (title.length < 20 || title.length > 70))
-          errors.push({ field: 'title', label: 'tiêu đề SEO 20-70 ký tự' });
-        if (
-          description &&
-          (description.length < 70 || description.length > 170)
-        )
-          errors.push({
-            field: 'description',
-            label: 'mô tả SEO 70-170 ký tự',
-          });
-        if (!imageAlt)
-          errors.push({ field: 'cardImageAlt', label: 'alt text cho ảnh bìa' });
         if (!contents.length && !bodyContent)
           errors.push({ field: 'content', label: 'nội dung bài viết' });
         if (!result.slug)
@@ -2614,23 +2988,13 @@
           nextStepText.textContent = 'Bắt đầu bằng tiêu đề bài viết.';
           return;
         }
-        if (!state.description) {
-          nextStepText.textContent =
-            'Thêm mô tả ngắn để người đọc biết bài viết nói về gì.';
-          return;
-        }
-        if (!state.seoTitle || !state.seoDescription || !state.imageAlt) {
-          nextStepText.textContent =
-            'Hoàn tất checklist SEO trước khi đăng: độ dài title/description và alt ảnh.';
-          return;
-        }
         if (!state.content) {
           nextStepText.textContent =
             'Thêm ít nhất một đoạn nội dung trong phần Nội dung.';
           return;
         }
         nextStepText.textContent =
-          'Bài đã đủ thông tin cơ bản. Bạn có thể kiểm tra bản xem trước rồi đăng.';
+          'Bài đã có phần chính. Checklist chỉ là gợi ý để rà lại trước khi đăng.';
       }
 
       function escapeHtml(value) {
@@ -2644,6 +3008,66 @@
 
       function escapeHtmlWithBreaks(value) {
         return escapeHtml(value).replace(/\r?\n/g, '<br>');
+      }
+
+      function renderInlineMarkdown(value) {
+        return escapeHtml(value)
+          .replace(
+            /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+            '<a href="$2" target="_blank" rel="noreferrer">$1</a>'
+          )
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+          .replace(/_(.+?)_/g, '<em>$1</em>');
+      }
+
+      function renderMarkdownTextBlock(value) {
+        const lines = String(value || '').split(/\r?\n/);
+        const html = [];
+        let paragraph = [];
+        let list = [];
+
+        const flushParagraph = () => {
+          if (!paragraph.length) return;
+          html.push(`<p>${renderInlineMarkdown(paragraph.join('<br>'))}</p>`);
+          paragraph = [];
+        };
+        const flushList = () => {
+          if (!list.length) return;
+          html.push(
+            `<ul>${list.map(item => `<li>${renderInlineMarkdown(item)}</li>`).join('')}</ul>`
+          );
+          list = [];
+        };
+
+        lines.forEach(line => {
+          const trimmed = line.trim();
+          const heading = trimmed.match(/^(#{2,3})\s+(.+)$/);
+          const bullet = trimmed.match(/^[-*]\s+(.+)$/);
+
+          if (!trimmed) {
+            flushParagraph();
+            flushList();
+            return;
+          }
+          if (heading) {
+            flushParagraph();
+            flushList();
+            const tag = heading[1].length === 3 ? 'h3' : 'h2';
+            html.push(`<${tag}>${renderInlineMarkdown(heading[2])}</${tag}>`);
+            return;
+          }
+          if (bullet) {
+            flushParagraph();
+            list.push(bullet[1]);
+            return;
+          }
+          flushList();
+          paragraph.push(trimmed);
+        });
+
+        flushParagraph();
+        flushList();
+        return html.join('');
       }
 
       function formatSavedAt(value) {
@@ -2718,7 +3142,7 @@ ${bodyMarkdown || contents.join('\n\n')}
               return `<${tag}>${escapeHtml(block.value)}</${tag}>`;
             }
             if (block.type === 'paragraph' && block.value) {
-              return `<p>${escapeHtmlWithBreaks(block.value)}</p>`;
+              return renderMarkdownTextBlock(block.value);
             }
             if (block.type === 'image' && block.src) {
               const src = imagePreviewSrc(block.src);
@@ -2728,7 +3152,7 @@ ${bodyMarkdown || contents.join('\n\n')}
               return `<figure><div class="path">${escapeHtml(youtubeEmbedUrl(block.url))}</div><p>${escapeHtml(block.title || 'Video embed')}</p>${block.caption ? `<p><em>${escapeHtml(block.caption)}</em></p>` : ''}</figure>`;
             }
             if (block.type === 'quote' && block.value) {
-              return `<blockquote>${escapeHtmlWithBreaks(block.value)}${block.cite ? `<br><strong>${escapeHtml(block.cite)}</strong>` : ''}</blockquote>`;
+              return `<blockquote>${renderInlineMarkdown(block.value)}${block.cite ? `<br><strong>${escapeHtml(block.cite)}</strong>` : ''}</blockquote>`;
             }
             if (
               (block.type === 'bullets' || block.type === 'numbers') &&
@@ -2738,7 +3162,9 @@ ${bodyMarkdown || contents.join('\n\n')}
               return `<${tag}>${block.value
                 .split('\n')
                 .map(
-                  item => item.trim() && `<li>${escapeHtml(item.trim())}</li>`
+                  item =>
+                    item.trim() &&
+                    `<li>${renderInlineMarkdown(item.trim())}</li>`
                 )
                 .filter(Boolean)
                 .join('')}</${tag}>`;
@@ -2754,7 +3180,11 @@ ${bodyMarkdown || contents.join('\n\n')}
           .filter(Boolean)
           .join('');
 
+        const coverSrc = imagePreviewSrc(data.cardImage || '@/images/growth-brainstorm.jpg');
         articlePreview.innerHTML = `
+          <figure class="article-cover">
+            <img src="${escapeHtml(coverSrc)}" alt="${escapeHtml(data.cardImageAlt || title)}" />
+          </figure>
           <div>
             <p class="eyebrow">${escapeHtml(data.category || 'C.H.E.S.S')}</p>
             <h1>${escapeHtml(title)}</h1>
@@ -2852,6 +3282,16 @@ ${bodyMarkdown || contents.join('\n\n')}
         );
       }
 
+      function setWorkspaceMode(mode) {
+        workspaceTabs.forEach(button => {
+          button.classList.toggle('active', button.dataset.workspaceTab === mode);
+        });
+        workspacePanels.forEach(panel => {
+          panel.hidden = panel.dataset.workspacePanel !== mode;
+        });
+        if (mode === 'manage') renderPostManager();
+      }
+
       function publishStatusTone(message) {
         const value = String(message || '').toLowerCase();
         if (
@@ -2916,9 +3356,7 @@ ${bodyMarkdown || contents.join('\n\n')}
 
       function updatePublishButtonState(result = buildMarkdown()) {
         const diff = currentPublishDiff(result);
-        const mustEnableUpdate = diff.exists && !allowUpdate.checked;
-        publishButton.disabled =
-          publishedPostState.checking || diff.unchanged || mustEnableUpdate;
+        publishButton.disabled = publishedPostState.checking || diff.unchanged;
       }
 
       function updateBlogChangeStatus(result = buildMarkdown()) {
@@ -2937,21 +3375,13 @@ ${bodyMarkdown || contents.join('\n\n')}
         }
         if (diff.unchanged) {
           updatePublishStatus(
-            'Bài hiện giống bản trên GitHub. Chưa có thay đổi nào để đăng.',
-            [{ label: 'Mở file bài viết', url: publishedPostState.fileUrl }]
-          );
-          return;
-        }
-        if (diff.exists && !allowUpdate.checked) {
-          updatePublishStatus(
-            'Đường dẫn này đã có bài. Bật “Cập nhật bài cũ” nếu muốn đăng bản sửa.',
-            [{ label: 'Mở file bài viết', url: publishedPostState.fileUrl }]
+            'Bài hiện giống bản trên GitHub. Chưa có thay đổi nào để đăng.'
           );
           return;
         }
         updatePublishStatus(
           diff.exists
-            ? 'Bài đã có thay đổi so với bản trên GitHub. Có thể kiểm tra rồi đăng.'
+            ? 'Đường dẫn này đã có bài. Nếu đăng, CMS sẽ cập nhật bài hiện có.'
             : 'Đường dẫn này chưa có bài trên GitHub. Có thể tạo bài mới.'
         );
       }
@@ -3223,14 +3653,6 @@ ${bodyMarkdown || contents.join('\n\n')}
             showToast('Chưa có thay đổi nào để đăng.', 'error');
             return;
           }
-          if (diff.exists && !allowUpdate.checked) {
-            updateBlogChangeStatus(result);
-            showToast(
-              'Bật chế độ cập nhật bài cũ trước khi đăng bản sửa.',
-              'error'
-            );
-            return;
-          }
         }
 
         const button =
@@ -3254,7 +3676,7 @@ ${bodyMarkdown || contents.join('\n\n')}
             locale: getValue('locale'),
             slug: result.slug,
             markdown: result.markdown,
-            allowUpdate: allowUpdate.checked,
+            allowUpdate: true,
           });
 
           const verb = action === 'draft' ? 'Đã lưu nháp' : 'Đã gửi bài';
@@ -3484,6 +3906,9 @@ ${bodyMarkdown || contents.join('\n\n')}
 
       function renderPostManager() {
         if (!postManagerList) return;
+        document.querySelectorAll('[data-post-filter]').forEach(button => {
+          button.classList.toggle('active', button.dataset.postFilter === postFilter);
+        });
         const query = String(postSearch?.value || '').toLowerCase().trim();
         const posts = managerPosts().filter(post => {
           const haystack = [
@@ -3523,8 +3948,8 @@ ${bodyMarkdown || contents.join('\n\n')}
                         <div><span class="status-pill ${post.source === 'local' ? 'local' : ''}">${escapeHtml(post.status)}</span></div>
                         <div class="post-cell">${escapeHtml((post.locale || 'en').toUpperCase())}</div>
                         <div class="row-actions">
-                          <button type="button" data-manager-load="${index}">${post.source === 'published' ? 'Xem' : 'Mở'}</button>
-                          <button type="button" class="utility-action" data-manager-duplicate="${index}">Nhân bản</button>
+                          <button type="button" data-manager-load="${index}">${post.source === 'published' ? 'Tạo bản sửa' : 'Mở'}</button>
+                          <button type="button" class="utility-action" data-manager-duplicate="${index}">${post.source === 'published' ? 'Nháp mới' : 'Nhân bản'}</button>
                           ${['local', 'autosave'].includes(post.source) ? `<button type="button" class="danger-action" data-manager-delete="${index}">Xóa</button>` : ''}
                         </div>
                       </div>
@@ -3558,7 +3983,7 @@ ${bodyMarkdown || contents.join('\n\n')}
       }
 
       function focusEditor() {
-        postManager.hidden = true;
+        setWorkspaceMode('write');
         document.querySelector('.grid')?.scrollIntoView({ behavior: 'smooth' });
         setEditorTab('write');
         setTimeout(() => document.getElementById('title')?.focus(), 180);
@@ -3577,6 +4002,83 @@ ${bodyMarkdown || contents.join('\n\n')}
         writeDrafts(drafts.slice(0, 12));
         renderDrafts();
         showToast('Đã nhân bản bài vào nháp.');
+      }
+
+      function parseFrontmatter(markdown) {
+        const match = String(markdown || '').match(/^---\n([\s\S]*?)\n---\n?/);
+        const data = {};
+        if (!match) return { data, body: String(markdown || '') };
+        match[1].split('\n').forEach(line => {
+          const separator = line.indexOf(':');
+          if (separator < 0) return;
+          const key = line.slice(0, separator).trim();
+          let value = line.slice(separator + 1).trim();
+          if (
+            (value.startsWith("'") && value.endsWith("'")) ||
+            (value.startsWith('"') && value.endsWith('"'))
+          ) {
+            value = value.slice(1, -1);
+          }
+          data[key] = value;
+        });
+        return {
+          data,
+          body: String(markdown || '').slice(match[0].length).trim(),
+        };
+      }
+
+      async function loadPublishedPostForEditing(post) {
+        if (!post?.slug) return;
+        updatePublishStatus('Đang tải bài đã đăng để tạo bản sửa...');
+        try {
+          const params = new URLSearchParams({
+            locale: post.locale || 'en',
+            slug: post.slug,
+          });
+          const response = await fetch(`/api/admin-blog?${params.toString()}`, {
+            credentials: 'same-origin',
+          });
+          const data = await response.json().catch(() => null);
+          if (!response.ok || data?.ok === false) {
+            throw new Error(data?.message || `Admin API error ${response.status}`);
+          }
+          const parsed = parseFrontmatter(data.markdown || '');
+          const draft = {
+            locale: post.locale || parsed.data.locale || 'en',
+            slug: post.slug,
+            title: parsed.data.title || post.title || '',
+            description: parsed.data.description || '',
+            author: parsed.data.author || 'Folks Team',
+            role: parsed.data.role || 'Biên tập',
+            pubDate: parsed.data.pubDate || today(),
+            readTime: parsed.data.readTime || '4',
+            category: parsed.data.category || post.category || 'C.H.E.S.S',
+            tags: parsed.data.tags || '',
+            cardImage: parsed.data.cardImage || '',
+            cardImageAlt: parsed.data.cardImageAlt || '',
+            authorImage: parsed.data.authorImage || '',
+            authorImageAlt: parsed.data.authorImageAlt || '',
+            linkedEn: parsed.data.linkedEn || '',
+            linkedVi: parsed.data.linkedVi || '',
+            linkedZh: parsed.data.linkedZh || '',
+            contents: parsed.data.contents || '',
+            blocks: [
+              {
+                type: 'paragraph',
+                value: parsed.body || '',
+              },
+            ],
+          };
+          applyDraft(draft);
+          allowUpdate.checked = true;
+          focusEditor();
+          setEditorTab('write');
+          updatePublishStatus('Đã tải bài đã đăng vào editor.');
+          showToast('Đã tạo bản sửa từ bài đã đăng.');
+        } catch (error) {
+          showToast(`Không tải được bài đã đăng: ${error.message}`, 'error');
+          updatePublishStatus(`Không tải được bài đã đăng: ${error.message}`);
+        }
       }
 
       function deleteManagerPost(index) {
@@ -3685,9 +4187,18 @@ ${bodyMarkdown || contents.join('\n\n')}
           addBlock(button.dataset.addBlock)
         );
       });
+      document.querySelectorAll('[data-format]').forEach(button => {
+        button.addEventListener('click', () =>
+          applyTextFormat(button.dataset.format)
+        );
+      });
+      workspaceTabs.forEach(button => {
+        button.addEventListener('click', () =>
+          setWorkspaceMode(button.dataset.workspaceTab)
+        );
+      });
       document.getElementById('show-manager').addEventListener('click', () => {
-        postManager.hidden = !postManager.hidden;
-        if (!postManager.hidden) renderPostManager();
+        setWorkspaceMode('manage');
       });
       document.getElementById('new-post-focus').addEventListener('click', () => {
         form.reset();
@@ -3696,6 +4207,7 @@ ${bodyMarkdown || contents.join('\n\n')}
         contentBlocks = [defaultBlock('paragraph')];
         renderBlocks();
         updatePreview();
+        setWorkspaceMode('write');
         focusEditor();
       });
       document
@@ -3715,7 +4227,11 @@ ${bodyMarkdown || contents.join('\n\n')}
         if (loadIndex !== undefined) {
           const draft = managerPostAt(Number(loadIndex));
           if (!draft) return;
-          if (['published', 'cloud-draft'].includes(draft.source)) {
+          if (draft.source === 'published') {
+            loadPublishedPostForEditing(draft);
+            return;
+          }
+          if (draft.source === 'cloud-draft') {
             window.open(draft.publicUrl || draft.fileUrl, '_blank', 'noreferrer');
             return;
           }
@@ -3729,6 +4245,27 @@ ${bodyMarkdown || contents.join('\n\n')}
         if (deleteIndex !== undefined) {
           deleteManagerPost(Number(deleteIndex));
         }
+      });
+      readinessList?.addEventListener('click', event => {
+        const item = event.target.closest('[data-check]');
+        if (!item) return;
+        const targets = {
+          title: 'title',
+          seoTitle: 'title',
+          description: 'description',
+          seoDescription: 'description',
+          content: 'block-list',
+          imageAlt: 'cardImageAlt',
+          slug: 'slug',
+        };
+        const targetId = targets[item.dataset.check];
+        if (!targetId) return;
+        setEditorTab(
+          ['cardImageAlt'].includes(targetId) ? 'settings' : 'write'
+        );
+        const target = document.getElementById(targetId);
+        target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => target?.focus?.(), 220);
       });
       blockList.addEventListener('input', event => {
         syncBlocksFromDom();
