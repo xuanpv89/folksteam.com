@@ -545,14 +545,6 @@
         <button
           class="tab secondary"
           type="button"
-          data-view-tab="collections"
-          data-tab-label="Kho nội dung"
-        >
-          Kho nội dung
-        </button>
-        <button
-          class="tab secondary"
-          type="button"
           data-view-tab="media"
           data-tab-label="Thư viện ảnh"
         >
@@ -639,84 +631,6 @@
           <div class="surface" style="margin-top: 12px">
             <h3>Cài đặt kỹ thuật</h3>
             <div class="list" id="health-env"></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="view" id="view-collections">
-        <div class="two grid">
-          <div class="surface">
-            <div class="toolbar">
-              <div>
-                <p class="eyebrow">Kho nội dung</p>
-                <h2>Kho nội dung sản phẩm, insight, docs và trang tĩnh</h2>
-                <p class="section-note">
-                  Dùng cho chỉnh nhanh file nội dung. Với thay đổi lớn, nên đưa
-                  vào Review trước khi publish.
-                </p>
-              </div>
-              <button type="button" id="reload-collection">Tải lại</button>
-            </div>
-            <div class="filters">
-              <label>
-                Nhóm nội dung
-                <select id="collection-select">
-                  <option value="products">Products</option>
-                  <option value="insights">Insights</option>
-                  <option value="docs">Docs</option>
-                  <option value="projects">Projects</option>
-                  <option value="caseStudies">Case studies</option>
-                  <option value="pages">Website pages</option>
-                </select>
-              </label>
-              <label>
-                Tìm file
-                <input
-                  id="collection-search"
-                  placeholder="Nhập tên file, ngôn ngữ hoặc path..."
-                />
-              </label>
-            </div>
-            <p class="list-summary" id="collection-summary"></p>
-            <div class="list" id="collection-list"></div>
-          </div>
-          <div class="editor">
-            <div class="toolbar">
-              <div>
-                <p class="eyebrow">Trình sửa an toàn</p>
-                <h2 id="collection-editor-title">Chọn file để sửa</h2>
-              </div>
-              <div class="actions">
-                <button
-                  type="button"
-                  class="secondary"
-                  id="new-collection-file"
-                >
-                  Tạo file
-                </button>
-                <button type="button" id="save-collection-file" disabled>
-                  Lưu file
-                </button>
-              </div>
-            </div>
-            <label>
-              Đường dẫn file
-              <input
-                id="collection-target"
-                placeholder="src/content/products/en/new-item.md"
-              />
-            </label>
-            <textarea
-              id="collection-content"
-              placeholder="---&#10;title: New item&#10;description: Short description&#10;---&#10;&#10;Body..."
-            ></textarea>
-            <p class="editor-helper">
-              Giữ đúng frontmatter hiện có để tránh lỗi build. Nếu chưa chắc,
-              tạo review item trước khi sửa file production.
-            </p>
-            <p class="editor-helper ready hidden" id="collection-dirty-note">
-              File đang có thay đổi chưa lưu.
-            </p>
           </div>
         </div>
       </section>
@@ -997,17 +911,11 @@
       const state = {
         dashboard: null,
         health: null,
-        collectionItems: [],
         mediaItems: [],
         subscribers: [],
         review: [],
         audit: [],
         seo: null,
-        selectedCollection: 'products',
-        selectedCollectionSha: '',
-        collectionOriginalContent: '',
-        collectionOriginalTarget: '',
-        collectionDirty: false,
       };
 
       const $ = selector => document.querySelector(selector);
@@ -1103,8 +1011,6 @@
           history.replaceState(null, '', `#${view}`);
         if (view === 'dashboard' && !state.dashboard) runLoad(loadDashboard);
         if (view === 'health' && !state.health) runLoad(loadHealth);
-        if (view === 'collections' && !state.collectionItems.length)
-          runLoad(loadCollection);
         if (view === 'media' && !state.mediaItems.length) runLoad(loadMedia);
         if (view === 'subscribers' && !state.subscribers.length)
           runLoad(loadSubscribers);
@@ -1338,94 +1244,6 @@
         const data = await api('/api/admin-operations?module=health');
         state.health = data;
         renderHealth(data);
-      }
-
-      function renderCollectionList() {
-        const query = $('#collection-search').value.trim().toLowerCase();
-        const items = state.collectionItems.filter(
-          item =>
-            item.name.toLowerCase().includes(query) ||
-            item.path.toLowerCase().includes(query)
-        );
-        setSummary(
-          '#collection-summary',
-          items.length,
-          state.collectionItems.length,
-          'file'
-        );
-        $('#collection-list').innerHTML = items.length
-          ? items
-              .map(
-                item => `
-            <button type="button" class="row-card" data-collection-path="${escapeHtml(item.path)}">
-              <div class="row-head">
-                <strong>${escapeHtml(item.name)}</strong>
-                <span class="pill">${Math.round((item.size || 0) / 1024)} KB</span>
-              </div>
-              <code class="path">${escapeHtml(item.path)}</code>
-            </button>`
-              )
-              .join('')
-          : emptyState('Không có file phù hợp với bộ lọc hiện tại.');
-      }
-
-      async function loadCollection() {
-        state.selectedCollection = $('#collection-select').value;
-        $('#collection-list').innerHTML = '<p class="muted">Đang tải...</p>';
-        const data = await api(
-          `/api/admin-operations?module=collections&collection=${encodeURIComponent(state.selectedCollection)}`
-        );
-        state.collectionItems = data.items || [];
-        renderCollectionList();
-      }
-
-      async function openCollectionFile(path) {
-        const data = await api(
-          `/api/admin-operations?module=collections&collection=${encodeURIComponent(state.selectedCollection)}&target=${encodeURIComponent(path)}`
-        );
-        $('#collection-editor-title').textContent = data.summary?.title || path;
-        $('#collection-target').value = data.target;
-        $('#collection-content').value = data.content;
-        state.selectedCollectionSha = data.sha || '';
-        state.collectionOriginalContent = data.content || '';
-        state.collectionOriginalTarget = data.target || '';
-        state.collectionDirty = false;
-        updateCollectionDirty();
-        $('#save-collection-file').disabled = false;
-      }
-
-      async function saveCollectionFile() {
-        const target = $('#collection-target').value.trim();
-        const content = $('#collection-content').value;
-        if (
-          state.collectionDirty &&
-          !window.confirm(`Lưu thay đổi vào "${target}"?`)
-        )
-          return;
-        const result = await api('/api/admin-operations?module=collections', {
-          method: 'POST',
-          body: JSON.stringify({
-            collection: state.selectedCollection,
-            target,
-            content,
-            sha: state.selectedCollectionSha,
-          }),
-        });
-        state.selectedCollectionSha = result.result?.sha || '';
-        state.collectionOriginalContent = content;
-        state.collectionOriginalTarget = target;
-        state.collectionDirty = false;
-        updateCollectionDirty();
-        toast('Đã lưu file nội dung.');
-        await loadCollection();
-      }
-
-      function updateCollectionDirty() {
-        const dirty =
-          $('#collection-content').value !== state.collectionOriginalContent ||
-          $('#collection-target').value !== state.collectionOriginalTarget;
-        state.collectionDirty = dirty;
-        $('#collection-dirty-note').classList.toggle('hidden', !dirty);
       }
 
       function renderMedia() {
@@ -1873,12 +1691,6 @@
         const shortcut = event.target.closest('[data-view-shortcut]');
         if (shortcut) setView(shortcut.dataset.viewShortcut);
 
-        const collectionButton = event.target.closest('[data-collection-path]');
-        if (collectionButton)
-          openCollectionFile(collectionButton.dataset.collectionPath).catch(
-            error => toast(error.message, true)
-          );
-
         const copyMediaButton = event.target.closest('[data-copy-media]');
         if (copyMediaButton) {
           navigator.clipboard
@@ -1936,29 +1748,6 @@
       $('#refresh-health').addEventListener('click', () =>
         loadHealth().catch(error => toast(error.message, true))
       );
-      $('#reload-collection').addEventListener('click', () =>
-        loadCollection().catch(error => toast(error.message, true))
-      );
-      $('#collection-select').addEventListener('change', () =>
-        loadCollection().catch(error => toast(error.message, true))
-      );
-      $('#collection-search').addEventListener('input', renderCollectionList);
-      $('#collection-content').addEventListener('input', updateCollectionDirty);
-      $('#collection-target').addEventListener('input', updateCollectionDirty);
-      $('#save-collection-file').addEventListener('click', () =>
-        saveCollectionFile().catch(error => toast(error.message, true))
-      );
-      $('#new-collection-file').addEventListener('click', () => {
-        state.selectedCollectionSha = '';
-        $('#collection-editor-title').textContent = 'File mới';
-        $('#collection-target').value = '';
-        $('#collection-content').value =
-          '---\ntitle: New item\ndescription: Short description\n---\n\nBody content...';
-        state.collectionOriginalContent = '';
-        state.collectionOriginalTarget = '';
-        updateCollectionDirty();
-        $('#save-collection-file').disabled = false;
-      });
       $('#reload-media').addEventListener('click', () =>
         loadMedia().catch(error => toast(error.message, true))
       );
@@ -2022,11 +1811,6 @@
         $(`[data-view-tab="${initialView}"]`) ? initialView : 'dashboard'
       );
 
-      window.addEventListener('beforeunload', event => {
-        if (!state.collectionDirty) return;
-        event.preventDefault();
-        event.returnValue = '';
-      });
     </script>
   </body>
 </html>

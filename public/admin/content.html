@@ -780,6 +780,96 @@
         max-width: 860px;
       }
 
+      body.admin-content .collections-workspace {
+        margin-top: 16px;
+      }
+
+      body.admin-content .collections-layout {
+        display: grid;
+        gap: 14px;
+      }
+
+      @media (min-width: 1040px) {
+        body.admin-content .collections-layout {
+          grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+          align-items: start;
+        }
+      }
+
+      body.admin-content .collection-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      body.admin-content .collection-filters {
+        display: grid;
+        gap: 10px;
+        margin: 12px 0;
+      }
+
+      @media (min-width: 720px) {
+        body.admin-content .collection-filters {
+          grid-template-columns: minmax(190px, 0.35fr) minmax(0, 0.65fr);
+        }
+      }
+
+      body.admin-content .collection-card {
+        display: grid;
+        width: 100%;
+        justify-content: stretch;
+        gap: 8px;
+        border: 1px solid var(--line) !important;
+        background: #fff !important;
+        color: var(--ink) !important;
+        text-align: left;
+        box-shadow: none !important;
+      }
+
+      body.admin-content .collection-card.active {
+        border-color: #bde8cb !important;
+        background: #fbfffc !important;
+      }
+
+      body.admin-content .collection-card code,
+      body.admin-content .collection-path {
+        display: block;
+        overflow-wrap: anywhere;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fafafa;
+        padding: 8px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      body.admin-content .collection-editor textarea {
+        min-height: 420px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      body.admin-content .collection-summary {
+        min-height: 20px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      body.admin-content .collection-dirty {
+        border: 1px solid #fde68a;
+        border-radius: 8px;
+        background: #fffbeb;
+        color: #854d0e;
+        padding: 10px 12px;
+      }
+
+      body.admin-content .collection-dirty.hidden {
+        display: none;
+      }
+
       @media (max-width: 860px) {
         body.admin-content .layout {
           grid-template-columns: 1fr !important;
@@ -955,6 +1045,82 @@
           <div id="toast" class="toast">Done.</div>
         </aside>
       </section>
+
+      <section class="panel collections-workspace" id="collections">
+        <div class="collection-toolbar">
+          <div>
+            <p class="eyebrow">Kho nội dung</p>
+            <h2>File sản phẩm, insight, docs và trang tĩnh</h2>
+            <p class="hint">
+              Khu này dùng chung chức năng với Vận hành, nhưng nằm ngay trong
+              trang Sửa trang để khỏi phải nhảy qua lại.
+            </p>
+          </div>
+          <div class="actions">
+            <button type="button" class="secondary" id="reload-collection">
+              Tải lại
+            </button>
+          </div>
+        </div>
+
+        <div class="collections-layout">
+          <div>
+            <div class="collection-filters">
+              <label>
+                Nhóm nội dung
+                <select id="collection-select">
+                  <option value="products">Products</option>
+                  <option value="insights">Insights</option>
+                  <option value="docs">Docs</option>
+                  <option value="projects">Projects</option>
+                  <option value="caseStudies">Case studies</option>
+                  <option value="pages">Website pages</option>
+                </select>
+              </label>
+              <label>
+                Tìm file
+                <input
+                  id="collection-search"
+                  placeholder="Nhập tên file, ngôn ngữ hoặc path..."
+                />
+              </label>
+            </div>
+            <p class="collection-summary" id="collection-summary"></p>
+            <div class="list" id="collection-list"></div>
+          </div>
+
+          <div class="collection-editor">
+            <div class="collection-toolbar">
+              <div>
+                <p class="eyebrow">Trình sửa file</p>
+                <h2 id="collection-editor-title">Chọn file để sửa</h2>
+              </div>
+              <div class="actions">
+                <button type="button" class="secondary" id="new-collection-file">
+                  Tạo file
+                </button>
+                <button type="button" id="save-collection-file" disabled>
+                  Lưu file
+                </button>
+              </div>
+            </div>
+            <label>
+              Đường dẫn file
+              <input
+                id="collection-target"
+                placeholder="src/content/products/en/new-item.md"
+              />
+            </label>
+            <textarea
+              id="collection-content"
+              placeholder="---&#10;title: New item&#10;description: Short description&#10;---&#10;&#10;Body..."
+            ></textarea>
+            <p class="collection-dirty hidden" id="collection-dirty-note">
+              File đang có thay đổi chưa lưu.
+            </p>
+          </div>
+        </div>
+      </section>
     </main>
 
     <dialog id="publish-dialog" class="modal-backdrop">
@@ -1052,6 +1218,29 @@
       const publishDialogDiff = document.getElementById('publish-dialog-diff');
       const publishCancelButton = document.getElementById('publish-cancel');
       const publishConfirmButton = document.getElementById('publish-confirm');
+      const collectionState = {
+        items: [],
+        selected: 'products',
+        sha: '',
+        originalContent: '',
+        originalTarget: '',
+        dirty: false,
+      };
+      const collectionSelect = document.getElementById('collection-select');
+      const collectionSearch = document.getElementById('collection-search');
+      const collectionSummary = document.getElementById('collection-summary');
+      const collectionList = document.getElementById('collection-list');
+      const collectionTitle = document.getElementById(
+        'collection-editor-title'
+      );
+      const collectionTarget = document.getElementById('collection-target');
+      const collectionContent = document.getElementById('collection-content');
+      const collectionDirtyNote = document.getElementById(
+        'collection-dirty-note'
+      );
+      const saveCollectionButton = document.getElementById(
+        'save-collection-file'
+      );
 
       function slugify(value) {
         return String(value || 'item')
@@ -1101,6 +1290,133 @@
           .replaceAll('>', '&gt;')
           .replaceAll('"', '&quot;')
           .replaceAll("'", '&#039;');
+      }
+
+      async function collectionApi(url, options = {}) {
+        const response = await fetch(url, {
+          credentials: 'same-origin',
+          ...options,
+          headers: {
+            ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+            ...(options.headers || {}),
+          },
+        });
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          window.location.assign('/admin/login.html');
+          throw new Error('Phiên đăng nhập admin đã hết hạn.');
+        }
+        if (!response.ok || data.ok === false) {
+          throw new Error(data.message || `Request failed: ${response.status}`);
+        }
+        return data;
+      }
+
+      function renderCollectionList() {
+        const query = normalizeSearch(collectionSearch.value);
+        const selectedPath = collectionState.originalTarget;
+        const items = collectionState.items.filter(item => {
+          const haystack = normalizeSearch(`${item.name} ${item.path}`);
+          return haystack.includes(query);
+        });
+        collectionSummary.textContent = `Đang hiển thị ${items.length} / ${collectionState.items.length} file`;
+        collectionList.innerHTML = items.length
+          ? items
+              .map(
+                item => `
+                <button
+                  type="button"
+                  class="collection-card ${item.path === selectedPath ? 'active' : ''}"
+                  data-collection-path="${escapeHtml(item.path)}"
+                >
+                  <span>
+                    <strong>${escapeHtml(item.name)}</strong>
+                    <small>${Math.round((item.size || 0) / 1024)} KB</small>
+                  </span>
+                  <code>${escapeHtml(item.path)}</code>
+                </button>`
+              )
+              .join('')
+          : '<p class="empty">Không có file phù hợp với bộ lọc hiện tại.</p>';
+      }
+
+      async function loadCollection() {
+        collectionState.selected = collectionSelect.value;
+        collectionList.innerHTML = '<p class="hint">Đang tải kho nội dung...</p>';
+        const data = await collectionApi(
+          `/api/admin-operations?module=collections&collection=${encodeURIComponent(collectionState.selected)}`
+        );
+        collectionState.items = data.items || [];
+        renderCollectionList();
+      }
+
+      async function openCollectionFile(path) {
+        const data = await collectionApi(
+          `/api/admin-operations?module=collections&collection=${encodeURIComponent(collectionState.selected)}&target=${encodeURIComponent(path)}`
+        );
+        collectionTitle.textContent = data.summary?.title || path;
+        collectionTarget.value = data.target;
+        collectionContent.value = data.content;
+        collectionState.sha = data.sha || '';
+        collectionState.originalContent = data.content || '';
+        collectionState.originalTarget = data.target || '';
+        collectionState.dirty = false;
+        updateCollectionDirty();
+        saveCollectionButton.disabled = false;
+        renderCollectionList();
+      }
+
+      function updateCollectionDirty() {
+        const dirty =
+          collectionContent.value !== collectionState.originalContent ||
+          collectionTarget.value !== collectionState.originalTarget;
+        collectionState.dirty = dirty;
+        collectionDirtyNote.classList.toggle('hidden', !dirty);
+      }
+
+      async function saveCollectionFile() {
+        const target = collectionTarget.value.trim();
+        const content = collectionContent.value;
+        if (!target) {
+          throw new Error('Cần nhập đường dẫn file trước khi lưu.');
+        }
+        if (
+          collectionState.dirty &&
+          !window.confirm(`Lưu thay đổi vào "${target}"?`)
+        ) {
+          return;
+        }
+        const result = await collectionApi(
+          '/api/admin-operations?module=collections',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              collection: collectionState.selected,
+              target,
+              content,
+              sha: collectionState.sha,
+            }),
+          }
+        );
+        collectionState.sha = result.result?.sha || '';
+        collectionState.originalContent = content;
+        collectionState.originalTarget = target;
+        collectionState.dirty = false;
+        updateCollectionDirty();
+        showToast('Đã lưu file nội dung.');
+        await loadCollection();
+      }
+
+      function startNewCollectionFile() {
+        collectionState.sha = '';
+        collectionState.originalContent = '';
+        collectionState.originalTarget = '';
+        collectionTitle.textContent = 'File mới';
+        collectionTarget.value = '';
+        collectionContent.value =
+          '---\ntitle: New item\ndescription: Short description\n---\n\nBody content...';
+        saveCollectionButton.disabled = false;
+        updateCollectionDirty();
       }
 
       function currentPage() {
@@ -2561,6 +2877,34 @@
         pageSearch.focus();
         renderPages();
       });
+      collectionList.addEventListener('click', event => {
+        const button = event.target.closest('[data-collection-path]');
+        if (!button) return;
+        openCollectionFile(button.dataset.collectionPath).catch(error =>
+          showToast(error.message, 'error')
+        );
+      });
+      collectionSearch.addEventListener('input', renderCollectionList);
+      collectionSelect.addEventListener('change', () => {
+        loadCollection().catch(error => showToast(error.message, 'error'));
+      });
+      collectionContent.addEventListener('input', updateCollectionDirty);
+      collectionTarget.addEventListener('input', updateCollectionDirty);
+      document
+        .getElementById('reload-collection')
+        .addEventListener('click', () =>
+          loadCollection().catch(error => showToast(error.message, 'error'))
+        );
+      document
+        .getElementById('save-collection-file')
+        .addEventListener('click', () =>
+          saveCollectionFile().catch(error =>
+            showToast(error.message, 'error')
+          )
+        );
+      document
+        .getElementById('new-collection-file')
+        .addEventListener('click', startNewCollectionFile);
       document.getElementById('scan-site').addEventListener('click', scanSite);
       document.getElementById('reload-live').addEventListener('click', () => {
         if (
@@ -2605,6 +2949,16 @@
             .querySelectorAll('[data-preview-mode]')
             .forEach(item => item.classList.toggle('active', item === button));
         });
+      });
+
+      if (location.hash === '#collections') {
+        loadCollection().catch(error => showToast(error.message, 'error'));
+      }
+
+      window.addEventListener('beforeunload', event => {
+        if (!collectionState.dirty) return;
+        event.preventDefault();
+        event.returnValue = '';
       });
 
       initialize();
