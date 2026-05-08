@@ -833,14 +833,14 @@
           </div>
         </div>
         <nav class="nav" aria-label="Admin links">
-          <a href="/admin/">Trang Ch? Admin</a>
-          <a class="secondary" href="/admin/content.html">S?a trang</a>
-          <a class="secondary" href="/admin/blog.html">Vi?t blog</a>
+          <a href="/admin/">Trang Chủ Admin</a>
+          <a class="secondary" href="/admin/content.html">Sửa trang</a>
+          <a class="secondary" href="/admin/blog.html">Viết blog</a>
           <a class="secondary" href="/admin/leads.html">Lead</a>
-          <a class="secondary" href="/admin/operations.html">V?n h?nh</a>
-          <a class="secondary" href="/admin/guide.html">H??ng d?n</a>
+          <a class="secondary" href="/admin/operations.html">Vận hành</a>
+          <a class="secondary" href="/admin/guide.html">Hướng dẫn</a>
           <button type="button" class="secondary" data-admin-logout>
-            ??ng xu?t
+            Đăng xuất
           </button>
         </nav>
       </header>
@@ -2177,7 +2177,11 @@
                 <h3>${escapeHtml(section.title || 'Nội dung trang')}</h3>
                 ${fields
                   .map(field => {
-                    const original = originalValueForField(page, section, field);
+                    const original = originalValueForField(
+                      page,
+                      section,
+                      field
+                    );
                     const changed =
                       original !== undefined &&
                       String(original) !== String(field.value ?? '');
@@ -2225,7 +2229,8 @@
             const wrapper = event.target.closest('.simple-field');
             wrapper?.classList.toggle('changed', changed);
             const meta = wrapper?.querySelector('.simple-meta');
-            if (meta) meta.textContent = changed ? 'Đã sửa' : fieldTypeLabel(field);
+            if (meta)
+              meta.textContent = changed ? 'Đã sửa' : fieldTypeLabel(field);
             updateActionStates();
           });
         });
