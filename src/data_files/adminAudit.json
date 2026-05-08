@@ -1,6 +1,15 @@
 {
-  "updatedAt": "2026-05-08T10:33:23.552Z",
+  "updatedAt": "2026-05-08T12:09:21.336Z",
   "events": [
+    {
+      "id": "audit-1778242161336-bczy9i",
+      "createdAt": "2026-05-08T12:09:21.336Z",
+      "type": "media-upload",
+      "actor": "admin",
+      "target": "src/images/blog/uploads/new-blog-post-1778242159637.png",
+      "commitSha": "69f473d0e1de96628a532a586b7bb1d38b852a49",
+      "commitUrl": "https://github.com/xuanpv89/folksteam.com/commit/69f473d0e1de96628a532a586b7bb1d38b852a49"
+    },
     {
       "id": "audit-1778236403552-cm3ign",
       "createdAt": "2026-05-08T10:33:23.552Z",
