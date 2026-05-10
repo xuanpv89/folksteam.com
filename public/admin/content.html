@@ -680,6 +680,10 @@
         display: grid !important;
       }
 
+      body.admin-content .content-view[hidden] {
+        display: none !important;
+      }
+
       body.admin-content .layout {
         grid-template-columns: 320px minmax(0, 1fr) !important;
         gap: 0;
@@ -877,6 +881,10 @@
         body.admin-content .collection-filters {
           grid-template-columns: minmax(190px, 0.35fr) minmax(0, 0.65fr);
         }
+      }
+
+      body.admin-content .collection-browser .collection-filters {
+        grid-template-columns: 1fr;
       }
 
       body.admin-content .collection-card {
@@ -1236,7 +1244,11 @@
         </aside>
       </section>
 
-      <section class="panel collections-workspace content-view" id="collections">
+      <section
+        class="panel collections-workspace content-view"
+        id="collections"
+        hidden
+      >
         <div class="collection-toolbar collection-head">
           <div>
             <p class="eyebrow">Sửa Nhóm Trang</p>
@@ -1896,8 +1908,9 @@
       }
 
       function startNewCollectionFile() {
+        const template = '---\ntitle: \"\"\ndescription: \"\"\n---\n\n';
         collectionState.sha = '';
-        collectionState.originalContent = '';
+        collectionState.originalContent = template;
         collectionState.originalTarget = '';
         collectionState.friendly = {
           frontmatter: 'title: \"\"\ndescription: \"\"',
@@ -1906,7 +1919,7 @@
         };
         collectionTitle.textContent = 'Trang con mới';
         collectionTarget.value = '';
-        collectionContent.value = '---\ntitle: \"\"\ndescription: \"\"\n---\n\n';
+        collectionContent.value = template;
         collectionEmpty.classList.add('hidden');
         updateCollectionContext('Trang con mới', '');
         collectionFriendlyEditor.classList.remove('hidden');
@@ -1942,8 +1955,12 @@
         const isCollections = view === 'collections';
         pageEditorView.classList.toggle('active', !isCollections);
         collectionsView.classList.toggle('active', isCollections);
+        pageEditorView.hidden = isCollections;
+        collectionsView.hidden = !isCollections;
         contentViewButtons.forEach(button => {
-          button.classList.toggle('active', button.dataset.contentView === view);
+          const isActive = button.dataset.contentView === view;
+          button.classList.toggle('active', isActive);
+          button.setAttribute('aria-selected', String(isActive));
         });
 
         if (updateHash) {
