@@ -979,6 +979,10 @@
         padding: 18px;
       }
 
+      body.admin-content .collection-empty .empty-actions {
+        margin-top: 12px;
+      }
+
       body.admin-content .collection-context {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
@@ -1021,6 +1025,21 @@
 
       body.admin-content .collection-dirty.hidden {
         display: none;
+      }
+
+      body.admin-content .collection-save-status {
+        min-height: 18px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 750;
+      }
+
+      body.admin-content .collection-save-status.success {
+        color: var(--brand);
+      }
+
+      body.admin-content .collection-save-status.error {
+        color: #b42318;
       }
 
       @media (max-width: 860px) {
@@ -1300,6 +1319,11 @@
                 Hãy chọn một mục ở danh sách bên trái. Với nội dung thường,
                 bạn sẽ thấy form gồm tiêu đề, mô tả và nội dung chính.
               </p>
+              <div class="empty-actions">
+                <button type="button" class="secondary" id="collection-empty-new">
+                  Tạo trang con mới
+                </button>
+              </div>
             </div>
             <div
               class="collection-friendly-editor hidden"
@@ -1347,6 +1371,7 @@
             <p class="collection-dirty hidden" id="collection-dirty-note">
               Trang con này đang có thay đổi chưa lưu.
             </p>
+            <p class="collection-save-status" id="collection-save-status"></p>
           </div>
         </div>
       </section>
@@ -1497,6 +1522,9 @@
       const collectionAdvanced = document.getElementById('collection-advanced');
       const collectionDirtyNote = document.getElementById(
         'collection-dirty-note'
+      );
+      const collectionSaveStatus = document.getElementById(
+        'collection-save-status'
       );
       const saveCollectionButton = document.getElementById(
         'save-collection-file'
@@ -1679,6 +1707,18 @@
         if (publicUrl) collectionPreviewLink.href = publicUrl;
       }
 
+      function setCollectionSaveStatus(message = '', type = '') {
+        collectionSaveStatus.textContent = message;
+        collectionSaveStatus.className = `collection-save-status ${type}`.trim();
+      }
+
+      function confirmCollectionNavigation() {
+        if (!collectionState.dirty) return true;
+        return window.confirm(
+          'Trang con này đang có thay đổi chưa lưu. Nếu chuyển sang mục khác, các thay đổi trên màn hình sẽ mất.'
+        );
+      }
+
       function showFriendlyEditor(data) {
         const parsed = parseFriendlyContent(data.content, data.target);
         collectionState.friendly = parsed;
@@ -1771,8 +1811,8 @@
         collectionState.originalTarget = data.target || '';
         collectionState.dirty = false;
         showFriendlyEditor(data);
+        setCollectionSaveStatus('Trang con đã được tải. Bạn có thể sửa các ô bên dưới.', '');
         updateCollectionDirty();
-        saveCollectionButton.disabled = false;
         renderCollectionList();
       }
 
@@ -1780,8 +1820,21 @@
         const dirty =
           collectionContent.value !== collectionState.originalContent ||
           collectionTarget.value !== collectionState.originalTarget;
+        const hasEditorContent = collectionContent.value || collectionTarget.value;
         collectionState.dirty = dirty;
         collectionDirtyNote.classList.toggle('hidden', !dirty);
+        saveCollectionButton.textContent = dirty
+          ? 'Lưu thay đổi'
+          : hasEditorContent
+            ? 'Đã lưu'
+            : 'Lưu thay đổi';
+        saveCollectionButton.disabled = !dirty;
+        if (dirty) {
+          setCollectionSaveStatus(
+            'Có thay đổi mới. Bấm “Lưu thay đổi” để ghi lên website.',
+            ''
+          );
+        }
       }
 
       function updateFriendlyCollectionDirty() {
@@ -1805,27 +1858,41 @@
           collectionState.dirty &&
           !window.confirm(`Lưu thay đổi cho trang con này?\n\n${target}`)
         ) {
+          setCollectionSaveStatus('Đã hủy lưu. Nội dung trên màn hình vẫn được giữ nguyên.', '');
           return;
         }
-        const result = await collectionApi(
-          '/api/admin-operations?module=collections',
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              collection: collectionState.selected,
-              target,
-              content,
-              sha: collectionState.sha,
-            }),
-          }
-        );
-        collectionState.sha = result.result?.sha || '';
-        collectionState.originalContent = content;
-        collectionState.originalTarget = target;
-        collectionState.dirty = false;
-        updateCollectionDirty();
-        showToast('Đã lưu nhóm trang.');
-        await loadCollection();
+        const originalButtonText = saveCollectionButton.textContent;
+        saveCollectionButton.disabled = true;
+        saveCollectionButton.textContent = 'Đang lưu...';
+        setCollectionSaveStatus('Đang lưu trang con này lên website...', '');
+        try {
+          const result = await collectionApi(
+            '/api/admin-operations?module=collections',
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                collection: collectionState.selected,
+                target,
+                content,
+                sha: collectionState.sha,
+              }),
+            }
+          );
+          collectionState.sha = result.result?.sha || '';
+          collectionState.originalContent = content;
+          collectionState.originalTarget = target;
+          collectionState.dirty = false;
+          updateCollectionDirty();
+          setCollectionSaveStatus('Đã lưu xong. Website có thể cần một chút thời gian để cập nhật.', 'success');
+          showToast('Đã lưu nhóm trang.');
+          await loadCollection();
+        } catch (error) {
+          saveCollectionButton.textContent = originalButtonText;
+          setCollectionSaveStatus(error.message, 'error');
+          throw error;
+        } finally {
+          saveCollectionButton.disabled = !collectionState.dirty;
+        }
       }
 
       function startNewCollectionFile() {
@@ -1847,8 +1914,8 @@
         collectionTitleField.value = '';
         collectionDescriptionField.value = '';
         collectionBodyField.value = '';
-        saveCollectionButton.disabled = false;
         updateCollectionDirty();
+        setCollectionSaveStatus('Đang tạo trang con mới. Nhập tiêu đề trước, hệ thống sẽ gợi ý nơi lưu.', '');
       }
 
       function resetCollectionEditor() {
@@ -1867,6 +1934,7 @@
         collectionFriendlyEditor.classList.add('hidden');
         collectionAdvanced.open = false;
         saveCollectionButton.disabled = true;
+        setCollectionSaveStatus('', '');
         updateCollectionDirty();
       }
 
@@ -3344,6 +3412,11 @@
 
       contentViewButtons.forEach(button => {
         button.addEventListener('click', () => {
+          if (
+            button.dataset.contentView !== 'collections' &&
+            !confirmCollectionNavigation()
+          )
+            return;
           setContentView(button.dataset.contentView || 'pages');
         });
       });
@@ -3356,12 +3429,17 @@
       collectionList.addEventListener('click', event => {
         const button = event.target.closest('[data-collection-path]');
         if (!button) return;
+        if (!confirmCollectionNavigation()) return;
         openCollectionFile(button.dataset.collectionPath).catch(error =>
           showToast(error.message, 'error')
         );
       });
       collectionSearch.addEventListener('input', renderCollectionList);
       collectionSelect.addEventListener('change', () => {
+        if (!confirmCollectionNavigation()) {
+          collectionSelect.value = collectionState.selected;
+          return;
+        }
         collectionState.loaded = false;
         resetCollectionEditor();
         loadCollection().catch(error => showToast(error.message, 'error'));
@@ -3374,7 +3452,10 @@
         }
         updateCollectionDirty();
       });
-      collectionTarget.addEventListener('input', updateCollectionDirty);
+      collectionTarget.addEventListener('input', () => {
+        updateCollectionContext(collectionTitle.textContent, collectionTarget.value.trim());
+        updateCollectionDirty();
+      });
       collectionTitleField.addEventListener('input', () => {
         updateSuggestedPath();
         updateFriendlyCollectionDirty();
@@ -3387,6 +3468,7 @@
       document
         .getElementById('reload-collection')
         .addEventListener('click', () =>
+          confirmCollectionNavigation() &&
           loadCollection().catch(error => showToast(error.message, 'error'))
         );
       document
@@ -3398,6 +3480,11 @@
         );
       document
         .getElementById('new-collection-file')
+        .addEventListener('click', () => {
+          if (confirmCollectionNavigation()) startNewCollectionFile();
+        });
+      document
+        .getElementById('collection-empty-new')
         .addEventListener('click', startNewCollectionFile);
       document.getElementById('scan-site').addEventListener('click', scanSite);
       document.getElementById('reload-live').addEventListener('click', () => {
